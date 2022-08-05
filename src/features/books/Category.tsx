@@ -1,15 +1,15 @@
-import clsx from "clsx";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import stringifyRtkQuerryError from "../../store/storeUtils/stringifyRtkQuerryError";
-import { selectChildrenByLevel, setCategoryKey } from "./booksSlice";
-import { useGetCategoriyesQuery } from "./booksService";
-import type { Category } from "./booksTypes";
-import React from "react";
+import clsx from 'clsx'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import stringifyRtkQuerryError from '../../store/storeUtils/stringifyRtkQuerryError'
+import { selectChildrenByLevel, setCategoryKey } from './booksSlice'
+import { useGetCategoriyesQuery } from './booksService'
+import type { Category } from './booksTypes'
+import React from 'react'
 
 export default function CategoryNav() {
-    const { isLoading, error } = useGetCategoriyesQuery();
+    const { isLoading, error } = useGetCategoriyesQuery()
 
-    const topCategories = useAppSelector((state) => state.bookList.categories);
+    const topCategories = useAppSelector((state) => state.bookList.categories)
 
     return (
         <div className="my-4">
@@ -25,26 +25,26 @@ export default function CategoryNav() {
                 </span>
             )}
         </div>
-    );
+    )
 }
 
 interface CategoryListProps {
-    categories: Category[];
-    categoryLevel: number;
-    selectedCategoryKeys?: string[];
+    categories: Category[]
+    categoryLevel: number
+    selectedCategoryKeys?: string[]
 }
 
 function CategoryList({ categories, categoryLevel }: CategoryListProps) {
-    const dispatch = useAppDispatch();
-    const children = useAppSelector(selectChildrenByLevel(categoryLevel));
+    const dispatch = useAppDispatch()
+    const children = useAppSelector(selectChildrenByLevel(categoryLevel))
 
     const selectedCategoryKey = useAppSelector(
         (state) => state.bookList.selectedCategoryKeys?.[categoryLevel]
-    );
+    )
 
     const handleClickCategory = (key: string) => {
-        dispatch(setCategoryKey({ categoryLevel, key }));
-    };
+        dispatch(setCategoryKey({ categoryLevel, key }))
+    }
 
     return (
         <>
@@ -53,8 +53,8 @@ function CategoryList({ categories, categoryLevel }: CategoryListProps) {
                     <span
                         className={clsx(
                             selectedCategoryKey === category.key &&
-                                "bg-red-200",
-                            "m-2 p-2 hover:cursor-pointer hover:bg-red-200"
+                                'bg-red-200',
+                            'm-2 p-2 hover:cursor-pointer hover:bg-red-200'
                         )}
                         key={category.key}
                         onClick={() => handleClickCategory(category.key)}
@@ -72,5 +72,5 @@ function CategoryList({ categories, categoryLevel }: CategoryListProps) {
                 )}
             </div>
         </>
-    );
+    )
 }
