@@ -1,19 +1,16 @@
 import clsx from 'clsx'
 import { ReactElement } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { selectIsLogin } from '../features/user/userSlice'
+import { selectIsLogin, selectRoleType } from '../features/user/userSlice'
 import { logout } from '../features/user/userThunks'
+import { Role } from '../features/user/userTypes'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import Button from './ui/Button'
 
 export default function NavBar(): ReactElement {
-    const dispatch = useAppDispatch()
-
     const isLogin = useAppSelector(selectIsLogin)
 
-    const handleLogout = () => {
-        dispatch(logout())
-    }
+    const role = useAppSelector((state) => state.user.role)
 
     return (
         <nav className="flex h-12 items-center gap-5 bg-white px-5">
@@ -30,16 +27,20 @@ export default function NavBar(): ReactElement {
             >
                 首页
             </NavLink>
-            <NavLink
-                className={({ isActive }) =>
-                    clsx('p-2 hover:text-green-800', {
-                        'bg-green-100': isActive,
-                    })
-                }
-                to={'/member'}
-            >
-                会员
-            </NavLink>
+
+            {role === Role.Admin && (
+                <NavLink
+                    className={({ isActive }) =>
+                        clsx('p-2 hover:text-green-800', {
+                            'bg-green-100': isActive,
+                        })
+                    }
+                    to={'/member'}
+                >
+                    会员
+                </NavLink>
+            )}
+
             {isLogin || (
                 <NavLink
                     className={({ isActive }) =>
@@ -52,11 +53,10 @@ export default function NavBar(): ReactElement {
                     <Button>登录</Button>
                 </NavLink>
             )}
+
             {isLogin && (
                 <div className="ml-auto mr-10">
-                    <Button outline onClick={handleLogout}>
-                        登出
-                    </Button>
+                    <AccountButton />
                 </div>
             )}
         </nav>
@@ -75,5 +75,24 @@ function Brand(): ReactElement {
                 轻松考后台
             </span>
         </Link>
+    )
+}
+
+function AccountButton() {
+    const dispatch = useAppDispatch()
+
+    const handleLogout = () => {
+        dispatch(logout())
+    }
+    const username = useAppSelector((state) => state.user.username)
+    const role = useAppSelector(selectRoleType)
+    return (
+        <div className="flex items-center gap-4">
+            <div className="text-gray-600">{username}</div>
+            <span className="text-gray-600">{role}</span>
+            <Button outline onClick={handleLogout}>
+                登出
+            </Button>
+        </div>
     )
 }

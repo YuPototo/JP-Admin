@@ -1,6 +1,6 @@
 import { AppThunk } from '../../store/store'
 import userStorage from './userStorage'
-import { userLoggedIn, userLoggedOut } from './userSlice'
+import { localUserFetched, userLoggedIn, userLoggedOut } from './userSlice'
 
 /* thunks */
 export const getLocalUserInfo = (): AppThunk => (dispatch) => {
@@ -9,6 +9,8 @@ export const getLocalUserInfo = (): AppThunk => (dispatch) => {
     if (result) {
         dispatch(userLoggedIn(result))
     }
+
+    dispatch(localUserFetched())
 }
 
 export const logout = (): AppThunk => (dispatch) => {

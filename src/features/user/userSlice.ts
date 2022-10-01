@@ -7,12 +7,14 @@ export interface UserSliceState {
     token: string | null
     username: string | null
     role: Role | null
+    hasFetcedLocalUser: boolean
 }
 
 const initialState: UserSliceState = {
     token: null,
     username: null,
     role: null,
+    hasFetcedLocalUser: false,
 }
 
 export const userSlice = createSlice({
@@ -28,6 +30,9 @@ export const userSlice = createSlice({
             state.token = payload.token
             state.username = payload.username
             state.role = payload.role
+        },
+        localUserFetched: (state) => {
+            state.hasFetcedLocalUser = true
         },
         userLoggedOut: (state) => {
             state.token = null
@@ -47,7 +52,8 @@ export const userSlice = createSlice({
     },
 })
 
-export const { userLoggedIn, userLoggedOut } = userSlice.actions
+export const { userLoggedIn, userLoggedOut, localUserFetched } =
+    userSlice.actions
 
 /* selectors */
 export const selectIsLogin = (state: RootState) => {
@@ -56,6 +62,14 @@ export const selectIsLogin = (state: RootState) => {
         state.user.username !== null &&
         state.user.role !== null
     )
+}
+
+export const selectRoleType = (state: RootState) => {
+    if (state.user.role === 'admin') {
+        return '管理员'
+    } else if (state.user.role === 'editor') {
+        return '编辑'
+    }
 }
 
 export default userSlice.reducer
