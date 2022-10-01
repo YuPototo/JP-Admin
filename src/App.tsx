@@ -7,6 +7,7 @@ import Error from './Routes/Error'
 import Home from './Routes/Home'
 import Login from './Routes/Login'
 import Member from './Routes/Member'
+import MemberResult from './Routes/MemberResult'
 import { useAppDispatch } from './store/hooks'
 
 const router = createBrowserRouter([
@@ -23,6 +24,11 @@ const router = createBrowserRouter([
     {
         path: '/member',
         element: <Member />,
+        errorElement: <Error />,
+    },
+    {
+        path: '/memberResult',
+        element: <MemberResult />,
         errorElement: <Error />,
     },
 ])

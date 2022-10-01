@@ -37,7 +37,7 @@ export default function NavBar(): ReactElement {
                     }
                     to={'/member'}
                 >
-                    会员
+                    开会员
                 </NavLink>
             )}
 
