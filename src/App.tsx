@@ -2,13 +2,14 @@ import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { getLocalUserInfo } from './features/user/userThunks'
-import BookEditor from './Routes/BookEditing/BookEditor'
+import BookEditor from './Routes/BookEditor'
 import Error from './Routes/Error'
 
 import Home from './Routes/Home'
 import Login from './Routes/Login'
 import Member from './Routes/Member'
 import MemberResult from './Routes/MemberResult'
+import QuestionSetEditor from './Routes/QuestionSetEditor'
 import { useAppDispatch } from './store/hooks'
 
 const router = createBrowserRouter([
@@ -33,8 +34,12 @@ const router = createBrowserRouter([
         errorElement: <Error />,
     },
     {
-        path: '/bookEditor/:bookId',
+        path: '/bookEditor/:bookId/sectionIndex/:sectionIndex/chapterIndex/:chapterIndex',
         element: <BookEditor />,
+    },
+    {
+        path: '/questionSetEditor/:questionSetId',
+        element: <QuestionSetEditor />,
     },
 ])
 

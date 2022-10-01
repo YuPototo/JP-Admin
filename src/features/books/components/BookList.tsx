@@ -18,7 +18,10 @@ export default function BookList() {
                         book.title.toLowerCase().includes(searcTerm)
                     )
                     .map((book, index) => (
-                        <Link key={index} to={`/bookEditor/${book.id}`}>
+                        <Link
+                            key={index}
+                            to={`/bookEditor/${book.id}/sectionIndex/0/chapterIndex/0`}
+                        >
                             <BookCard book={book} />
                         </Link>
                     ))
