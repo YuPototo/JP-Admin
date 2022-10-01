@@ -22,7 +22,7 @@ const classes = {
     disabled: 'opacity-50 cursor-not-allowed',
 
     outline: {
-        base: 'bg-transparent hover:text-white hover:border-transparen ',
+        base: 'bg-white hover:text-white hover:border-transparen ',
         color: {
             green: 'hover:bg-green-600 text-green-700 border border-green-600',
             gray: ' hover:bg-gray-600 text-gray-700 border border-gray-600',

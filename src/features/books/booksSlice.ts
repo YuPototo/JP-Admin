@@ -7,12 +7,14 @@ export interface BookListState {
     categories: Category[]
     selectedCategoryKeys: CategoryKey[]
     books: Book[]
+    searchTerm: string
 }
 
 const initialState: BookListState = {
     categories: [],
     selectedCategoryKeys: [],
     books: [],
+    searchTerm: '',
 }
 
 export const bookListSlice = createSlice({
@@ -59,6 +61,12 @@ export const bookListSlice = createSlice({
                 }
             }
         },
+        cleanCategory: (state) => {
+            state.selectedCategoryKeys = []
+        },
+        searchTermChanged: (state, { payload }: PayloadAction<string>) => {
+            state.searchTerm = payload.toLocaleLowerCase()
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -77,7 +85,8 @@ export const bookListSlice = createSlice({
     },
 })
 
-export const { categoryPicked } = bookListSlice.actions
+export const { categoryPicked, cleanCategory, searchTermChanged } =
+    bookListSlice.actions
 
 /* selectors */
 
@@ -135,4 +144,9 @@ export const selectBooksByCategory = (state: RootState) => {
         return books
     }
 }
+
+export const hasSelectedCatory = (state: RootState) => {
+    return state.bookList.selectedCategoryKeys.length > 0
+}
+
 export default bookListSlice.reducer
