@@ -1,17 +1,25 @@
 import clsx from 'clsx'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import stringifyRtkQuerryError from '../../../store/storeUtils/stringifyRtkQuerryError'
-import { selectChildrenByLevel, categoryPicked } from '../booksSlice'
+import {
+    selectChildrenByLevel,
+    categoryPicked,
+    cleanCategory,
+    hasSelectedCatory,
+} from '../booksSlice'
 import { useGetCategoriyesQuery } from '../booksService'
 import type { Category } from '../booksTypes'
+import Button from '../../../components/ui/Button'
 
 export default function CategoryNav() {
     const { isLoading, error } = useGetCategoriyesQuery()
+    const dispatch = useAppDispatch()
 
     const topCategories = useAppSelector((state) => state.books.categories)
+    const hasCategory = useAppSelector(hasSelectedCatory)
 
     return (
-        <div className="my-4 rounded bg-white p-1">
+        <div className="my-4 rounded bg-white p-2">
             {isLoading ? (
                 <div className="skeleton mb-4 h-6 w-60"></div>
             ) : (
@@ -22,6 +30,18 @@ export default function CategoryNav() {
                 <span className="text-red-500">
                     {`获取内容分类出错：${stringifyRtkQuerryError(error)}`}
                 </span>
+            )}
+
+            {hasCategory && (
+                <div className="m-1 ml-5">
+                    <Button
+                        outline
+                        color="gray"
+                        onClick={() => dispatch(cleanCategory())}
+                    >
+                        清除筛选
+                    </Button>
+                </div>
             )}
         </div>
     )

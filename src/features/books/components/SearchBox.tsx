@@ -37,9 +37,11 @@ export default function SearchBox() {
                 onChange={handleSearch}
                 id="searchTerm"
             />
-            <Button outline onClick={handleClean}>
-                清空
-            </Button>
+            {searchTerm && (
+                <Button outline onClick={handleClean}>
+                    清空
+                </Button>
+            )}
         </div>
     )
 }

@@ -1,5 +1,6 @@
 import { Formik } from 'formik'
 import React from 'react'
+import toast from 'react-hot-toast'
 import MyModal from '../../components/MyModal'
 import Button from '../../components/ui/Button'
 import { useUpdateSectionMutation } from './contentService'
@@ -53,6 +54,7 @@ function SectionEditModal({
                             title: values.title,
                             sectionId: section.id,
                         }).unwrap()
+                        toast.success('更新成功')
                         onClose()
                         setSubmitting(false)
                     } catch (err) {

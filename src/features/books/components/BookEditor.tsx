@@ -1,21 +1,22 @@
 import { Formik } from 'formik'
 import React from 'react'
 import toast from 'react-hot-toast'
-import MyModal from '../../components/MyModal'
-import Button from '../../components/ui/Button'
-import { useUpdateChapterMutation } from './contentService'
-import { IChapter } from './contentTypes'
+import MyModal from '../../../components/MyModal'
+import Button from '../../../components/ui/Button'
+import { useUpdateBookMutation } from '../booksService'
+import { IBook } from '../booksTypes'
 
 type Props = {
-    chapter: IChapter
+    book: IBook
 }
 
-export default function ChapterEditor({ chapter }: Props) {
+export default function BookEditor({ book }: Props) {
     const [showModal, setShowModal] = React.useState(false)
+
     return (
         <>
-            <ChapterEditorModal
-                chapter={chapter}
+            <BookEditorModal
+                book={book}
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
             />
@@ -26,24 +27,24 @@ export default function ChapterEditor({ chapter }: Props) {
     )
 }
 
-function ChapterEditorModal({
-    chapter,
+function BookEditorModal({
+    book,
     isOpen,
     onClose,
 }: {
-    chapter: IChapter
+    book: IBook
     isOpen: boolean
     onClose: () => void
 }) {
-    const [updateChapter] = useUpdateChapterMutation()
+    const [updateBook] = useUpdateBookMutation()
 
     return (
         <MyModal isOpen={isOpen} onModalClosed={onClose}>
-            <h2 className="mb-4 font-bold text-green-700">小节</h2>
+            <h2 className="mb-4 font-bold text-green-700">练习册信息</h2>
             <Formik
                 initialValues={{
-                    title: chapter.title,
-                    desc: chapter.desc || '',
+                    title: book.title,
+                    desc: book.desc || '',
                 }}
                 validate={(values) => {
                     const errors = {}
@@ -56,10 +57,10 @@ function ChapterEditorModal({
                 onSubmit={async (values, { setSubmitting }) => {
                     try {
                         setSubmitting(true)
-                        await updateChapter({
+                        await updateBook({
                             title: values.title,
                             desc: values.desc,
-                            chapterId: chapter.id,
+                            bookId: book.id,
                         }).unwrap()
                         toast.success('更新成功')
                         onClose()
@@ -109,7 +110,7 @@ function ChapterEditorModal({
                                     className="inline-block w-16"
                                     htmlFor="desc"
                                 >
-                                    小节说明
+                                    说明
                                 </label>
                                 <textarea
                                     className="ml-4 w-96 rounded border p-2"

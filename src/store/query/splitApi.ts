@@ -14,6 +14,6 @@ export const splitApi = createApi({
             return headers
         },
     }),
-    tagTypes: ['Content', 'Chapter'],
+    tagTypes: ['Content', 'Chapter', 'Book'],
     endpoints: () => ({}),
 })
