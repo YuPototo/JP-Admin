@@ -15,12 +15,12 @@ export const booksApi = splitApi.injectEndpoints({
         }),
         updateBook: build.mutation<
             IBook,
-            { bookId: string; title?: string; desc?: string }
+            { bookId: string; title?: string; desc?: string; hidden?: boolean }
         >({
-            query: ({ bookId, title, desc }) => ({
+            query: ({ bookId, title, desc, hidden }) => ({
                 url: `books/${bookId}`,
                 method: 'PATCH',
-                body: { title, desc },
+                body: { title, desc, hidden },
             }),
             invalidatesTags: ['Book'],
         }),

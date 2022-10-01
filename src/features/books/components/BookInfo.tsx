@@ -3,6 +3,7 @@ import { useGetBooksQuery, useGetCategoriyesQuery } from '../booksService'
 import { selectBookById, selectCategoryValueByKey } from '../booksSlice'
 import { BookCategory, IBook } from '../booksTypes'
 import BookEditor from './BookEditor'
+import ToggleHidden from './ToggleHidden'
 
 type Props = {
     bookId: string
@@ -38,8 +39,12 @@ function BookMeta({ book }: { book: IBook }) {
                 </div>
                 {book.hidden && <div className="my-2 text-red-500">隐藏中</div>}
             </div>
-            <div className="ml-auto self-center">
+            <div className="ml-auto  self-center">
                 <BookEditor book={book} />
+
+                <div className="mt-4">
+                    <ToggleHidden book={book} />
+                </div>
             </div>
         </div>
     )
