@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../../store/store'
-import type { Book, Category, CategoryKey } from './booksTypes'
+import type { IBook, Category, CategoryKey } from './booksTypes'
 import { booksApi } from './booksService'
 
 export interface BookListState {
     categories: Category[]
     selectedCategoryKeys: CategoryKey[]
-    books: Book[]
+    books: IBook[]
     searchTerm: string
 }
 
@@ -96,8 +96,8 @@ export const { categoryPicked, cleanCategory, searchTermChanged } =
  */
 export const selectChildrenByLevel =
     (categoryLevel: number) => (state: RootState) => {
-        const categories = state.bookList.categories
-        const selectedCategoryKeys = state.bookList.selectedCategoryKeys
+        const categories = state.books.categories
+        const selectedCategoryKeys = state.books.selectedCategoryKeys
         if (categoryLevel === 0) {
             const key = selectedCategoryKeys?.[0]
             return categories.find((c) => c.key === key)?.children
@@ -114,8 +114,8 @@ export const selectChildrenByLevel =
     }
 
 export const selectBooksByCategory = (state: RootState) => {
-    const selectedCategoryKeys = state.bookList.selectedCategoryKeys
-    const books = state.bookList.books
+    const selectedCategoryKeys = state.books.selectedCategoryKeys
+    const books = state.books.books
 
     const selectedCategoryLength = selectedCategoryKeys.length
     if (selectedCategoryLength === 0) {
@@ -146,7 +146,32 @@ export const selectBooksByCategory = (state: RootState) => {
 }
 
 export const hasSelectedCatory = (state: RootState) => {
-    return state.bookList.selectedCategoryKeys.length > 0
+    return state.books.selectedCategoryKeys.length > 0
 }
+
+export const selectBookById = (bookId?: string) => (state: RootState) => {
+    return state.books.books.find((book) => book.id === bookId)
+}
+
+export const selectFlattenCategories = (state: RootState) => {
+    const categories = state.books.categories
+    const flattenCategories: Category[] = []
+    categories.forEach((c) => {
+        flattenCategories.push(c)
+        c.children?.forEach((c) => {
+            flattenCategories.push(c)
+            c.children?.forEach((c) => {
+                flattenCategories.push(c)
+            })
+        })
+    })
+    return flattenCategories
+}
+
+export const selectCategoryValueByKey =
+    (categoryKey: string) => (state: RootState) => {
+        const categories = selectFlattenCategories(state)
+        return categories.find((c) => c.key === categoryKey)?.displayValue
+    }
 
 export default bookListSlice.reducer

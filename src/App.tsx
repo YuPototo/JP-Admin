@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { getLocalUserInfo } from './features/user/userThunks'
+import BookEditor from './Routes/BookEditing/BookEditor'
 import Error from './Routes/Error'
 
 import Home from './Routes/Home'
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
         path: '/memberResult',
         element: <MemberResult />,
         errorElement: <Error />,
+    },
+    {
+        path: '/bookEditor/:bookId',
+        element: <BookEditor />,
     },
 ])
 

@@ -1,7 +1,7 @@
 import PageLayout from '../components/layout/PageLayout'
-import BookList from '../features/books/BookList'
-import CategoryNav from '../features/books/Category'
-import SearchBox from '../features/books/SearchBox'
+import BookList from '../features/books/components/BookList'
+import CategoryNav from '../features/books/components/Category'
+import SearchBox from '../features/books/components/SearchBox'
 import useAuthGuard from '../features/user/useAuthGuard'
 
 export default function Home() {

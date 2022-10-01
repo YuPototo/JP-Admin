@@ -2,13 +2,13 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux'
 import { splitApi } from './query/splitApi'
 
-import bookListReducer from '../features/books/booksSlice'
+import booksReducer from '../features/books/booksSlice'
 import userReducer from '../features/user/userSlice'
 import { queryErrorMiddleware } from './middleware/queryErrorMiddleware'
 
 const rootReducer = combineReducers({
     [splitApi.reducerPath]: splitApi.reducer,
-    bookList: bookListReducer,
+    books: booksReducer,
     user: userReducer,
 })
 

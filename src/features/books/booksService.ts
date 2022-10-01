@@ -1,5 +1,5 @@
 import { splitApi } from '../../store/query/splitApi'
-import type { Category, Book } from './booksTypes'
+import type { Category, IBook } from './booksTypes'
 
 export const booksApi = splitApi.injectEndpoints({
     endpoints: (build) => ({
@@ -8,9 +8,9 @@ export const booksApi = splitApi.injectEndpoints({
             transformResponse: (res: { categories: Category[] }) =>
                 res.categories,
         }),
-        getBooks: build.query<Book[], void>({
+        getBooks: build.query<IBook[], void>({
             query: () => 'books',
-            transformResponse: (res: { books: Book[] }) => res.books,
+            transformResponse: (res: { books: IBook[] }) => res.books,
         }),
     }),
 })

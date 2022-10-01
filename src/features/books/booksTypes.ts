@@ -8,12 +8,12 @@ export interface Category {
 }
 
 /* books */
-interface BookCategory {
+export interface BookCategory {
     key: CategoryKey
     child?: BookCategory
 }
 
-export interface Book {
+export interface IBook {
     id: string
     title: string
     category: BookCategory

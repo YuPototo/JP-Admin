@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import Button from '../../components/ui/Button'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import Button from '../../../components/ui/Button'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
     cleanCategory,
     hasSelectedCatory,
     searchTermChanged,
-} from './booksSlice'
+} from '../booksSlice'
 
 export default function SearchBox() {
     const dispatch = useAppDispatch()
