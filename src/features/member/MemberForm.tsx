@@ -54,6 +54,7 @@ export default function MemberForm() {
                             name="userDisplayId"
                             id="userDisplayId"
                             onChange={handleChange}
+                            autoFocus
                             value={values.userDisplayId}
                         />
                     </div>

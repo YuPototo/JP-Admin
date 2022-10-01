@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { getLocalUserInfo } from './features/user/userThunks'
 import BookEditor from './Routes/BookEditor'
 import Error from './Routes/Error'
+import Modal from 'react-modal'
 
 import Home from './Routes/Home'
 import Login from './Routes/Login'
@@ -42,6 +43,8 @@ const router = createBrowserRouter([
         element: <QuestionSetEditor />,
     },
 ])
+
+Modal.setAppElement('#root')
 
 function App() {
     const dispatch = useAppDispatch()

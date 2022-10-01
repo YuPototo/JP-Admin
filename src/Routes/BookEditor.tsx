@@ -5,7 +5,7 @@ import BookInfo from '../features/books/components/BookInfo'
 import ChapterEditor from '../features/content/ChapterEditor'
 import Content from '../features/content/Content'
 import { useGetBookContentQuery } from '../features/content/contentService'
-import SectionEditor from '../features/content/SectionEditor'
+import SectionPanel from '../features/content/SectionPanel'
 import QuestionSetList from '../features/questionSets/QuestionSetList'
 import useAuthGuard from '../features/user/useAuthGuard'
 
@@ -42,7 +42,7 @@ export default function BookEditor() {
                     </div>
                     <div className="flex flex-grow flex-col gap-3">
                         {activeSection && (
-                            <SectionEditor section={activeSection} />
+                            <SectionPanel section={activeSection} />
                         )}
                         {activeChapter && (
                             <ChapterEditor chapter={activeChapter} />

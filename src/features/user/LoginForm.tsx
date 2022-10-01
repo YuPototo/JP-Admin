@@ -32,6 +32,7 @@ export default function LoginForm() {
                             type="username"
                             name="username"
                             id="username"
+                            autoFocus
                             onChange={handleChange}
                             value={values.username}
                         />
