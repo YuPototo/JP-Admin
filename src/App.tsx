@@ -1,16 +1,45 @@
+import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
-import BookList from './features/books/BookList'
-import CategoryNav from './features/books/Category'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { getLocalUserInfo } from './features/user/userThunks'
+import Error from './Routes/Error'
+
+import Home from './Routes/Home'
+import Login from './Routes/Login'
+import Member from './Routes/Member'
+import { useAppDispatch } from './store/hooks'
+
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <Home />,
+        errorElement: <Error />,
+    },
+    {
+        path: '/login',
+        element: <Login />,
+        errorElement: <Error />,
+    },
+    {
+        path: '/member',
+        element: <Member />,
+        errorElement: <Error />,
+    },
+])
 
 function App() {
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(getLocalUserInfo())
+    }, [dispatch])
+
     return (
-        <div>
+        <>
             <Toaster />
 
-            <h1 className="text-3xl font-bold underline">This is admin page</h1>
-            <CategoryNav />
-            <BookList />
-        </div>
+            <RouterProvider router={router} />
+        </>
     )
 }
 

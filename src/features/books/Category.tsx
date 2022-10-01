@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import stringifyRtkQuerryError from '../../store/storeUtils/stringifyRtkQuerryError'
-import { selectChildrenByLevel, setCategoryKey } from './booksSlice'
+import { selectChildrenByLevel, categoryPicked } from './booksSlice'
 import { useGetCategoriyesQuery } from './booksService'
 import type { Category } from './booksTypes'
 import React from 'react'
@@ -12,9 +12,9 @@ export default function CategoryNav() {
     const topCategories = useAppSelector((state) => state.bookList.categories)
 
     return (
-        <div className="my-4">
+        <div className="my-4 rounded bg-white p-1">
             {isLoading ? (
-                <div className="skeleton mb-4 h-6  w-60"></div>
+                <div className="skeleton mb-4 h-6 w-60"></div>
             ) : (
                 <CategoryList categories={topCategories} categoryLevel={0} />
             )}
@@ -43,18 +43,24 @@ function CategoryList({ categories, categoryLevel }: CategoryListProps) {
     )
 
     const handleClickCategory = (key: string) => {
-        dispatch(setCategoryKey({ categoryLevel, key }))
+        dispatch(categoryPicked({ categoryLevel, key }))
     }
 
     return (
         <>
-            <div className="m-2">
+            <div className="m-2 mb-4">
                 {categories.map((category) => (
                     <span
                         className={clsx(
-                            selectedCategoryKey === category.key &&
-                                'bg-red-200',
-                            'm-2 p-2 hover:cursor-pointer hover:bg-red-200'
+                            {
+                                'bg-green-200':
+                                    selectedCategoryKey === category.key,
+                            },
+                            {
+                                'bg-gray-100':
+                                    selectedCategoryKey !== category.key,
+                            },
+                            'm-2 rounded p-1.5 hover:cursor-pointer hover:bg-green-200'
                         )}
                         key={category.key}
                         onClick={() => handleClickCategory(category.key)}

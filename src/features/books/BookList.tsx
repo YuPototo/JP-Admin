@@ -9,12 +9,11 @@ export default function BookList() {
     const books = useAppSelector(selectBooksByCategory)
 
     return (
-        <div>
-            <h1>book list</h1>
+        <div className="flex flex-wrap gap-6">
             {books.length > 0 ? (
                 books.map((book, index) => <BookCard key={index} book={book} />)
             ) : (
-                <div>No books</div>
+                <div>该筛选条件内没有练习册</div>
             )}
         </div>
     )
