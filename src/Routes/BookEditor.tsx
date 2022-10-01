@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 import PageLayout from '../components/layout/PageLayout'
 import Button from '../components/ui/Button'
 import BookInfo from '../features/books/components/BookInfo'
-import ChapterEditor from '../features/content/ChapterEditor'
+import ChapterPanel from '../features/content/ChapterPanel'
 import Content from '../features/content/Content'
 import { useGetBookContentQuery } from '../features/content/contentService'
 import SectionPanel from '../features/content/SectionPanel'
@@ -45,7 +45,7 @@ export default function BookEditor() {
                             <SectionPanel section={activeSection} />
                         )}
                         {activeChapter && (
-                            <ChapterEditor chapter={activeChapter} />
+                            <ChapterPanel chapter={activeChapter} />
                         )}
                         {activeChapter && (
                             <QuestionSetList chapterId={activeChapter.id} />

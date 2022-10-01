@@ -38,7 +38,7 @@ function SectionEditModal({
 
     return (
         <MyModal isOpen={isOpen} onModalClosed={onClose}>
-            <h2 className="mb-4 font-bold text-green-700">修改章</h2>
+            <h2 className="mb-4 font-bold text-green-700">章</h2>
             <div className="flex gap-4">
                 <span>原标题</span>
                 <span>{section.title}</span>

@@ -7,7 +7,7 @@ export const contentApi = splitApi.injectEndpoints({
             query: (bookId) => `books/${bookId}/contents`,
             transformResponse: (res: { sections: ISection[] }) => res.sections,
             keepUnusedDataFor: 300,
-            providesTags: ['Section'],
+            providesTags: ['Content'],
         }),
         updateSection: build.mutation<
             void,
@@ -18,12 +18,27 @@ export const contentApi = splitApi.injectEndpoints({
                 method: 'PATCH',
                 body: { title },
             }),
-            invalidatesTags: ['Section'],
+            invalidatesTags: ['Content'],
+        }),
+        updateChapter: build.mutation<
+            void,
+            { chapterId: string; title?: string; desc?: string }
+        >({
+            query: ({ chapterId, title, desc }) => ({
+                url: `chapters/${chapterId}`,
+                method: 'PATCH',
+                body: { title, desc },
+            }),
+            invalidatesTags: ['Content', 'Chapter'],
         }),
     }),
 })
 
-export const { useGetBookContentQuery, useUpdateSectionMutation } = contentApi
+export const {
+    useGetBookContentQuery,
+    useUpdateSectionMutation,
+    useUpdateChapterMutation,
+} = contentApi
 
 export const selectContentByBook = (bookId: string) => {
     return contentApi.endpoints.getBookContent.select(bookId)

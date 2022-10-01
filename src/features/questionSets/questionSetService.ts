@@ -14,6 +14,7 @@ export const questionSetApi = splitApi.injectEndpoints({
             query: (chapterId) => `chapters/${chapterId}`,
             transformResponse: (res: { chapter: ChapterInfo }) => res.chapter,
             keepUnusedDataFor: 300,
+            providesTags: ['Chapter'],
         }),
         getQuestionSet: build.query<IQuestionSet, string>({
             query: (questionSetId) => `questionSets/${questionSetId}`,
