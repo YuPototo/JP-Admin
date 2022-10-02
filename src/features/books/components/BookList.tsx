@@ -3,12 +3,26 @@ import { useAppSelector } from '../../../store/hooks'
 import BookCard from './BookCard'
 import { useGetBooksQuery } from '../booksService'
 import { selectBooksByCategory } from '../booksSlice'
+import BookSkeleton from './BookSkeleton'
 
 export default function BookList() {
-    useGetBooksQuery()
+    const { isLoading } = useGetBooksQuery()
     const books = useAppSelector(selectBooksByCategory)
 
     const searcTerm = useAppSelector((state) => state.books.searchTerm)
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-wrap gap-6">
+                <BookSkeleton />
+                <BookSkeleton />
+                <BookSkeleton />
+                <BookSkeleton />
+                <BookSkeleton />
+                <BookSkeleton />
+            </div>
+        )
+    }
 
     return (
         <div className="flex flex-wrap gap-6">

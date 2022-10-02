@@ -9,7 +9,7 @@ type Props = {
 }
 
 export default function ChapterPanel({ chapter }: Props) {
-    const { data } = useGetChapterQuery(chapter.id)
+    const { data, isLoading } = useGetChapterQuery(chapter.id)
 
     return (
         <div className="flex items-center rounded bg-white px-4 py-3">
@@ -19,17 +19,25 @@ export default function ChapterPanel({ chapter }: Props) {
                     <label className="text-gray-500">id</label>
                     <div className="text-sm text-gray-500">{chapter.id}</div>
                 </div>
+
                 <div className="mb-2 flex items-center gap-4">
                     <label className="text-gray-500">小节说明</label>
-                    <div className=" ">{data?.desc || '无'}</div>
+                    {isLoading ? (
+                        <div className="skeleton h-8 w-32"></div>
+                    ) : (
+                        <div className=" ">{data?.desc || '无'}</div>
+                    )}
                 </div>
             </div>
-            <div className="ml-auto flex gap-4">
-                <ChapterEditor chapter={chapter} />
-                <Button outline color="red">
-                    隐藏
-                </Button>
-            </div>
+
+            {isLoading || (
+                <div className="ml-auto flex gap-4">
+                    <ChapterEditor chapter={chapter} />
+                    <Button outline color="red">
+                        隐藏
+                    </Button>
+                </div>
+            )}
         </div>
     )
 }

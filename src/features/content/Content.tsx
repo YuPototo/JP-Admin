@@ -1,5 +1,6 @@
 import Button from '../../components/ui/Button'
 import { useGetBookContentQuery } from './contentService'
+import ContentSkeleton from './ContentSkeleton'
 import Section from './Section'
 
 type Props = {
@@ -8,9 +9,16 @@ type Props = {
 }
 
 export default function Content({ bookId, activeSectionIndex }: Props) {
-    const { data: sections } = useGetBookContentQuery(bookId)
+    const { data: sections, isLoading } = useGetBookContentQuery(bookId)
+
+    if (isLoading) {
+        return <ContentSkeleton />
+    }
+
     return (
         <div className="rounded bg-white p-2">
+            <h2 className="mb-4 font-bold text-green-700">目录</h2>
+
             {sections?.map((section, index) => (
                 <Section
                     key={section.id}

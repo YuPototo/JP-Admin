@@ -7,17 +7,24 @@ type Props = {
 }
 
 export default function QuestionSetList({ chapterId }: Props) {
-    const { data } = useGetChapterQuery(chapterId)
+    const { data, isLoading } = useGetChapterQuery(chapterId)
 
-    const { questionSets } = data || {}
-    if (questionSets === undefined || questionSets.length === 0) {
-        return <div>这一小节还没有题目</div>
-    }
+    const questionSetIds = data?.questionSets
 
     return (
         <div className="rounded bg-white p-4">
             <h3 className="mb-3 font-semibold text-green-700">题目列表</h3>
-            {questionSets.map((questionSetId, index) => (
+
+            {isLoading && (
+                <div className="flex flex-col gap-3">
+                    <div className="skeleton h-8 w-64"></div>
+                    <div className="skeleton h-8 w-64"></div>
+                    <div className="skeleton h-8 w-64"></div>
+                    <div className="skeleton h-8 w-64"></div>
+                </div>
+            )}
+
+            {questionSetIds?.map((questionSetId, index) => (
                 <Link
                     to={`/questionSetEditor/${questionSetId}`}
                     key={questionSetId}
@@ -28,6 +35,8 @@ export default function QuestionSetList({ chapterId }: Props) {
                     </div>
                 </Link>
             ))}
+
+            {questionSetIds?.length === 0 && <div>这一小节还没有题目</div>}
         </div>
     )
 }
