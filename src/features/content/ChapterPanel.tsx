@@ -1,5 +1,6 @@
 import React from 'react'
 import Button from '../../components/ui/Button'
+import Skeleton from '../../components/ui/Skeleton'
 import { useGetChapterQuery } from '../questionSets/questionSetService'
 import ChapterEditor from './ChapterEditor'
 import { IChapter } from './contentTypes'
@@ -23,7 +24,7 @@ export default function ChapterPanel({ chapter }: Props) {
                 <div className="mb-2 flex items-center gap-4">
                     <label className="text-gray-500">小节说明</label>
                     {isLoading ? (
-                        <div className="skeleton h-8 w-32"></div>
+                        <Skeleton />
                     ) : (
                         <div className=" ">{data?.desc || '无'}</div>
                     )}

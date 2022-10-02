@@ -10,6 +10,7 @@ import {
 import { useGetCategoriyesQuery } from '../booksService'
 import type { Category } from '../booksTypes'
 import Button from '../../../components/ui/Button'
+import Skeleton from '../../../components/ui/Skeleton'
 
 export default function CategoryNav() {
     const { isLoading, error } = useGetCategoriyesQuery()
@@ -21,7 +22,7 @@ export default function CategoryNav() {
     return (
         <div className="my-4 rounded bg-white p-2">
             {isLoading ? (
-                <div className="skeleton mb-4 h-6 w-60"></div>
+                <CategorySkeleton />
             ) : (
                 <CategoryList categories={topCategories} categoryLevel={0} />
             )}
@@ -97,5 +98,14 @@ function CategoryList({ categories, categoryLevel }: CategoryListProps) {
                 )}
             </div>
         </>
+    )
+}
+
+function CategorySkeleton() {
+    return (
+        <div className="flex gap-4">
+            <Skeleton w="w-16" />
+            <Skeleton w="w-16" />
+        </div>
     )
 }

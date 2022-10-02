@@ -1,5 +1,5 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
+import Skeleton from '../../components/ui/Skeleton'
 import { useGetChapterQuery } from './questionSetService'
 
 type Props = {
@@ -15,14 +15,7 @@ export default function QuestionSetList({ chapterId }: Props) {
         <div className="rounded bg-white p-4">
             <h3 className="mb-3 font-semibold text-green-700">题目列表</h3>
 
-            {isLoading && (
-                <div className="flex flex-col gap-3">
-                    <div className="skeleton h-8 w-64"></div>
-                    <div className="skeleton h-8 w-64"></div>
-                    <div className="skeleton h-8 w-64"></div>
-                    <div className="skeleton h-8 w-64"></div>
-                </div>
-            )}
+            {isLoading && <QuestionSetListSkeleton />}
 
             {questionSetIds?.map((questionSetId, index) => (
                 <Link
@@ -37,6 +30,17 @@ export default function QuestionSetList({ chapterId }: Props) {
             ))}
 
             {questionSetIds?.length === 0 && <div>这一小节还没有题目</div>}
+        </div>
+    )
+}
+
+function QuestionSetListSkeleton() {
+    return (
+        <div className="flex flex-col gap-3">
+            <Skeleton w="w-64" />
+            <Skeleton w="w-64" />
+            <Skeleton w="w-64" />
+            <Skeleton w="w-64" />
         </div>
     )
 }

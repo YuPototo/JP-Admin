@@ -12,16 +12,7 @@ export default function BookList() {
     const searcTerm = useAppSelector((state) => state.books.searchTerm)
 
     if (isLoading) {
-        return (
-            <div className="flex flex-wrap gap-6">
-                <BookSkeleton />
-                <BookSkeleton />
-                <BookSkeleton />
-                <BookSkeleton />
-                <BookSkeleton />
-                <BookSkeleton />
-            </div>
-        )
+        return <BookListSkeleton />
     }
 
     return (
@@ -42,6 +33,19 @@ export default function BookList() {
             ) : (
                 <div>该筛选条件内没有练习册</div>
             )}
+        </div>
+    )
+}
+
+function BookListSkeleton() {
+    return (
+        <div className="flex flex-wrap gap-6">
+            <BookSkeleton />
+            <BookSkeleton />
+            <BookSkeleton />
+            <BookSkeleton />
+            <BookSkeleton />
+            <BookSkeleton />
         </div>
     )
 }
