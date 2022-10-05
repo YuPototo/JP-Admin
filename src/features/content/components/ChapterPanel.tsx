@@ -1,9 +1,9 @@
 import React from 'react'
-import Button from '../../components/ui/Button'
-import Skeleton from '../../components/ui/Skeleton'
-import { useGetChapterQuery } from '../questionSets/questionSetService'
+import Button from '../../../components/ui/Button'
+import Skeleton from '../../../components/ui/Skeleton'
+import { useGetChapterQuery } from '../../questionSets/questionSetService'
 import ChapterEditor from './ChapterEditor'
-import { IChapter } from './contentTypes'
+import { IChapter } from '../contentTypes'
 
 type Props = {
     chapter: IChapter

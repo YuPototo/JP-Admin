@@ -1,50 +1,53 @@
 import { Formik } from 'formik'
 import React from 'react'
 import toast from 'react-hot-toast'
-import MyModal from '../../components/MyModal'
-import Button from '../../components/ui/Button'
-import { useUpdateChapterMutation } from './contentService'
-import { IChapter } from './contentTypes'
+import MyModal from '../../../components/MyModal'
+import Button from '../../../components/ui/Button'
+import { useAddChapterMutation } from '../contentService'
+import { ISection } from '../contentTypes'
 
 type Props = {
-    chapter: IChapter
+    section: ISection
 }
 
-export default function ChapterEditor({ chapter }: Props) {
+export default function ChapterAdder({ section }: Props) {
     const [showModal, setShowModal] = React.useState(false)
+
     return (
         <>
-            <ChapterEditorModal
-                chapter={chapter}
+            <AddChapaterModal
+                section={section}
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
             />
-            <Button outline color="gray" onClick={() => setShowModal(true)}>
-                编辑
+            <Button outline onClick={() => setShowModal(true)}>
+                新增一节
             </Button>
         </>
     )
 }
 
-function ChapterEditorModal({
-    chapter,
+function AddChapaterModal({
+    section,
     isOpen,
     onClose,
 }: {
-    chapter: IChapter
+    section: ISection
     isOpen: boolean
     onClose: () => void
 }) {
-    const [updateChapter] = useUpdateChapterMutation()
+    const [addChapter] = useAddChapterMutation()
 
     return (
         <MyModal isOpen={isOpen} onModalClosed={onClose}>
-            <h2 className="mb-4 font-bold text-green-700">小节</h2>
+            <h2 className="mb-4 font-bold text-green-700">添加一节</h2>
+            <div className="flex gap-4">
+                <div className="text-gray-600">章</div>
+                <div> {section.title}</div>
+            </div>
+
             <Formik
-                initialValues={{
-                    title: chapter.title,
-                    desc: chapter.desc || '',
-                }}
+                initialValues={{ title: '', desc: '' }}
                 validate={(values) => {
                     const errors = {}
                     if (!values.title) {
@@ -56,12 +59,12 @@ function ChapterEditorModal({
                 onSubmit={async (values, { setSubmitting }) => {
                     try {
                         setSubmitting(true)
-                        await updateChapter({
+                        await addChapter({
                             title: values.title,
                             desc: values.desc,
-                            chapterId: chapter.id,
+                            sectionId: section.id,
                         }).unwrap()
-                        toast.success('更新成功')
+                        toast.success('添加成功')
                         onClose()
                         setSubmitting(false)
                     } catch (err) {
@@ -78,17 +81,17 @@ function ChapterEditorModal({
                     handleSubmit,
                     isSubmitting,
                 }) => (
-                    <form onSubmit={handleSubmit}>
-                        <div className="mb-4">
+                    <form className="mt-6" onSubmit={handleSubmit}>
+                        <div className="my-3">
                             <div>
                                 <label
-                                    className="inline-block w-16"
+                                    className="mr-4 inline-block w-12"
                                     htmlFor="title"
                                 >
-                                    新标题
+                                    标题
                                 </label>
                                 <input
-                                    className="ml-4 w-60 rounded border p-2"
+                                    className="w-60 rounded border p-2"
                                     autoFocus
                                     type="title"
                                     name="title"
@@ -103,24 +106,25 @@ function ChapterEditorModal({
                             </div>
                         </div>
 
-                        <div className="mb-4">
-                            <div className="flex items-center">
-                                <label
-                                    className="inline-block w-16"
-                                    htmlFor="desc"
-                                >
-                                    小节说明
-                                </label>
-                                <textarea
-                                    className="ml-4 w-96 rounded border p-2"
-                                    name="desc"
-                                    id="desc"
-                                    rows={3}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.desc}
-                                />
-                            </div>
+                        <div className="flex items-center">
+                            <label
+                                className="mr-4 inline-block "
+                                htmlFor="desc"
+                            >
+                                说明
+                                <span className="ml-1 text-sm text-gray-500">
+                                    (选填)
+                                </span>
+                            </label>
+                            <textarea
+                                className="w-96 rounded border p-2"
+                                name="desc"
+                                id="desc"
+                                rows={2}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.desc}
+                            />
                         </div>
 
                         <div className="mt-4 flex justify-center gap-4">

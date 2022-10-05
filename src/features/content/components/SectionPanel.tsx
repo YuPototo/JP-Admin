@@ -1,6 +1,6 @@
 import React from 'react'
-import Button from '../../components/ui/Button'
-import { ISection } from './contentTypes'
+import Button from '../../../components/ui/Button'
+import { ISection } from '../contentTypes'
 import SectionEditButton from './SectionEditor'
 
 type Props = {

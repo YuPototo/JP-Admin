@@ -1,13 +1,13 @@
 import { useParams } from 'react-router-dom'
 import PageLayout from '../components/layout/PageLayout'
-import Button from '../components/ui/Button'
 import BookInfo from '../features/books/components/BookInfo'
-import ChapterPanel from '../features/content/ChapterPanel'
-import Content from '../features/content/Content'
+import ChapterPanel from '../features/content/components/ChapterPanel'
+import Content from '../features/content/components/Content'
 import { useGetBookContentQuery } from '../features/content/contentService'
-import SectionPanel from '../features/content/SectionPanel'
+import SectionPanel from '../features/content/components/SectionPanel'
 import QuestionSetList from '../features/questionSets/QuestionSetList'
 import useAuthGuard from '../features/user/useAuthGuard'
+import SectionAdder from '../features/content/components/SectionAdder'
 
 export default function BookEditor() {
     useAuthGuard()
@@ -56,9 +56,9 @@ export default function BookEditor() {
 
             {hasSection || (
                 <div className="rounded bg-white p-4">
-                    <div>这本练习册还没有章节</div>
+                    <div>这本练习册还没有内容</div>
                     <div className="mt-3">
-                        <Button>添加一章</Button>
+                        <SectionAdder bookId={bookId} />
                     </div>
                 </div>
             )}

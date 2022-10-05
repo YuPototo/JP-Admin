@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { Link, useParams } from 'react-router-dom'
-import { IChapter } from './contentTypes'
+import { IChapter } from '../contentTypes'
 
 type Props = {
     chapters: IChapter[]
@@ -14,7 +14,7 @@ export default function Chapters({ chapters, chapterIndex }: Props) {
     }
 
     return (
-        <div className="mb-4">
+        <div className="mb-1">
             {chapters.map((chapter, index) => (
                 <Link
                     key={chapter.id}
@@ -22,7 +22,7 @@ export default function Chapters({ chapters, chapterIndex }: Props) {
                 >
                     <div
                         className={clsx(
-                            'my-1  rounded p-2 pl-5 hover:bg-green-200',
+                            'my-1 rounded p-2 pl-5 hover:bg-green-200',
                             { 'bg-green-100': chapterIndex === index }
                         )}
                     >

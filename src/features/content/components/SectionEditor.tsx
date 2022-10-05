@@ -1,10 +1,10 @@
 import { Formik } from 'formik'
 import React from 'react'
 import toast from 'react-hot-toast'
-import MyModal from '../../components/MyModal'
-import Button from '../../components/ui/Button'
-import { useUpdateSectionMutation } from './contentService'
-import { ISection } from './contentTypes'
+import MyModal from '../../../components/MyModal'
+import Button from '../../../components/ui/Button'
+import { useUpdateSectionMutation } from '../contentService'
+import { ISection } from '../contentTypes'
 
 type Props = {
     section: ISection

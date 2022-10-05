@@ -9,6 +9,14 @@ export const contentApi = splitApi.injectEndpoints({
             keepUnusedDataFor: 300,
             providesTags: ['Content'],
         }),
+        addSection: build.mutation<void, { bookId: string; title: string }>({
+            query: ({ bookId, title }) => ({
+                url: `sections`,
+                method: 'POST',
+                body: { bookId, title },
+            }),
+            invalidatesTags: ['Content'],
+        }),
         updateSection: build.mutation<
             void,
             { sectionId: string; title: string }
@@ -17,6 +25,17 @@ export const contentApi = splitApi.injectEndpoints({
                 url: `sections/${sectionId}`,
                 method: 'PATCH',
                 body: { title },
+            }),
+            invalidatesTags: ['Content'],
+        }),
+        addChapter: build.mutation<
+            void,
+            { sectionId: string; title: string; desc?: string }
+        >({
+            query: (args) => ({
+                url: `chapters`,
+                method: 'POST',
+                body: args,
             }),
             invalidatesTags: ['Content'],
         }),
@@ -38,6 +57,8 @@ export const {
     useGetBookContentQuery,
     useUpdateSectionMutation,
     useUpdateChapterMutation,
+    useAddSectionMutation,
+    useAddChapterMutation,
 } = contentApi
 
 export const selectContentByBook = (bookId: string) => {

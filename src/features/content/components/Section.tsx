@@ -1,7 +1,8 @@
 import clsx from 'clsx'
 import { Link, useParams } from 'react-router-dom'
 import Chapters from './Chapters'
-import { ISection } from './contentTypes'
+import { ISection } from '../contentTypes'
+import ChapterAdder from './ChapterAdder'
 
 type Props = {
     section: ISection
@@ -35,10 +36,21 @@ export default function Section({
                 </div>
             </Link>
             {isActive && (
-                <Chapters
-                    chapters={section.chapters}
-                    chapterIndex={parseInt(chapterIndex)}
-                />
+                <div className="mb-10 flex flex-col ">
+                    {section.chapters.length === 0 ? (
+                        <div className="pl-5 text-sm text-gray-700">
+                            暂无小节
+                        </div>
+                    ) : (
+                        <Chapters
+                            chapters={section.chapters}
+                            chapterIndex={parseInt(chapterIndex)}
+                        />
+                    )}
+                    <div className="self-center">
+                        <ChapterAdder section={section} />
+                    </div>
+                </div>
             )}
         </div>
     )

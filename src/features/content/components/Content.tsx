@@ -1,7 +1,7 @@
-import Button from '../../components/ui/Button'
-import { useGetBookContentQuery } from './contentService'
+import { useGetBookContentQuery } from '../contentService'
 import SectionsSkeleton from './SectionsSkeleton'
 import Section from './Section'
+import SectionAdder from './SectionAdder'
 
 type Props = {
     bookId: string
@@ -13,7 +13,10 @@ export default function Content({ bookId, activeSectionIndex }: Props) {
 
     return (
         <div className="rounded bg-white p-2">
-            <h2 className="mb-4 font-bold text-green-700">目录</h2>
+            <div className="mx-2 mb-4 mt-2 flex items-center justify-between">
+                <h2 className=" font-bold text-green-700">目录</h2>
+                <SectionAdder bookId={bookId} />
+            </div>
 
             {isLoading && <SectionsSkeleton />}
 
@@ -27,13 +30,6 @@ export default function Content({ bookId, activeSectionIndex }: Props) {
                             isActive={activeSectionIndex === index}
                         />
                     ))}
-
-                    <div className="mt-4 flex justify-center">
-                        <div className="h-1 w-16 rounded bg-gray-300"></div>
-                    </div>
-                    <div className="mt-4 flex justify-center ">
-                        <Button outline>新增一章</Button>
-                    </div>
                 </>
             )}
         </div>
