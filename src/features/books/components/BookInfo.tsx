@@ -35,7 +35,13 @@ function BookMeta({ book }: { book: IBook }) {
                 <h1 className="text-lg">{book.title}</h1>
                 <div className="text-gray-500">{book.desc}</div>
                 <div>
-                    <CategoryBreadCrumb category={book.category} />
+                    {book.category ? (
+                        <CategoryBreadCrumb category={book.category} />
+                    ) : (
+                        <span className="text-sm text-gray-700">
+                            本练习册还没有设置分类
+                        </span>
+                    )}
                 </div>
                 {book.hidden && <div className="my-2 text-red-500">隐藏中</div>}
             </div>

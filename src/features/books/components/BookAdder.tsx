@@ -1,50 +1,41 @@
 import { Formik } from 'formik'
 import React from 'react'
 import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 import MyModal from '../../../components/MyModal'
 import Button from '../../../components/ui/Button'
-import { useAddChapterMutation } from '../contentService'
-import { ISection } from '../contentTypes'
+import { useAddBookMutation } from '../booksService'
 
-type Props = {
-    section: ISection
-}
-
-export default function ChapterAdder({ section }: Props) {
+export default function BookAdder() {
     const [showModal, setShowModal] = React.useState(false)
 
     return (
         <>
-            <AddChapaterModal
-                section={section}
+            <Button outline onClick={() => setShowModal(true)}>
+                新增练习册
+            </Button>
+
+            <AddBookModal
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
             />
-            <Button outline onClick={() => setShowModal(true)}>
-                新增一节
-            </Button>
         </>
     )
 }
 
-function AddChapaterModal({
-    section,
+function AddBookModal({
     isOpen,
     onClose,
 }: {
-    section: ISection
     isOpen: boolean
     onClose: () => void
 }) {
-    const [addChapter] = useAddChapterMutation()
+    const navigate = useNavigate()
+    const [addBook] = useAddBookMutation()
 
     return (
         <MyModal isOpen={isOpen} onModalClosed={onClose}>
-            <h2 className="mb-4 font-bold text-green-700">添加一节 Chapter</h2>
-            <div className="flex gap-4">
-                <div className="text-gray-600">所属章</div>
-                <div> {section.title}</div>
-            </div>
+            <h2 className="mb-4 font-bold text-green-700">创建练习册</h2>
 
             <Formik
                 initialValues={{ title: '', desc: '' }}
@@ -59,14 +50,18 @@ function AddChapaterModal({
                 onSubmit={async (values, { setSubmitting }) => {
                     try {
                         setSubmitting(true)
-                        await addChapter({
+                        const book = await addBook({
                             title: values.title,
                             desc: values.desc,
-                            sectionId: section.id,
                         }).unwrap()
                         toast.success('添加成功')
                         onClose()
                         setSubmitting(false)
+                        setTimeout(() => {
+                            navigate(
+                                `/bookEditor/${book.id}/sectionIndex/0/chapterIndex/0`
+                            )
+                        }, 1000)
                     } catch (err) {
                         // middle ware 里处理了
                     }
@@ -81,7 +76,7 @@ function AddChapaterModal({
                     handleSubmit,
                     isSubmitting,
                 }) => (
-                    <form className="mt-6" onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit}>
                         <div className="my-3">
                             <div>
                                 <label
@@ -126,7 +121,6 @@ function AddChapaterModal({
                                 value={values.desc}
                             />
                         </div>
-
                         <div className="mt-4 flex justify-center gap-4">
                             <Button type="submit" disabled={isSubmitting}>
                                 提交

@@ -122,12 +122,12 @@ export const selectBooksByCategory = (state: RootState) => {
         return books
     } else if (selectedCategoryLength === 1) {
         const key = selectedCategoryKeys[0]
-        return books.filter((b) => b.category.key === key)
+        return books.filter((b) => b.category?.key === key)
     } else if (selectedCategoryLength === 2) {
         const key_0 = selectedCategoryKeys[0]
         const key_1 = selectedCategoryKeys[1]
         return books.filter(
-            (b) => b.category.key === key_0 && b.category.child?.key === key_1
+            (b) => b.category?.key === key_0 && b?.category.child?.key === key_1
         )
     } else if (selectedCategoryLength === 3) {
         const key_0 = selectedCategoryKeys[0]
@@ -135,7 +135,7 @@ export const selectBooksByCategory = (state: RootState) => {
         const key_2 = selectedCategoryKeys[2]
         return books.filter(
             (b) =>
-                b.category.key === key_0 &&
+                b.category?.key === key_0 &&
                 b.category.child?.key === key_1 &&
                 b.category.child?.child?.key === key_2
         )

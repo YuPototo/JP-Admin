@@ -24,6 +24,15 @@ export const booksApi = splitApi.injectEndpoints({
             }),
             invalidatesTags: ['Book'],
         }),
+        addBook: build.mutation<IBook, { title: string; desc?: string }>({
+            query: (arg) => ({
+                url: `books`,
+                method: 'POST',
+                body: arg,
+            }),
+            invalidatesTags: ['Book'],
+            transformResponse: (res: { book: IBook }) => res.book,
+        }),
     }),
 })
 
@@ -31,4 +40,5 @@ export const {
     useGetCategoriyesQuery,
     useGetBooksQuery,
     useUpdateBookMutation,
+    useAddBookMutation,
 } = booksApi

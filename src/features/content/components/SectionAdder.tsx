@@ -14,7 +14,7 @@ export default function SectionAdder({ bookId }: Props) {
 
     return (
         <>
-            <AddSectionmodal
+            <AddSectionModal
                 bookId={bookId}
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
@@ -26,7 +26,7 @@ export default function SectionAdder({ bookId }: Props) {
     )
 }
 
-function AddSectionmodal({
+function AddSectionModal({
     bookId,
     isOpen,
     onClose,
@@ -39,7 +39,7 @@ function AddSectionmodal({
 
     return (
         <MyModal isOpen={isOpen} onModalClosed={onClose}>
-            <h2 className="mb-4 font-bold text-green-700">添加一章</h2>
+            <h2 className="mb-4 font-bold text-green-700">添加一章 Section</h2>
 
             <Formik
                 initialValues={{ title: '' }}
