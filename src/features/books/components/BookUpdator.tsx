@@ -10,7 +10,7 @@ type Props = {
     book: IBook
 }
 
-export default function BookEditor({ book }: Props) {
+export default function BookUpdator({ book }: Props) {
     const [showModal, setShowModal] = React.useState(false)
 
     return (
@@ -116,7 +116,7 @@ function BookEditorModal({
                                     className="ml-4 w-96 rounded border p-2"
                                     name="desc"
                                     id="desc"
-                                    rows={3}
+                                    rows={2}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.desc}
