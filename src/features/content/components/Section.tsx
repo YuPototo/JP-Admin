@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import Chapters from './Chapters'
 import { ISection } from '../contentTypes'
 import ChapterAdder from './ChapterAdder'
+import { useEffect, useState } from 'react'
 
 type Props = {
     section: ISection
@@ -16,15 +17,26 @@ export default function Section({
     sectionIndex,
     isActive = false,
 }: Props) {
+    const [isOpen, setIsOpen] = useState(false)
+
     const { bookId, chapterIndex } = useParams() as {
         bookId: string
         chapterIndex: string
+    }
+
+    useEffect(() => {
+        setIsOpen(isActive)
+    }, [isActive])
+
+    const handleClick = () => {
+        setIsOpen(!isOpen)
     }
 
     return (
         <div>
             <Link
                 to={`/bookEditor/${bookId}/sectionIndex/${sectionIndex}/chapterIndex/0`}
+                onClick={handleClick}
             >
                 <div
                     className={clsx(
@@ -35,7 +47,7 @@ export default function Section({
                     {section.title}
                 </div>
             </Link>
-            {isActive && (
+            {isOpen && (
                 <div className="mb-10 flex flex-col ">
                     {section.chapters.length === 0 ? (
                         <div className="pl-5 text-sm text-gray-700">
