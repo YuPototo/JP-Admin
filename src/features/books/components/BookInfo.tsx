@@ -2,6 +2,7 @@ import { useAppSelector } from '../../../store/hooks'
 import { useGetBooksQuery, useGetCategoriyesQuery } from '../booksService'
 import { selectBookById, selectCategoryValueByKey } from '../booksSlice'
 import { BookCategory, IBook } from '../booksTypes'
+import BookCoverUpdator from './BookCoverUpdator'
 import BookUpdator from './BookUpdator'
 import ToggleHidden from './ToggleHidden'
 
@@ -28,8 +29,11 @@ export default function BookInfo({ bookId }: Props) {
 function BookMeta({ book }: { book: IBook }) {
     return (
         <div className="flex gap-6 rounded bg-white p-4">
-            <div className="h-full rounded">
+            <div className="flex h-full flex-col rounded">
                 <img className="h-full rounded" alt="封面" src={book.cover} />
+                <div className="-translate-y-1/2 self-center">
+                    <BookCoverUpdator bookId={book.id} />
+                </div>
             </div>
             <div className="">
                 <h1 className="text-lg">{book.title}</h1>
