@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
-import Skeleton from '../../components/ui/Skeleton'
-import { useGetChapterQuery } from './questionSetService'
+import Button from '../../../components/ui/Button'
+import Skeleton from '../../../components/ui/Skeleton'
+import { useGetChapterQuery } from '../questionSetService'
 
 type Props = {
     chapterId: string
@@ -30,6 +31,12 @@ export default function QuestionSetList({ chapterId }: Props) {
             ))}
 
             {questionSetIds?.length === 0 && <div>这一小节还没有题目</div>}
+
+            <div className="mt-4">
+                <Button outline>
+                    <Link to="/questionSetEditor/new">新增题目</Link>
+                </Button>
+            </div>
         </div>
     )
 }

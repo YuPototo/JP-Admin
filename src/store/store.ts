@@ -4,12 +4,14 @@ import { splitApi } from './query/splitApi'
 
 import booksReducer from '../features/books/booksSlice'
 import userReducer from '../features/user/userSlice'
+import questionSetEditorReducer from '../features/questionSets/questionSetEditorSlice'
 import { queryErrorMiddleware } from './middleware/queryErrorMiddleware'
 
 const rootReducer = combineReducers({
     [splitApi.reducerPath]: splitApi.reducer,
     books: booksReducer,
     user: userReducer,
+    questionSetEditor: questionSetEditorReducer,
 })
 
 export const store = configureStore({

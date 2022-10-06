@@ -1,15 +1,47 @@
+import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import PageLayout from '../components/layout/PageLayout'
+import AudioPart from '../features/questionSets/components/AudioPart'
+import QuestionListPart from '../features/questionSets/components/QuestionListPart'
+import QuestionSetBodyPart from '../features/questionSets/components/QuestionSetBodyPart'
+import QuesitonSetExplanationPart from '../features/questionSets/components/QuestionSetExpalanationPart'
+import { questionSetCreated } from '../features/questionSets/questionSetEditorSlice'
 import { useGetQuestionSetQuery } from '../features/questionSets/questionSetService'
 import useAuthGuard from '../features/user/useAuthGuard'
+import { useAppDispatch } from '../store/hooks'
 
 export default function QuestionSetEditor() {
     useAuthGuard()
+    const dispatch = useAppDispatch()
+
     let { questionSetId } = useParams() as {
         questionSetId: string
     }
 
-    const { data } = useGetQuestionSetQuery(questionSetId)
+    useEffect(() => {
+        console.log('questionSetId', questionSetId)
+        if (questionSetId === 'new') {
+            dispatch(questionSetCreated())
+        }
+    }, [questionSetId, dispatch])
 
-    return <PageLayout>{data && <div>{JSON.stringify(data)}</div>}</PageLayout>
+    const { data } = useGetQuestionSetQuery(questionSetId, {
+        skip: questionSetId === 'new',
+    })
+
+    return (
+        <PageLayout>
+            <div className="text-xl">题目编辑器</div>
+
+            <div className="my-8 flex flex-col gap-5">
+                <QuestionSetBodyPart />
+                <AudioPart />
+                <QuestionListPart />
+
+                <QuesitonSetExplanationPart />
+
+                <button>预览题目</button>
+            </div>
+        </PageLayout>
+    )
 }

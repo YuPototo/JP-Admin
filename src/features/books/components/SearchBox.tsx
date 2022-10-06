@@ -29,7 +29,9 @@ export default function SearchBox() {
 
     return (
         <div className="flex items-center gap-3">
-            <label htmlFor="searchTerm">搜索练习册</label>
+            <label htmlFor="searchTerm " className="text-white">
+                搜索练习册
+            </label>
             <input
                 className="rounded p-2"
                 type="text"
