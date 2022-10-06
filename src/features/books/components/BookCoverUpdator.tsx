@@ -45,7 +45,8 @@ function UpdateBookModal({
     const [updateCover] = useUpdateBookCoverMutation()
     const [file, setFile] = useState<File | undefined>()
 
-    const fileSizeLimit = 200000
+    // 上限：100kb
+    const fileSizeLimit = 100000
 
     return (
         <MyModal isOpen={isOpen} onModalClosed={onClose}>
