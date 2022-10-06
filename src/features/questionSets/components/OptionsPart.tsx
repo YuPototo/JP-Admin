@@ -14,7 +14,7 @@ export default function OptionsPart({ questionIndex }: Props) {
     return (
         <div className="flex items-center gap-6">
             <div className="font-bold text-green-800">选项</div>
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-grow flex-col gap-5">
                 {Array.from({ length: optionCount }).map((_, index) => (
                     <OptionPart
                         questionIndex={questionIndex}

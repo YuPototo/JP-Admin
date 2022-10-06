@@ -13,6 +13,7 @@ export interface INewQuestion {
 }
 
 export interface IAudio {
+    id: string
     key: string
     transcription?: string
 }

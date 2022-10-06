@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { INewQuestion, IQuestionSetInEditor } from './questionSetTypes'
+import { IAudio, INewQuestion, IQuestionSetInEditor } from './questionSetTypes'
 import type { RootState } from '../../store/store'
 import _ from 'lodash'
 
@@ -152,6 +152,16 @@ export const questionSetEditorSlice = createSlice({
             const index = action.payload
             delete state.questionSet.questions[index].explanation
         },
+        audioAdded: (state, action: PayloadAction<IAudio>) => {
+            if (!state.questionSet) {
+                console.error('audioAdded called without questionSet')
+                return
+            }
+            state.questionSet.audio = action.payload
+        },
+        audioRemoved: (state) => {
+            delete state.questionSet?.audio
+        },
     },
 })
 
@@ -170,6 +180,8 @@ export const {
     optionSelected,
     questionExplanationAdded,
     questionExplanationRemoved,
+    audioAdded,
+    audioRemoved,
 } = questionSetEditorSlice.actions
 
 export default questionSetEditorSlice.reducer
@@ -224,3 +236,7 @@ export const selectHasQuestionExaplantion =
                 .explanation !== undefined
         )
     }
+
+export const selectHasAudio = (state: RootState) => {
+    return state.questionSetEditor.questionSet?.audio !== undefined
+}

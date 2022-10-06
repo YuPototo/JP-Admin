@@ -1,5 +1,5 @@
 import { splitApi } from '../../store/query/splitApi'
-import { IQuestionSet } from './questionSetTypes'
+import { IAudio, IQuestionSet } from './questionSetTypes'
 
 interface ChapterInfo {
     id: string
@@ -22,7 +22,19 @@ export const questionSetApi = splitApi.injectEndpoints({
                 res.questionSet,
             keepUnusedDataFor: 300,
         }),
+        addAudio: build.mutation<IAudio, FormData>({
+            query: (formData) => ({
+                url: 'audios',
+                method: 'POST',
+                body: formData,
+            }),
+            transformResponse: (res: { audio: IAudio }) => res.audio,
+        }),
     }),
 })
 
-export const { useGetChapterQuery, useGetQuestionSetQuery } = questionSetApi
+export const {
+    useGetChapterQuery,
+    useGetQuestionSetQuery,
+    useAddAudioMutation,
+} = questionSetApi

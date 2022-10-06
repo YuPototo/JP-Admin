@@ -30,7 +30,7 @@ function BookMeta({ book }: { book: IBook }) {
     return (
         <div className="flex gap-6 rounded bg-white p-4">
             <div className="flex h-full flex-col rounded">
-                <img className="h-full rounded" alt="封面" src={book.cover} />
+                <img className="h-44 rounded" alt="封面" src={book.cover} />
                 <div className="-translate-y-1/2 self-center">
                     <BookCoverUpdator bookId={book.id} />
                 </div>

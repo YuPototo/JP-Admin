@@ -31,7 +31,7 @@ export default function QuestionSetEditor() {
 
     return (
         <PageLayout>
-            <div className="text-xl">题目编辑器</div>
+            <div className="text-xl text-white">题目编辑器</div>
 
             <div className="my-8 flex flex-col gap-5">
                 <QuestionSetBodyPart />
