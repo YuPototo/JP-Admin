@@ -1,9 +1,13 @@
+import clsx from 'clsx'
 import { Formik } from 'formik'
-import React from 'react'
+import React, { useState } from 'react'
 import { Pencil } from 'react-bootstrap-icons'
 import toast from 'react-hot-toast'
 import MyModal from '../../../components/MyModal'
 import Button from '../../../components/ui/Button'
+import Spinner from '../../../components/ui/Spinner'
+import { calcSize } from '../../../utils/calcSize'
+import { useUpdateBookCoverMutation } from '../booksService'
 
 type Props = {
     bookId: string
@@ -15,6 +19,7 @@ export default function BookCoverUpdator({ bookId }: Props) {
     return (
         <>
             <UpdateBookModal
+                bookId={bookId}
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
             />
@@ -29,36 +34,50 @@ export default function BookCoverUpdator({ bookId }: Props) {
 }
 
 function UpdateBookModal({
+    bookId,
     isOpen,
     onClose,
 }: {
+    bookId: string
     isOpen: boolean
     onClose: () => void
 }) {
-    // const [addBook] = useAddBookMutation()
+    const [updateCover] = useUpdateBookCoverMutation()
+    const [file, setFile] = useState<File | undefined>()
+
+    const fileSizeLimit = 200000
 
     return (
         <MyModal isOpen={isOpen} onModalClosed={onClose}>
             <h2 className="mb-4 font-bold text-green-700">上传封面</h2>
 
             <Formik
-                initialValues={{ file: '' }}
+                initialValues={{ cover: '' }}
                 validate={(values) => {
                     const errors = {}
-                    if (!values.file) {
+                    if (!values.cover) {
                         //@ts-ignore
-                        errors.title = '必须有标题'
+                        errors.cover = '必须选择封面'
+                    }
+
+                    //@ts-ignore
+                    if (values.cover.size > fileSizeLimit) {
+                        //@ts-ignore
+                        errors.cover = '封面尺寸需要小于200kb'
                     }
                     return errors
                 }}
                 onSubmit={async (values, { setSubmitting }) => {
+                    const formData = new FormData()
+                    formData.append('cover', values.cover)
+
                     try {
                         setSubmitting(true)
-                        // const book = await addBook({
-                        //     title: values.title,
-                        //     desc: values.desc,
-                        // }).unwrap()
-                        toast.success('添加成功')
+                        await updateCover({
+                            bookId,
+                            formData,
+                        }).unwrap()
+                        toast.success('图片添加成功')
                         onClose()
                         setSubmitting(false)
                     } catch (err) {
@@ -67,7 +86,6 @@ function UpdateBookModal({
                 }}
             >
                 {({
-                    values,
                     errors,
                     touched,
                     handleSubmit,
@@ -75,26 +93,62 @@ function UpdateBookModal({
                     isSubmitting,
                 }) => (
                     <form onSubmit={handleSubmit}>
-                        <label htmlFor="image" className="mr-2">
-                            选择图片
-                        </label>
+                        {file === undefined ? (
+                            <div>
+                                <label htmlFor="cover" className="mr-2">
+                                    选择图片
+                                </label>
 
-                        <input
-                            id="image"
-                            name="cover"
-                            type="file"
-                            accept=".jpg, .jpeg, .png"
-                            onChange={(event) => {
-                                setFieldValue(
-                                    'cover',
-                                    event.currentTarget.files?.[0]
-                                )
-                            }}
-                        />
+                                <input
+                                    id="cover"
+                                    name="cover"
+                                    type="file"
+                                    accept=".jpg, .jpeg, .png"
+                                    onChange={(event) => {
+                                        const file =
+                                            event.currentTarget.files?.[0]
+                                        setFieldValue('cover', file)
+                                        setFile(file)
+                                    }}
+                                />
+                            </div>
+                        ) : (
+                            <div className="flex flex-col gap-2">
+                                <div>
+                                    <span className="mr-4 text-gray-600">
+                                        文件名
+                                    </span>
+                                    <span>{file.name}</span>
+                                </div>
+                                <div
+                                    className={clsx(
+                                        file.size > fileSizeLimit
+                                            ? 'text-red-600'
+                                            : 'text-gray-500',
+                                        'text-sm'
+                                    )}
+                                >
+                                    {calcSize(file.size)}
+                                </div>
+                                <div>
+                                    <Button
+                                        outline
+                                        color="gray"
+                                        onClick={() => setFile(undefined)}
+                                    >
+                                        重新选择
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="mt-2 text-sm text-red-600">
+                            {errors.cover && touched.cover && errors.cover}
+                        </div>
 
                         <div className="mt-4 flex justify-center gap-4">
                             <Button type="submit" disabled={isSubmitting}>
-                                提交
+                                {isSubmitting ? <Spinner /> : <span>提交</span>}
                             </Button>
                             <Button outline color="gray" onClick={onClose}>
                                 返回

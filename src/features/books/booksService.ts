@@ -33,6 +33,17 @@ export const booksApi = splitApi.injectEndpoints({
             invalidatesTags: ['Book'],
             transformResponse: (res: { book: IBook }) => res.book,
         }),
+        updateBookCover: build.mutation<
+            void,
+            { bookId: string; formData: FormData }
+        >({
+            query: ({ bookId, formData }) => ({
+                url: `books/${bookId}/bookCover`,
+                method: 'PATCH',
+                body: formData,
+            }),
+            invalidatesTags: ['Book'],
+        }),
     }),
 })
 
@@ -41,4 +52,5 @@ export const {
     useGetBooksQuery,
     useUpdateBookMutation,
     useAddBookMutation,
+    useUpdateBookCoverMutation,
 } = booksApi
