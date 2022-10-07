@@ -26,7 +26,7 @@ export interface IQuestionSet {
     audio?: IAudio
 }
 
-type IQuestionInEditor = INewQuestion | IQuestion
+export type IQuestionInEditor = INewQuestion | IQuestion
 
 export interface IQuestionSetInEditor {
     id?: string

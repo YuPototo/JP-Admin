@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import MyModal from '../../../components/MyModal'
 import Button from '../../../components/ui/Button'
-import { useAppDispatch } from '../../../store/hooks'
+import QuestionSet from './QuestionSet'
 
 export default function Previewer() {
     const [showModal, setShowModal] = useState(false)
@@ -24,14 +24,20 @@ function PreviewModal({
     isOpen: boolean
     onClose: () => void
 }) {
-    const dispatch = useAppDispatch()
-
     return (
-        <MyModal isOpen={isOpen} onModalClosed={onClose}>
-            <div className=" w-screen max-w-4xl">
-                <h2 className="mb-4 font-bold text-green-700">预览</h2>
+        <MyModal
+            isOpen={isOpen}
+            onModalClosed={onClose}
+            bottom="20px"
+            top="20px"
+            transform="translate(-50%)"
+        >
+            <div className="w-screen max-w-4xl overflow-y-scroll">
+                <h2 className="mb-4 text-2xl font-bold text-green-700">预览</h2>
 
-                <div className="flex gap-4">
+                <QuestionSet />
+
+                <div className="mt-10 flex gap-6">
                     <Button outline color="gray" onClick={onClose}>
                         返回
                     </Button>

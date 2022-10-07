@@ -5,17 +5,27 @@ type Props = {
     isOpen: boolean
     onModalClosed: () => void
     children: React.ReactNode
+    top?: string
+    bottom?: string
+    transform?: string
 }
 
-export default function MyModal({ isOpen, onModalClosed, children }: Props) {
+export default function MyModal({
+    isOpen,
+    onModalClosed,
+    children,
+    top = '50%',
+    bottom = 'auto',
+    transform = 'translate(-50%, -50%)',
+}: Props) {
     const customStyles = {
         content: {
-            top: '50%',
+            top,
             left: '50%',
             right: 'auto',
-            bottom: 'auto',
+            bottom,
             marginRight: '-50%',
-            transform: 'translate(-50%, -50%)',
+            transform,
         },
     }
 

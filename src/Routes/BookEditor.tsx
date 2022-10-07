@@ -5,7 +5,7 @@ import ChapterPanel from '../features/content/components/ChapterPanel'
 import Content from '../features/content/components/Content'
 import { useGetBookContentQuery } from '../features/content/contentService'
 import SectionPanel from '../features/content/components/SectionPanel'
-import QuestionSetList from '../features/questionSets/components/QuestionSetList'
+import QuestionSetList from '../features/questionSets/EditComponents/QuestionSetList'
 import useAuthGuard from '../features/user/useAuthGuard'
 import SectionAdder from '../features/content/components/SectionAdder'
 
