@@ -24,7 +24,7 @@ export default function QuestionOptions({ options, answer }: Props) {
             )}
 
             {options.map((option, index) => (
-                <div>
+                <div key={index}>
                     <Option option={option} isAnswer={index === answer} />
                 </div>
             ))}

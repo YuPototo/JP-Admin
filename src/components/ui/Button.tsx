@@ -11,13 +11,13 @@ type Props = {
     color?: ButtonColor
     outline?: boolean
     disabled?: boolean
-    size?: string
+    padding?: string
     onClick?: () => void
 }
 
 const classes = {
     base: 'focus:outline-none transition ease-in-out duration-300 rounded-full shadow-md',
-    baseSize: 'py-1 px-4',
+    padding: 'py-1 px-4',
 
     disabled: 'opacity-50 cursor-not-allowed',
 
@@ -47,7 +47,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
             disabled = false,
             type = 'button',
             outline = false,
-            size,
+            padding,
             ...props
         },
         ref
@@ -59,7 +59,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
                 disabled={disabled}
                 className={clsx(
                     classes.base,
-                    size || classes.baseSize,
+                    padding || classes.padding,
                     disabled && classes.disabled,
                     outline ? classes.outline.base : classes.fill.base,
                     outline

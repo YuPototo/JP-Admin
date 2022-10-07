@@ -4,13 +4,15 @@ import type { RootState } from '../../store/store'
 import _ from 'lodash'
 
 export interface QuestionSetEditorState {
-    editType: null | 'new' | 'edit'
+    // editType: null | 'new' | 'edit'
+    chapterId: null | string
     questionSet: null | IQuestionSetInEditor
     validationError: null | string[]
 }
 
 const initialState: QuestionSetEditorState = {
-    editType: null,
+    // editType: null,
+    chapterId: null,
     questionSet: null,
     validationError: null,
 }
@@ -24,8 +26,11 @@ export const questionSetEditorSlice = createSlice({
     name: 'questionSetEditor',
     initialState,
     reducers: {
+        chapterUsed: (state, action: PayloadAction<string>) => {
+            state.chapterId = action.payload
+        },
         questionSetCreated: (state) => {
-            state.editType = 'new'
+            // state.editType = 'new'
             state.questionSet = {
                 questions: [_.cloneDeep(emptyQuestion)],
             }
@@ -270,10 +275,16 @@ export const questionSetEditorSlice = createSlice({
         errorReset: (state) => {
             state.validationError = null
         },
+        questionSetSubmitted: (state) => {
+            state.chapterId = null
+            state.questionSet = null
+            state.validationError = null
+        },
     },
 })
 
 export const {
+    chapterUsed,
     questionSetBodyAdded,
     questionSetCreated,
     questionSetBodyRemoved,
@@ -298,6 +309,7 @@ export const {
     questionSetExplanationChanged,
     errorDiscovered,
     errorReset,
+    questionSetSubmitted,
 } = questionSetEditorSlice.actions
 
 export default questionSetEditorSlice.reducer
@@ -390,4 +402,25 @@ export const selectQuestionExplanation =
 export const selectQuestionSetExplanation = (state: RootState) => {
     const questionSet = state.questionSetEditor.questionSet
     return questionSet?.explanation ?? ''
+}
+
+export const selectAddQuestionSetPayload = (state: RootState) => {
+    const questionSet = state.questionSetEditor.questionSet
+    if (!questionSet) {
+        return
+    }
+    const chapterId = state.questionSetEditor.chapterId
+    if (!chapterId) {
+        return
+    }
+    return {
+        questionSet: {
+            body: questionSet.body,
+            explanation: questionSet.explanation,
+            audio: questionSet.audio?.id,
+            questions: questionSet.questions,
+        },
+        audio: questionSet.audio,
+        chapterId,
+    }
 }

@@ -35,3 +35,10 @@ export interface IQuestionSetInEditor {
     explanation?: string // 大题解析
     audio?: IAudio
 }
+
+export interface IQuestionSetPayload {
+    body?: string // 大题题干
+    questions: IQuestionInEditor[]
+    explanation?: string // 大题解析
+    audio?: string
+}

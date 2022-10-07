@@ -34,7 +34,9 @@ export default function QuestionSetList({ chapterId }: Props) {
 
             <div className="mt-4">
                 <Button outline>
-                    <Link to="/questionSetEditor/new">新增题目</Link>
+                    <Link to={`/questionSetEditor/new?chapterId=${chapterId}`}>
+                        新增题目
+                    </Link>
                 </Button>
             </div>
         </div>
