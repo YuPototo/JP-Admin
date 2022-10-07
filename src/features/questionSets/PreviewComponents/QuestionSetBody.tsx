@@ -1,8 +1,22 @@
+import { useEffect } from 'react'
+import { useAppDispatch } from '../../../store/hooks'
+import { errorDiscovered } from '../questionSetEditorSlice'
+
 type Props = {
     body?: string
 }
 
 export default function QuestionSetBody({ body }: Props) {
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        if (body === '') {
+            dispatch(
+                errorDiscovered('大题题干为空白。如果不需要，请移除题干。')
+            )
+        }
+    }, [body, dispatch])
+
     if (body === undefined) {
         return <></>
     }

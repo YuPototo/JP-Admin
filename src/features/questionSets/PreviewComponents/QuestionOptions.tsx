@@ -1,5 +1,7 @@
-import clsx from 'clsx'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useAppDispatch } from '../../../store/hooks'
+import { errorDiscovered } from '../questionSetEditorSlice'
+import Option from './Option'
 
 type Props = {
     options: string[]
@@ -7,6 +9,14 @@ type Props = {
 }
 
 export default function QuestionOptions({ options, answer }: Props) {
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        if (answer === undefined) {
+            dispatch(errorDiscovered('没有选择答案 '))
+        }
+    }, [answer, dispatch])
+
     return (
         <div className="ml-4">
             {answer === undefined && (
@@ -14,15 +24,8 @@ export default function QuestionOptions({ options, answer }: Props) {
             )}
 
             {options.map((option, index) => (
-                <div
-                    className={clsx(
-                        'my-2 px-4 py-2',
-                        answer === index ? 'bg-green-100' : 'bg-gray-100',
-                        option === '' && 'text-red-700'
-                    )}
-                    key={index}
-                >
-                    {option || '选项不能空白！'}
+                <div>
+                    <Option option={option} isAnswer={index === answer} />
                 </div>
             ))}
         </div>

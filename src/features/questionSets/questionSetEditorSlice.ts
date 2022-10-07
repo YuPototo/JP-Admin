@@ -6,11 +6,13 @@ import _ from 'lodash'
 export interface QuestionSetEditorState {
     editType: null | 'new' | 'edit'
     questionSet: null | IQuestionSetInEditor
+    validationError: null | string[]
 }
 
 const initialState: QuestionSetEditorState = {
     editType: null,
     questionSet: null,
+    validationError: null,
 }
 
 const emptyQuestion: INewQuestion = {
@@ -258,6 +260,16 @@ export const questionSetEditorSlice = createSlice({
             }
             state.questionSet.explanation = action.payload
         },
+        errorDiscovered: (state, action: PayloadAction<string>) => {
+            if (state.validationError) {
+                state.validationError.push(action.payload)
+            } else {
+                state.validationError = [action.payload]
+            }
+        },
+        errorReset: (state) => {
+            state.validationError = null
+        },
     },
 })
 
@@ -284,6 +296,8 @@ export const {
     optionChanged,
     questionExplanationChanged,
     questionSetExplanationChanged,
+    errorDiscovered,
+    errorReset,
 } = questionSetEditorSlice.actions
 
 export default questionSetEditorSlice.reducer

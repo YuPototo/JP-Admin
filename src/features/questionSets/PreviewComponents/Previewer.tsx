@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import MyModal from '../../../components/MyModal'
 import Button from '../../../components/ui/Button'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { errorReset } from '../questionSetEditorSlice'
 import QuestionSet from './QuestionSet'
 
 export default function Previewer() {
@@ -24,6 +26,18 @@ function PreviewModal({
     isOpen: boolean
     onClose: () => void
 }) {
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        if (isOpen) {
+            dispatch(errorReset())
+        }
+    }, [isOpen, dispatch])
+
+    const hasValidtionError = useAppSelector(
+        (state) => state.questionSetEditor.validationError !== null
+    )
+
     return (
         <MyModal
             isOpen={isOpen}
@@ -41,7 +55,7 @@ function PreviewModal({
                     <Button outline color="gray" onClick={onClose}>
                         返回
                     </Button>
-                    <Button>提交</Button>
+                    <Button disabled={hasValidtionError}>提交</Button>
                 </div>
             </div>
         </MyModal>
