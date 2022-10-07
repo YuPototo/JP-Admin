@@ -1,10 +1,11 @@
-import React from 'react'
 import Button from '../../../components/ui/Button'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
     questionExplanationAdded,
+    questionExplanationChanged,
     questionExplanationRemoved,
     selectHasQuestionExaplantion,
+    selectQuestionExplanation,
 } from '../questionSetEditorSlice'
 import RemovableEditor from './RemovableEditor'
 
@@ -14,9 +15,16 @@ type Props = {
 
 export default function QuestionExpalantionPart({ questionIndex }: Props) {
     const dispatch = useAppDispatch()
+
     const hasQuestionExplanation = useAppSelector(
         selectHasQuestionExaplantion(questionIndex)
     )
+
+    const value = useAppSelector(selectQuestionExplanation(questionIndex))
+
+    const handleChange = (value: string) => {
+        dispatch(questionExplanationChanged({ questionIndex, value }))
+    }
 
     return (
         <div className="flex items-center gap-6">
@@ -26,6 +34,8 @@ export default function QuestionExpalantionPart({ questionIndex }: Props) {
                 <>
                     <div className="flex-grow">
                         <RemovableEditor
+                            value={value}
+                            onChange={handleChange}
                             onRemove={() =>
                                 dispatch(
                                     questionExplanationRemoved(questionIndex)

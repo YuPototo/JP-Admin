@@ -5,15 +5,9 @@ type Props = {
     isOpen: boolean
     onModalClosed: () => void
     children: React.ReactNode
-    bottom?: string
 }
 
-export default function MyModal({
-    isOpen,
-    onModalClosed,
-    children,
-    bottom, // 如果设置为 auto，那么 modal 高度会根据内容自动调整。否则固定高度
-}: Props) {
+export default function MyModal({ isOpen, onModalClosed, children }: Props) {
     const customStyles = {
         content: {
             top: '50%',

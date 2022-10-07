@@ -28,7 +28,7 @@ export default function QuestionPart({ index }: Props) {
             </div>
 
             {questionsCount > 1 && (
-                <div className="mt-8">
+                <div className="mt-8 flex justify-center">
                     <Button
                         outline
                         color="gray"

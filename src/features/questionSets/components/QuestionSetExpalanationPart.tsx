@@ -5,14 +5,23 @@ import {
     questionSetExplanationAdded,
     questionSetExplanationRemoved,
     selectHasQuestionSetExplanation,
+    selectQuestionSetExplanation,
+    questionSetExplanationChanged,
 } from '../questionSetEditorSlice'
 import RemovableEditor from './RemovableEditor'
 
 export default function QuesitonSetExplanationPart() {
     const dispatch = useAppDispatch()
+
     const hasQuestionSetExplanation = useAppSelector(
         selectHasQuestionSetExplanation
     )
+
+    const value = useAppSelector(selectQuestionSetExplanation)
+
+    const handleChange = (value: string) => {
+        dispatch(questionSetExplanationChanged(value))
+    }
 
     return (
         <div className="rounded bg-gray-100 p-4">
@@ -21,6 +30,8 @@ export default function QuesitonSetExplanationPart() {
             {hasQuestionSetExplanation ? (
                 <div className="mt-2">
                     <RemovableEditor
+                        value={value}
+                        onChange={handleChange}
                         onRemove={() =>
                             dispatch(questionSetExplanationRemoved())
                         }

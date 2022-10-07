@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import PageLayout from '../components/layout/PageLayout'
 import AudioPart from '../features/questionSets/components/AudioPart'
+import Previewer from '../features/questionSets/components/Previewer'
 import QuestionListPart from '../features/questionSets/components/QuestionListPart'
 import QuestionSetBodyPart from '../features/questionSets/components/QuestionSetBodyPart'
 import QuesitonSetExplanationPart from '../features/questionSets/components/QuestionSetExpalanationPart'
@@ -40,7 +41,7 @@ export default function QuestionSetEditor() {
 
                 <QuesitonSetExplanationPart />
 
-                <button>预览题目</button>
+                <Previewer />
             </div>
         </PageLayout>
     )

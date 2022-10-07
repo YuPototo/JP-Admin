@@ -1,9 +1,11 @@
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
+    optionChanged,
     optionRemoved,
     optionSelected,
     selectAnswer,
     selectOptionsCount,
+    selectOptionValue,
 } from '../questionSetEditorSlice'
 import RemovableEditor from './RemovableEditor'
 import { Check } from 'react-bootstrap-icons'
@@ -16,12 +18,17 @@ type Props = {
 
 export default function OptionPart({ questionIndex, optionIndex }: Props) {
     const dispatch = useAppDispatch()
+    const value = useAppSelector(selectOptionValue(questionIndex, optionIndex))
     const optionCount = useAppSelector(selectOptionsCount(questionIndex))
     const isSelected = useAppSelector(selectAnswer(questionIndex, optionIndex))
 
     const handleClick = () => {
         dispatch(optionSelected({ questionIndex, optionIndex }))
     }
+    const handleChange = (value: string) => {
+        dispatch(optionChanged({ questionIndex, optionIndex, value }))
+    }
+
     return (
         <div className="flex items-center gap-4">
             <div
@@ -41,10 +48,12 @@ export default function OptionPart({ questionIndex, optionIndex }: Props) {
             </div>
             <div className="flex-grow">
                 <RemovableEditor
+                    value={value}
                     onRemove={() =>
                         dispatch(optionRemoved({ questionIndex, optionIndex }))
                     }
                     disableRemove={optionCount <= 2}
+                    onChange={handleChange}
                 />
             </div>
         </div>

@@ -162,6 +162,102 @@ export const questionSetEditorSlice = createSlice({
         audioRemoved: (state) => {
             delete state.questionSet?.audio
         },
+        questionSetBodyChanged: (state, action: PayloadAction<string>) => {
+            if (!state.questionSet) {
+                console.error(
+                    'questionSetBodyChanged called without questionSet'
+                )
+                return
+            }
+            state.questionSet.body = action.payload
+        },
+        audioTranscriptionChanged: (state, action: PayloadAction<string>) => {
+            if (!state.questionSet) {
+                console.error(
+                    'audioTranscriptionChanged called without questionSet'
+                )
+                return
+            }
+            if (!state.questionSet.audio) {
+                console.error('audioTranscriptionChanged: audio is undefined')
+                return
+            }
+            state.questionSet.audio.transcription = action.payload
+        },
+        questionBodyChanged: (
+            state,
+            action: PayloadAction<{ value: string; questionIndex: number }>
+        ) => {
+            if (!state.questionSet) {
+                console.error('questionBodyChanged called without questionSet')
+                return
+            }
+            const { value, questionIndex } = action.payload
+
+            const question = state.questionSet.questions[questionIndex]
+            if (!question) {
+                console.error('questionBodyChanged: question is undefined')
+            }
+            question.body = value
+        },
+        optionChanged: (
+            state,
+            action: PayloadAction<{
+                value: string
+                questionIndex: number
+                optionIndex: number
+            }>
+        ) => {
+            if (!state.questionSet) {
+                console.error('optionChanged called without questionSet')
+                return
+            }
+            const { value, questionIndex, optionIndex } = action.payload
+
+            const question = state.questionSet.questions[questionIndex]
+            if (!question) {
+                console.error('optionChanged: question is undefined')
+                return
+            }
+
+            const option = question.options[optionIndex]
+            if (option === undefined) {
+                console.error('optionChanged: option is undefined')
+                return
+            }
+
+            question.options[optionIndex] = value
+        },
+        questionExplanationChanged: (
+            state,
+            action: PayloadAction<{ questionIndex: number; value: string }>
+        ) => {
+            if (!state.questionSet) {
+                console.error('questionExplanationChanged:  no questionSet')
+                return
+            }
+            const { value, questionIndex } = action.payload
+
+            const question = state.questionSet.questions[questionIndex]
+            if (!question) {
+                console.error(
+                    'questionExplanationChanged: question is undefined'
+                )
+                return
+            }
+
+            question.explanation = value
+        },
+        questionSetExplanationChanged: (
+            state,
+            action: PayloadAction<string>
+        ) => {
+            if (!state.questionSet) {
+                console.error('questionExplanationChanged:  no questionSet')
+                return
+            }
+            state.questionSet.explanation = action.payload
+        },
     },
 })
 
@@ -182,12 +278,23 @@ export const {
     questionExplanationRemoved,
     audioAdded,
     audioRemoved,
+    questionSetBodyChanged,
+    audioTranscriptionChanged,
+    questionBodyChanged,
+    optionChanged,
+    questionExplanationChanged,
+    questionSetExplanationChanged,
 } = questionSetEditorSlice.actions
 
 export default questionSetEditorSlice.reducer
 
 /* selectors */
 export const selectQuestionSetBody = (state: RootState) => {
+    const questionSet = state.questionSetEditor.questionSet
+    return questionSet?.body ?? ''
+}
+
+export const selectHasQuestionSetBody = (state: RootState) => {
     return state.questionSetEditor.questionSet?.body !== undefined
 }
 
@@ -203,13 +310,11 @@ export const selectHasQuestionSetExplanation = (state: RootState) => {
     return state.questionSetEditor.questionSet?.explanation !== undefined
 }
 
-export const selectHasQuestionSetBody =
-    (index: number) => (state: RootState) => {
-        return (
-            state.questionSetEditor.questionSet?.questions[index].body !==
-            undefined
-        )
-    }
+export const selectHasQuestionBody = (index: number) => (state: RootState) => {
+    return (
+        state.questionSetEditor.questionSet?.questions[index].body !== undefined
+    )
+}
 
 export const selectOptionsCount =
     (questionIndex: number) => (state: RootState) => {
@@ -239,4 +344,36 @@ export const selectHasQuestionExaplantion =
 
 export const selectHasAudio = (state: RootState) => {
     return state.questionSetEditor.questionSet?.audio !== undefined
+}
+
+export const selectAudioTranscription = (state: RootState) => {
+    const audio = state.questionSetEditor.questionSet?.audio
+
+    return audio?.transcription ?? ''
+}
+
+export const selectQuestionBody =
+    (questionIndex: number) => (state: RootState) => {
+        const questionSet = state.questionSetEditor.questionSet
+        return questionSet?.questions[questionIndex]?.body ?? ''
+    }
+
+export const selectOptionValue =
+    (questionIndex: number, optionIndex: number) => (state: RootState) => {
+        const questionSet = state.questionSetEditor.questionSet
+
+        const question = questionSet?.questions[questionIndex]
+
+        return question?.options[optionIndex] ?? ''
+    }
+
+export const selectQuestionExplanation =
+    (questionIndex: number) => (state: RootState) => {
+        const questionSet = state.questionSetEditor.questionSet
+        return questionSet?.questions[questionIndex]?.explanation ?? ''
+    }
+
+export const selectQuestionSetExplanation = (state: RootState) => {
+    const questionSet = state.questionSetEditor.questionSet
+    return questionSet?.explanation ?? ''
 }

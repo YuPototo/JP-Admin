@@ -1,3 +1,5 @@
+import { nanoid } from '@reduxjs/toolkit'
+import { useMemo } from 'react'
 import Button from '../../../components/ui/Button'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { optionAdded, selectOptionsCount } from '../questionSetEditorSlice'
@@ -17,6 +19,7 @@ export default function OptionsPart({ questionIndex }: Props) {
             <div className="flex flex-grow flex-col gap-5">
                 {Array.from({ length: optionCount }).map((_, index) => (
                     <OptionPart
+                        key={index}
                         questionIndex={questionIndex}
                         optionIndex={index}
                     />

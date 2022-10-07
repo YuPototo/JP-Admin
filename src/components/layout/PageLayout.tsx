@@ -10,7 +10,7 @@ export default function PageLayout({
     backgroundColor?: string
 }) {
     return (
-        <div className={clsx('min-h-screen ', backgroundColor)}>
+        <div className={clsx('min-h-screen pb-16', backgroundColor)}>
             <NavBar />
             <div className="mx-auto max-w-6xl px-4 pt-5">{children}</div>
         </div>

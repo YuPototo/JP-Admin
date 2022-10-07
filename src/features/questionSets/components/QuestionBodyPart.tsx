@@ -1,10 +1,11 @@
-import React from 'react'
 import Button from '../../../components/ui/Button'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
     questionBodyAdded,
+    questionBodyChanged,
     questionBodyRemoved,
-    selectHasQuestionSetBody,
+    selectHasQuestionBody,
+    selectQuestionBody,
 } from '../questionSetEditorSlice'
 import RemovableEditor from './RemovableEditor'
 
@@ -14,7 +15,13 @@ type Props = {
 
 export default function QuestionBodyPart({ index }: Props) {
     const dispatch = useAppDispatch()
-    const hasQuestionBody = useAppSelector(selectHasQuestionSetBody(index))
+
+    const hasQuestionBody = useAppSelector(selectHasQuestionBody(index))
+    const questionBody = useAppSelector(selectQuestionBody(index))
+
+    const handleChange = (value: string) => {
+        dispatch(questionBodyChanged({ questionIndex: index, value }))
+    }
 
     return (
         <div className="flex items-center gap-6">
@@ -24,6 +31,8 @@ export default function QuestionBodyPart({ index }: Props) {
                 <>
                     <div className="flex-grow">
                         <RemovableEditor
+                            value={questionBody}
+                            onChange={handleChange}
                             onRemove={() =>
                                 dispatch(questionBodyRemoved(index))
                             }

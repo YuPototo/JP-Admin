@@ -2,6 +2,8 @@ import Button from '../../../components/ui/Button'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
     questionSetBodyAdded,
+    questionSetBodyChanged,
+    selectHasQuestionSetBody,
     selectQuestionSetBody,
 } from '../questionSetEditorSlice'
 import RemovableEditor from './RemovableEditor'
@@ -9,7 +11,12 @@ import { questionSetBodyRemoved } from '../questionSetEditorSlice'
 
 export default function QuestionSetBodyPart() {
     const dispatch = useAppDispatch()
-    const hasQuestionSetBody = useAppSelector(selectQuestionSetBody)
+    const value = useAppSelector(selectQuestionSetBody)
+    const hasQuestionSetBody = useAppSelector(selectHasQuestionSetBody)
+
+    const handleChange = (value: string) => {
+        dispatch(questionSetBodyChanged(value))
+    }
 
     return (
         <div className="rounded bg-gray-100 p-4">
@@ -18,6 +25,8 @@ export default function QuestionSetBodyPart() {
             {hasQuestionSetBody ? (
                 <div className="mt-2">
                     <RemovableEditor
+                        value={value}
+                        onChange={handleChange}
                         onRemove={() => dispatch(questionSetBodyRemoved())}
                     />
                 </div>
