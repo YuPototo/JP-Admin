@@ -1,23 +1,19 @@
-import { BaseRange, Editor } from 'slate'
+import { Editor } from 'slate'
 import { useSlate } from 'slate-react'
-import { CustomEditor } from './command'
 import ToolbarButton from './components/ToolbarButton'
 import { EditorType } from './SlateEditor'
-import { TypeBold } from 'react-bootstrap-icons'
+import { TypeBold, TypeUnderline } from 'react-bootstrap-icons'
 
-type Format = 'bold'
+type Format = 'bold' | 'underline'
 
-type Props = {
-    selection: BaseRange | null
-    customEditor: typeof CustomEditor
-    editor: EditorType
-}
-
-export default function MyToolbar({ selection, customEditor, editor }: Props) {
+export default function MyToolbar() {
     return (
         <div className="mb-1 flex gap-1">
             <MarkButton format="bold">
                 <TypeBold />
+            </MarkButton>
+            <MarkButton format="underline">
+                <TypeUnderline />
             </MarkButton>
         </div>
     )
@@ -49,7 +45,7 @@ const isMarkActive = (editor: EditorType, format: Format) => {
     return marks ? marks[format] === true : false
 }
 
-const toggleMark = (editor: EditorType, format: Format) => {
+export const toggleMark = (editor: EditorType, format: Format) => {
     const isActive = isMarkActive(editor, format)
 
     if (isActive) {
