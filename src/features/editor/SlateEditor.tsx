@@ -15,6 +15,7 @@ import areEqual from 'deep-equal'
 import Toolbar, { toggleMark } from './components/Toolbar'
 import Leaf from './components/Leaf'
 import Filler from './components/Filler'
+import Tip from './components/Tip'
 
 export type EditorType = ReturnType<typeof withReact>
 
@@ -39,6 +40,8 @@ export default function SlateEditor({ onChange, value }: Props) {
         switch (props.element.type) {
             case 'filler':
                 return <Filler {...props} />
+            case 'tip':
+                return <Tip {...props} />
             default:
                 return <DefaultElement {...props} />
         }
