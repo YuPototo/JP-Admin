@@ -12,6 +12,7 @@ import Member from './routes/Member'
 import MemberResult from './routes/MemberResult'
 import QuestionSetEditor from './routes/QuestionSetEditor'
 import { useAppDispatch } from './store/hooks'
+import PlayEditor from './routes/PlayEditor'
 
 const router = createBrowserRouter([
     {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
     {
         path: '/questionSetEditor',
         element: <QuestionSetEditor />,
+    },
+    {
+        path: '/playEditor',
+        element: <PlayEditor />,
     },
 ])
 

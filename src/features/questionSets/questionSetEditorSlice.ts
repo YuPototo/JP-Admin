@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import {
     IAudio,
     INewQuestion,
+    RichTextNode,
     IQuestionSet,
     IQuestionSetInEditor,
 } from './questionSetTypes'
@@ -27,6 +28,17 @@ const emptyQuestion: INewQuestion = {
     options: ['', ''],
 }
 
+export const startingParagraph: RichTextNode[] = [
+    {
+        type: 'paragraph',
+        children: [{ text: '' }],
+    },
+]
+
+function createStartingParagprah() {
+    return _.cloneDeep(startingParagraph)
+}
+
 export const questionSetEditorSlice = createSlice({
     name: 'questionSetEditor',
     initialState,
@@ -45,7 +57,8 @@ export const questionSetEditorSlice = createSlice({
                 console.error('questionSetBodyAdded called without questionSet')
                 return
             }
-            state.questionSet.body = ''
+            // state.questionSet.body = ''
+            state.questionSet.body = createStartingParagprah()
         },
         questionSetBodyRemoved: (state) => {
             delete state.questionSet?.body
@@ -174,7 +187,10 @@ export const questionSetEditorSlice = createSlice({
         audioRemoved: (state) => {
             delete state.questionSet?.audio
         },
-        questionSetBodyChanged: (state, action: PayloadAction<string>) => {
+        questionSetBodyChanged: (
+            state,
+            action: PayloadAction<RichTextNode[]>
+        ) => {
             if (!state.questionSet) {
                 console.error(
                     'questionSetBodyChanged called without questionSet'
@@ -326,11 +342,7 @@ export default questionSetEditorSlice.reducer
 /* selectors */
 export const selectQuestionSetBody = (state: RootState) => {
     const questionSet = state.questionSetEditor.questionSet
-    return questionSet?.body ?? ''
-}
-
-export const selectHasQuestionSetBody = (state: RootState) => {
-    return state.questionSetEditor.questionSet?.body !== undefined
+    return questionSet?.body
 }
 
 export const selectQuestionsCount = (state: RootState) => {

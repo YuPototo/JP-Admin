@@ -3,18 +3,17 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
     questionSetBodyAdded,
     questionSetBodyChanged,
-    selectHasQuestionSetBody,
     selectQuestionSetBody,
 } from '../questionSetEditorSlice'
-import RemovableEditor from './RemovableEditor'
 import { questionSetBodyRemoved } from '../questionSetEditorSlice'
+import { RichTextNode } from '../questionSetTypes'
+import RemovableEditorSlate from './RemovableEditorSlate'
 
 export default function QuestionSetBodyPart() {
     const dispatch = useAppDispatch()
     const value = useAppSelector(selectQuestionSetBody)
-    const hasQuestionSetBody = useAppSelector(selectHasQuestionSetBody)
 
-    const handleChange = (value: string) => {
+    const handleChange = (value: RichTextNode[]) => {
         dispatch(questionSetBodyChanged(value))
     }
 
@@ -22,9 +21,9 @@ export default function QuestionSetBodyPart() {
         <div className="rounded bg-gray-100 p-4">
             <div className="text-lg font-bold text-green-800">大题题干</div>
 
-            {hasQuestionSetBody ? (
+            {value !== undefined ? (
                 <div className="mt-2">
-                    <RemovableEditor
+                    <RemovableEditorSlate
                         value={value}
                         onChange={handleChange}
                         onRemove={() => dispatch(questionSetBodyRemoved())}

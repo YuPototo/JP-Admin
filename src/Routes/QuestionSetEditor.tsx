@@ -34,10 +34,11 @@ export default function QuestionSetEditor() {
 
             <div className="my-8 flex flex-col gap-5">
                 <QuestionSetBodyPart />
-                <AudioPart />
-                <QuestionListPart />
 
-                <QuesitonSetExplanationPart />
+                {/* <AudioPart /> */}
+                {/* <QuestionListPart /> */}
+
+                {/* <QuesitonSetExplanationPart /> */}
 
                 <Previewer editType={editType} />
             </div>
