@@ -46,7 +46,6 @@ function PreviewModal({
     onClose: () => void
 }) {
     const dispatch = useAppDispatch()
-    const navigate = useNavigate()
 
     useEffect(() => {
         if (isOpen) {
@@ -54,55 +53,12 @@ function PreviewModal({
         }
     }, [isOpen, dispatch])
 
-    const [addQuestionSet, { isLoading: isAdding }] =
-        useAddQuestionSetMutation()
-    const [updateQuestionSet, { isLoading: isUpdating }] =
-        useUpdateQuestionSetMutation()
-
     const hasValidtionError = useAppSelector(
         (state) => state.questionSetEditor.validationError !== null
     )
 
-    const newQuestionSetPayload = useAppSelector(selectAddQuestionSetPayload)
-
-    const handleCreateNew = async () => {
-        if (!newQuestionSetPayload) {
-            toast.error('请先填写题目')
-            return
-        }
-
-        try {
-            await addQuestionSet(newQuestionSetPayload).unwrap()
-            toast.success('成功添加题目')
-            setTimeout(() => {
-                navigate(-1)
-                dispatch(questionSetSubmitted())
-            }, 1000)
-        } catch (err) {
-            // 在 middlware 处理了
-        }
-    }
-
-    const updateQuestionSetPayload = useAppSelector(
-        selectUpdateQuestionSetPayload
-    )
-    const handleUpdate = async () => {
-        if (!updateQuestionSetPayload) {
-            toast.error('找不到题目')
-            return
-        }
-
-        try {
-            await updateQuestionSet(updateQuestionSetPayload).unwrap()
-            toast.success('成功修改题目')
-            setTimeout(() => {
-                navigate(-1)
-                dispatch(questionSetSubmitted())
-            }, 1000)
-        } catch (err) {
-            // 在 middlware 处理了
-        }
-    }
+    const [handleCreateNew, isAdding] = useAddQuestionSet()
+    const [handleUpdate, isUpdating] = useUpdateQuestionSet()
 
     const handleSubmit = async () => {
         if (editType === EditType.New) {
@@ -140,4 +96,61 @@ function PreviewModal({
             </div>
         </MyModal>
     )
+}
+
+function useAddQuestionSet() {
+    const navigate = useNavigate()
+    const dispatch = useAppDispatch()
+
+    const [addQuestionSet, { isLoading }] = useAddQuestionSetMutation()
+    const newQuestionSetPayload = useAppSelector(selectAddQuestionSetPayload)
+
+    const handleCreateNew = async () => {
+        if (!newQuestionSetPayload) {
+            toast.error('请先填写题目')
+            return
+        }
+
+        try {
+            await addQuestionSet(newQuestionSetPayload).unwrap()
+            toast.success('成功添加题目')
+            setTimeout(() => {
+                navigate(-1)
+                dispatch(questionSetSubmitted())
+            }, 1000)
+        } catch (err) {
+            // 在 middlware 处理了
+        }
+    }
+
+    return [handleCreateNew, isLoading] as const
+}
+
+function useUpdateQuestionSet() {
+    const navigate = useNavigate()
+    const dispatch = useAppDispatch()
+
+    const [updateQuestionSet, { isLoading: isUpdating }] =
+        useUpdateQuestionSetMutation()
+    const updateQuestionSetPayload = useAppSelector(
+        selectUpdateQuestionSetPayload
+    )
+    const handleUpdate = async () => {
+        if (!updateQuestionSetPayload) {
+            toast.error('找不到题目')
+            return
+        }
+
+        try {
+            await updateQuestionSet(updateQuestionSetPayload).unwrap()
+            toast.success('成功修改题目')
+            setTimeout(() => {
+                navigate(-1)
+                dispatch(questionSetSubmitted())
+            }, 1000)
+        } catch (err) {
+            // 在 middlware 处理了
+        }
+    }
+    return [handleUpdate, isUpdating] as const
 }

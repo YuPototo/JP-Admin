@@ -1,10 +1,9 @@
 import React from 'react'
 import { useAppSelector } from '../../../store/hooks'
-import AudioPlayer from './AudioPlayer'
+import AudioPlayer from './AudioPart'
 import Questions from './Questions'
 import QuestionSetBody from './QuestionSetBody'
 import QuestionSetExplanation from './QuestionSetExplanation'
-import Transcription from './Transcription'
 
 export default function QuestionSet() {
     const questionSet = useAppSelector(
@@ -19,9 +18,10 @@ export default function QuestionSet() {
         <div className="flex flex-col gap-8">
             <QuestionSetBody body={questionSet.body} />
 
-            <AudioPlayer url={questionSet.audio?.key} />
-
-            <Transcription text={questionSet.audio?.transcription} />
+            <AudioPlayer
+                url={questionSet.audio?.key}
+                text={questionSet.audio?.transcription}
+            />
 
             <Questions questions={questionSet.questions} />
 
