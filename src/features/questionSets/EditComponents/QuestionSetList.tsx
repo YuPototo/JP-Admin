@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import Button from '../../../components/ui/Button'
 import Skeleton from '../../../components/ui/Skeleton'
+import { EditType } from '../../../routes/QuestionSetEditor'
 import { useGetChapterQuery } from '../questionSetService'
 
 type Props = {
@@ -20,7 +21,7 @@ export default function QuestionSetList({ chapterId }: Props) {
 
             {questionSetIds?.map((questionSetId, index) => (
                 <Link
-                    to={`/questionSetEditor/${questionSetId}`}
+                    to={`/questionSetEditor?editType=${EditType.Update}&questionSetId=${questionSetId}`}
                     key={questionSetId}
                 >
                     <div className="m-1 flex gap-2 p-2 text-gray-700 hover:bg-green-100">
@@ -34,7 +35,9 @@ export default function QuestionSetList({ chapterId }: Props) {
 
             <div className="mt-4">
                 <Button outline>
-                    <Link to={`/questionSetEditor/new?chapterId=${chapterId}`}>
+                    <Link
+                        to={`/questionSetEditor?editType=${EditType.New}&chapterId=${chapterId}`}
+                    >
                         新增题目
                     </Link>
                 </Button>

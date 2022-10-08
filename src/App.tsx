@@ -39,7 +39,7 @@ const router = createBrowserRouter([
         element: <BookEditor />,
     },
     {
-        path: '/questionSetEditor/:questionSetId',
+        path: '/questionSetEditor',
         element: <QuestionSetEditor />,
     },
 ])

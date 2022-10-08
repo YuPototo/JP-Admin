@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IAudio, INewQuestion, IQuestionSetInEditor } from './questionSetTypes'
+import {
+    IAudio,
+    INewQuestion,
+    IQuestionSet,
+    IQuestionSetInEditor,
+} from './questionSetTypes'
 import type { RootState } from '../../store/store'
 import _ from 'lodash'
 
@@ -280,6 +285,9 @@ export const questionSetEditorSlice = createSlice({
             state.questionSet = null
             state.validationError = null
         },
+        questionSetReceived: (state, payload: PayloadAction<IQuestionSet>) => {
+            state.questionSet = payload.payload
+        },
     },
 })
 
@@ -310,6 +318,7 @@ export const {
     errorDiscovered,
     errorReset,
     questionSetSubmitted,
+    questionSetReceived,
 } = questionSetEditorSlice.actions
 
 export default questionSetEditorSlice.reducer

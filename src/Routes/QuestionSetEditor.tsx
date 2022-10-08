@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import PageLayout from '../components/layout/PageLayout'
 import AudioPart from '../features/questionSets/EditComponents/AudioPart'
 import Previewer from '../features/questionSets/PreviewComponents/Previewer'
@@ -9,45 +9,21 @@ import QuesitonSetExplanationPart from '../features/questionSets/EditComponents/
 import {
     chapterUsed,
     questionSetCreated,
+    questionSetReceived,
 } from '../features/questionSets/questionSetEditorSlice'
 import { useGetQuestionSetQuery } from '../features/questionSets/questionSetService'
 import useAuthGuard from '../features/user/useAuthGuard'
 import { useAppDispatch } from '../store/hooks'
 
+export enum EditType {
+    New = 'new',
+    Update = 'update',
+}
+
 export default function QuestionSetEditor() {
     useAuthGuard()
-    const dispatch = useAppDispatch()
-
-    let [searchParams] = useSearchParams()
-    const chapterId = searchParams.get('chapterId')
-
-    let { questionSetId } = useParams() as {
-        questionSetId: string
-    }
-
-    useEffect(() => {
-        if (questionSetId !== 'new') {
-            return
-        }
-
-        if (!chapterId) {
-            console.error('在 query 里找不到 chapterId')
-            return
-        }
-
-        dispatch(chapterUsed(chapterId))
-    }, [questionSetId, chapterId, dispatch])
-
-    useEffect(() => {
-        console.log('questionSetId', questionSetId)
-        if (questionSetId === 'new') {
-            dispatch(questionSetCreated())
-        }
-    }, [questionSetId, dispatch])
-
-    const { data } = useGetQuestionSetQuery(questionSetId, {
-        skip: questionSetId === 'new',
-    })
+    usePrepareNewQuestionSet()
+    usePrepareUpdatingQuestionSet()
 
     return (
         <PageLayout>
@@ -64,4 +40,48 @@ export default function QuestionSetEditor() {
             </div>
         </PageLayout>
     )
+}
+
+/**
+ * 新增一个 question set
+ */
+export function usePrepareNewQuestionSet() {
+    const dispatch = useAppDispatch()
+
+    let [searchParams] = useSearchParams()
+
+    const chapterId = searchParams.get('chapterId')
+    const editType = searchParams.get('editType')
+
+    useEffect(() => {
+        if (editType === EditType.New) {
+            if (chapterId) {
+                dispatch(chapterUsed(chapterId))
+            } else {
+                throw Error('query 里没有 chapter id')
+            }
+            dispatch(questionSetCreated())
+        }
+    }, [editType, chapterId, dispatch])
+}
+
+/**
+ * 更新 question set
+ */
+export function usePrepareUpdatingQuestionSet() {
+    const dispatch = useAppDispatch()
+    let [searchParams] = useSearchParams()
+
+    const questionSetId = searchParams.get('questionSetId')
+    const editType = searchParams.get('editType')
+
+    const { data } = useGetQuestionSetQuery(questionSetId!, {
+        skip: questionSetId === null,
+    })
+
+    useEffect(() => {
+        if (editType === EditType.Update) {
+            data && dispatch(questionSetReceived(data!))
+        }
+    }, [editType, data, dispatch])
 }
