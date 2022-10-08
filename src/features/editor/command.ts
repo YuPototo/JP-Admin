@@ -1,24 +1,22 @@
 import { Editor, Text, Transforms } from 'slate'
+import { EditorType } from './SlateEditor'
+import { Element } from 'slate'
 
 export const CustomEditor = {
-    //@ts-ignore
-    isBoldMarkActive(editor) {
-        //@ts-ignore
+    isBoldMarkActive(editor: EditorType) {
         const [match] = Editor.nodes(editor, {
             //@ts-ignore
-            match: (n) => n.bold === true,
+            match: (node) => node.bold === true,
             universal: true,
         })
 
         return !!match
     },
 
-    //@ts-ignore
-    toggleBoldMark(editor) {
+    toggleBoldMark(editor: EditorType) {
         const isActive = CustomEditor.isBoldMarkActive(editor)
         Transforms.setNodes(
             editor,
-            //@ts-ignore
             { bold: isActive ? undefined : true },
             { match: (n) => Text.isText(n), split: true }
         )
