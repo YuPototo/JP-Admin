@@ -3,21 +3,27 @@ import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import MyModal from '../../../components/MyModal'
 import Button from '../../../components/ui/Button'
+import { EditType } from '../../../routes/QuestionSetEditor'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
     errorReset,
     questionSetSubmitted,
     selectAddQuestionSetPayload,
+    selectUpdateQuestionSetPayload,
 } from '../questionSetEditorSlice'
-import { useAddQuestionSetMutation } from '../questionSetService'
+import {
+    useAddQuestionSetMutation,
+    useUpdateQuestionSetMutation,
+} from '../questionSetService'
 import QuestionSet from './QuestionSet'
 
-export default function Previewer() {
+export default function Previewer({ editType }: { editType: EditType }) {
     const [showModal, setShowModal] = useState(false)
 
     return (
         <>
             <PreviewModal
+                editType={editType}
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
             />
@@ -31,9 +37,11 @@ export default function Previewer() {
 }
 
 function PreviewModal({
+    editType,
     isOpen,
     onClose,
 }: {
+    editType: EditType
     isOpen: boolean
     onClose: () => void
 }) {
@@ -46,22 +54,25 @@ function PreviewModal({
         }
     }, [isOpen, dispatch])
 
-    const [addQuestionSet, { isLoading }] = useAddQuestionSetMutation()
+    const [addQuestionSet, { isLoading: isAdding }] =
+        useAddQuestionSetMutation()
+    const [updateQuestionSet, { isLoading: isUpdating }] =
+        useUpdateQuestionSetMutation()
 
     const hasValidtionError = useAppSelector(
         (state) => state.questionSetEditor.validationError !== null
     )
 
-    const payload = useAppSelector(selectAddQuestionSetPayload)
+    const newQuestionSetPayload = useAppSelector(selectAddQuestionSetPayload)
 
-    const handleSubmit = async () => {
-        if (!payload) {
+    const handleCreateNew = async () => {
+        if (!newQuestionSetPayload) {
             toast.error('请先填写题目')
             return
         }
 
         try {
-            await addQuestionSet(payload).unwrap()
+            await addQuestionSet(newQuestionSetPayload).unwrap()
             toast.success('成功添加题目')
             setTimeout(() => {
                 navigate(-1)
@@ -69,6 +80,35 @@ function PreviewModal({
             }, 1000)
         } catch (err) {
             // 在 middlware 处理了
+        }
+    }
+
+    const updateQuestionSetPayload = useAppSelector(
+        selectUpdateQuestionSetPayload
+    )
+    const handleUpdate = async () => {
+        if (!updateQuestionSetPayload) {
+            toast.error('找不到题目')
+            return
+        }
+
+        try {
+            await updateQuestionSet(updateQuestionSetPayload).unwrap()
+            toast.success('成功修改题目')
+            setTimeout(() => {
+                navigate(-1)
+                dispatch(questionSetSubmitted())
+            }, 1000)
+        } catch (err) {
+            // 在 middlware 处理了
+        }
+    }
+
+    const handleSubmit = async () => {
+        if (editType === EditType.New) {
+            await handleCreateNew()
+        } else if (editType === EditType.Update) {
+            await handleUpdate()
         }
     }
 
@@ -92,7 +132,7 @@ function PreviewModal({
                     <Button
                         onClick={handleSubmit}
                         padding="px-8"
-                        disabled={hasValidtionError || isLoading}
+                        disabled={hasValidtionError || isAdding || isUpdating}
                     >
                         提交
                     </Button>

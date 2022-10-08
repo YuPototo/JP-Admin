@@ -24,6 +24,7 @@ export interface IQuestionSet {
     questions: IQuestion[]
     explanation?: string // 大题解析
     audio?: IAudio
+    chapters: string[]
 }
 
 export type IQuestionInEditor = INewQuestion | IQuestion
@@ -36,9 +37,11 @@ export interface IQuestionSetInEditor {
     audio?: IAudio
 }
 
-export interface IQuestionSetPayload {
+export interface AddQuestionSetPayload {
     body?: string // 大题题干
     questions: IQuestionInEditor[]
     explanation?: string // 大题解析
     audio?: IAudio
 }
+
+export type UpdateQuestionSetPayload = Omit<IQuestionSet, 'chapters'>

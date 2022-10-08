@@ -427,3 +427,14 @@ export const selectAddQuestionSetPayload = (state: RootState) => {
         chapterId,
     }
 }
+
+export const selectUpdateQuestionSetPayload = (
+    state: RootState
+): { questionSet: IQuestionSet } | null => {
+    const questionSet = state.questionSetEditor.questionSet
+
+    if (questionSet !== null && questionSet.id === undefined) {
+        throw Error('selectUpdateQuestionSetPayload: questionSet 没有 id')
+    }
+    return { questionSet } as { questionSet: IQuestionSet }
+}

@@ -22,8 +22,11 @@ export enum EditType {
 
 export default function QuestionSetEditor() {
     useAuthGuard()
-    usePrepareNewQuestionSet()
-    usePrepareUpdatingQuestionSet()
+    let [searchParams] = useSearchParams()
+    const editType = searchParams.get('editType') as EditType
+
+    usePrepareNewQuestionSet(editType)
+    usePrepareUpdatingQuestionSet(editType)
 
     return (
         <PageLayout>
@@ -36,7 +39,7 @@ export default function QuestionSetEditor() {
 
                 <QuesitonSetExplanationPart />
 
-                <Previewer />
+                <Previewer editType={editType} />
             </div>
         </PageLayout>
     )
@@ -45,13 +48,11 @@ export default function QuestionSetEditor() {
 /**
  * 新增一个 question set
  */
-export function usePrepareNewQuestionSet() {
+export function usePrepareNewQuestionSet(editType: EditType) {
     const dispatch = useAppDispatch()
 
     let [searchParams] = useSearchParams()
-
     const chapterId = searchParams.get('chapterId')
-    const editType = searchParams.get('editType')
 
     useEffect(() => {
         if (editType === EditType.New) {
@@ -68,12 +69,11 @@ export function usePrepareNewQuestionSet() {
 /**
  * 更新 question set
  */
-export function usePrepareUpdatingQuestionSet() {
+export function usePrepareUpdatingQuestionSet(editType: EditType) {
     const dispatch = useAppDispatch()
     let [searchParams] = useSearchParams()
 
     const questionSetId = searchParams.get('questionSetId')
-    const editType = searchParams.get('editType')
 
     const { data } = useGetQuestionSetQuery(questionSetId!, {
         skip: questionSetId === null,

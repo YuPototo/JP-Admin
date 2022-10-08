@@ -1,5 +1,5 @@
 import { splitApi } from '../../store/query/splitApi'
-import { IAudio, IQuestionSet, IQuestionSetPayload } from './questionSetTypes'
+import { IAudio, IQuestionSet, AddQuestionSetPayload } from './questionSetTypes'
 
 interface ChapterInfo {
     id: string
@@ -21,6 +21,7 @@ export const questionSetApi = splitApi.injectEndpoints({
             transformResponse: (res: { questionSet: IQuestionSet }) =>
                 res.questionSet,
             keepUnusedDataFor: 300,
+            providesTags: ['QuestionSet'],
         }),
         addAudio: build.mutation<IAudio, FormData>({
             query: (formData) => ({
@@ -34,7 +35,7 @@ export const questionSetApi = splitApi.injectEndpoints({
             void,
             {
                 chapterId: string
-                questionSet: IQuestionSetPayload
+                questionSet: AddQuestionSetPayload
             }
         >({
             query: ({ chapterId, questionSet }) => ({
@@ -47,6 +48,19 @@ export const questionSetApi = splitApi.injectEndpoints({
             }),
             invalidatesTags: ['Chapter'],
         }),
+        updateQuestionSet: build.mutation<void, { questionSet: IQuestionSet }>({
+            query: ({ questionSet }) => {
+                // * 不能包含 chapters 字段
+                const { id, chapters, ...rest } = questionSet
+                return {
+                    url: `questionSets/${id}`,
+                    method: 'PATCH',
+                    body: { questionSet: rest },
+                }
+            },
+
+            invalidatesTags: ['QuestionSet'],
+        }),
     }),
 })
 
@@ -55,4 +69,5 @@ export const {
     useGetQuestionSetQuery,
     useAddAudioMutation,
     useAddQuestionSetMutation,
+    useUpdateQuestionSetMutation,
 } = questionSetApi
