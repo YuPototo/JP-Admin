@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import React from 'react'
 
 type Props = {
-    active: boolean
+    active?: boolean
     onMouseDown: (event: React.MouseEvent) => void
     children: React.ReactNode
 }
@@ -15,7 +15,7 @@ export default function ToolbarButton({
     return (
         <span
             className={clsx(
-                'rounded p-1 hover:cursor-pointer',
+                'flex h-6 w-6 items-center justify-center rounded hover:cursor-pointer',
                 active ? 'bg-green-200' : 'bg-gray-200'
             )}
             onMouseDown={onMouseDown}

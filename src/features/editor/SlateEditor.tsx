@@ -2,18 +2,19 @@
 import { useCallback, useState } from 'react'
 import { createEditor, Descendant } from 'slate'
 import isHotkey from 'is-hotkey'
-
-// Import the Slate components and React plugin.
 import {
     Slate,
     Editable,
     withReact,
     RenderElementProps,
     RenderLeafProps,
+    DefaultElement,
 } from 'slate-react'
-import Toolbar, { toggleMark } from './Toolbar'
 import areEqual from 'deep-equal'
-import clsx from 'clsx'
+
+import Toolbar, { toggleMark } from './components/Toolbar'
+import Leaf from './components/Leaf'
+import Filler from './components/Filler'
 
 export type EditorType = ReturnType<typeof withReact>
 
@@ -30,8 +31,14 @@ type Props = {
 export default function SlateEditor({ onChange, value }: Props) {
     const [editor] = useState(() => withReact(createEditor()))
 
+    // 设置 inline 和 void element 类型
+    editor.isInline = (element) => ['filler', 'tip'].includes(element.type)
+    editor.isVoid = (element) => ['filler'].includes(element.type)
+
     const renderElement = useCallback((props: RenderElementProps) => {
         switch (props.element.type) {
+            case 'filler':
+                return <Filler {...props} />
             default:
                 return <DefaultElement {...props} />
         }
@@ -69,24 +76,5 @@ export default function SlateEditor({ onChange, value }: Props) {
                 </div>
             </Slate>
         </div>
-    )
-}
-
-const DefaultElement = (props: RenderElementProps) => {
-    return <p {...props.attributes}>{props.children}</p>
-}
-
-const Leaf = (props: RenderLeafProps) => {
-    return (
-        <span
-            {...props.attributes}
-            // 这里直接使用了 renderer 的 className
-            className={clsx({
-                'jp-bold': props.leaf.bold,
-                'jp-underline': props.leaf.underline,
-            })}
-        >
-            {props.children}
-        </span>
     )
 }
