@@ -423,13 +423,7 @@ export const selectAddQuestionSetPayload = (state: RootState) => {
         return
     }
     return {
-        questionSet: {
-            body: questionSet.body,
-            explanation: questionSet.explanation,
-            audio: questionSet.audio?.id,
-            questions: questionSet.questions,
-        },
-        audio: questionSet.audio,
+        questionSet,
         chapterId,
     }
 }

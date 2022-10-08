@@ -35,16 +35,14 @@ export const questionSetApi = splitApi.injectEndpoints({
             {
                 chapterId: string
                 questionSet: IQuestionSetPayload
-                audio?: IAudio
             }
         >({
-            query: ({ chapterId, questionSet, audio }) => ({
+            query: ({ chapterId, questionSet }) => ({
                 url: 'questionSets',
                 method: 'POST',
                 body: {
                     chapterId,
                     questionSet,
-                    audio,
                 },
             }),
             invalidatesTags: ['Chapter'],
