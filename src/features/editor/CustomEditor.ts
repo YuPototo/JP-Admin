@@ -20,6 +20,7 @@ export const CustomEditor = {
             at: editor.selection,
             match: (n) => Element.isElement(n) && n.type === 'tip',
         })
+
         return !!match
     },
 

@@ -39,7 +39,7 @@ export const startingParagraph: RichTextNode[] = [
         //@ts-ignore
         type: 'paragraph',
         //@ts-ignore
-        children: [{ text: '' }, testTip],
+        children: [{ text: '' }],
     },
 ]
 
