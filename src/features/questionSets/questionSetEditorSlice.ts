@@ -28,10 +28,18 @@ const emptyQuestion: INewQuestion = {
     options: ['', ''],
 }
 
+const testTip = {
+    type: 'tip',
+    tip: '这是备注',
+    children: [{ text: '测试' }],
+}
+
 export const startingParagraph: RichTextNode[] = [
     {
+        //@ts-ignore
         type: 'paragraph',
-        children: [{ text: '' }],
+        //@ts-ignore
+        children: [{ text: '' }, testTip],
     },
 ]
 

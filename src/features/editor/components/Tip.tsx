@@ -1,15 +1,11 @@
 import { ReactElement } from 'react'
+import { TipElement } from '../editorTypes'
 
-// 在编辑器里展示的 tip，估计要改一改。
-// 实现 link 那样的 inline 编辑。
+type Props = {
+    element: TipElement
+    children: ReactElement
+}
 
-export default function Tip({ element, children }: any): ReactElement {
-    return (
-        <span className="jp-tip">
-            {children}
-            <span className="jp-tip-content" contentEditable={false}>
-                <span>{element.tip}</span>
-            </span>
-        </span>
-    )
+export default function Tip({ element, children }: Props): ReactElement {
+    return <span className="jp-tip">{children}</span>
 }

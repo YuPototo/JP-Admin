@@ -33,10 +33,10 @@
     border-bottom: 1px dashed #999;
 }
 
-.jp-tip > span:hover:not(.jp-tip-content) {
+/* .jp-tip > span:hover:not(.jp-tip-content) {
     background-color: #dcfce7;
     padding: 0 3px;
-}
+} */
 
 .jp-tip .jp-tip-content {
     visibility: hidden;

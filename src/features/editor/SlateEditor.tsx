@@ -10,7 +10,6 @@ import {
     RenderLeafProps,
     DefaultElement,
 } from 'slate-react'
-import areEqual from 'deep-equal'
 
 import Toolbar, { toggleMark } from './components/Toolbar'
 import Leaf from './components/Leaf'
@@ -32,35 +31,25 @@ type Props = {
 export default function SlateEditor({ onChange, value }: Props) {
     const [editor] = useState(() => withReact(createEditor()))
 
-    // 设置 inline 和 void element 类型
-    editor.isInline = (element) => ['filler', 'tip'].includes(element.type)
-    editor.isVoid = (element) => ['filler'].includes(element.type)
-
-    const renderElement = useCallback((props: RenderElementProps) => {
-        switch (props.element.type) {
-            case 'filler':
-                return <Filler {...props} />
-            case 'tip':
-                return <Tip {...props} />
-            default:
-                return <DefaultElement {...props} />
-        }
-    }, [])
-
-    const renderLeaf = useCallback((props: RenderLeafProps) => {
-        return <Leaf {...props} />
-    }, [])
+    useInlineConfig(editor)
+    const renderElement = useRenderElement()
+    const renderLeaf = useRenderLeaf()
 
     const handleChange = (newValue: Descendant[]) => {
-        // 过滤掉这些事件
-        if (areEqual(newValue, value)) return
-        onChange(newValue)
+        // 判断编辑器内容是否发生改变
+        const isAstChange = editor.operations.some(
+            (op) => 'set_selection' !== op.type
+        )
+        if (isAstChange) {
+            onChange(newValue)
+        }
     }
 
     return (
         <div>
             <Slate editor={editor} value={value} onChange={handleChange}>
                 <Toolbar />
+
                 <div className="rounded border border-gray-300 bg-gray-50 px-6 py-3 shadow-green-100">
                     <Editable
                         renderElement={renderElement}
@@ -80,4 +69,33 @@ export default function SlateEditor({ onChange, value }: Props) {
             </Slate>
         </div>
     )
+}
+
+function useRenderElement() {
+    const renderElement = useCallback((props: RenderElementProps) => {
+        switch (props.element.type) {
+            case 'filler':
+                return <Filler {...props} />
+            case 'tip':
+                // tech debt：RenderElementProps 不包含 custom element 的 type
+                //@ts-ignore
+                return <Tip {...props} />
+            default:
+                return <DefaultElement {...props} />
+        }
+    }, [])
+    return renderElement
+}
+
+function useRenderLeaf() {
+    const renderLeaf = useCallback((props: RenderLeafProps) => {
+        return <Leaf {...props} />
+    }, [])
+    return renderLeaf
+}
+
+// 设置哪个 element 是 inline elmeent
+function useInlineConfig(editor: EditorType) {
+    editor.isInline = (element) => ['filler', 'tip'].includes(element.type)
+    editor.isVoid = (element) => ['filler'].includes(element.type)
 }
