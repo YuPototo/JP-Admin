@@ -8,7 +8,7 @@ import {
     withReact,
     RenderElementProps,
     RenderLeafProps,
-    DefaultElement,
+    DefaultElement as Paragraph,
 } from 'slate-react'
 
 import Toolbar, { toggleMark } from './components/Toolbar'
@@ -50,7 +50,7 @@ export default function SlateEditor({ onChange, value }: Props) {
             <Slate editor={editor} value={value} onChange={handleChange}>
                 <Toolbar />
 
-                <div className="rounded border border-gray-300 bg-gray-50 px-6 py-3 shadow-green-100">
+                <div className="rounded border border-gray-300 bg-gray-50 px-4 py-3 shadow-green-100">
                     <Editable
                         renderElement={renderElement}
                         renderLeaf={renderLeaf}
@@ -80,8 +80,17 @@ function useRenderElement() {
                 // tech debt：RenderElementProps 不包含 custom element 的 type
                 //@ts-ignore
                 return <Tip {...props} />
+            case 'paragraph':
+                return <Paragraph {...props} />
             default:
-                return <DefaultElement {...props} />
+                return (
+                    <div className="my-2">
+                        <div className="text-sm text-red-700">未知数据类型</div>
+                        <div className="text-sm text-red-700">
+                            {JSON.stringify(props.element)}
+                        </div>
+                    </div>
+                )
         }
     }, [])
     return renderElement
