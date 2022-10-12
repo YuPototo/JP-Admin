@@ -1,13 +1,13 @@
+import { Descendant } from 'slate'
 import Button from '../../../components/ui/Button'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
     questionExplanationAdded,
     questionExplanationChanged,
     questionExplanationRemoved,
-    selectHasQuestionExaplantion,
     selectQuestionExplanation,
 } from '../questionSetEditorSlice'
-import RemovableEditor from './RemovableEditor'
+import RemovableEditorSlate from './RemovableEditorSlate'
 
 type Props = {
     questionIndex: number
@@ -16,13 +16,9 @@ type Props = {
 export default function QuestionExpalantionPart({ questionIndex }: Props) {
     const dispatch = useAppDispatch()
 
-    const hasQuestionExplanation = useAppSelector(
-        selectHasQuestionExaplantion(questionIndex)
-    )
+    const explanation = useAppSelector(selectQuestionExplanation(questionIndex))
 
-    const value = useAppSelector(selectQuestionExplanation(questionIndex))
-
-    const handleChange = (value: string) => {
+    const handleChange = (value: Descendant[]) => {
         dispatch(questionExplanationChanged({ questionIndex, value }))
     }
 
@@ -30,11 +26,11 @@ export default function QuestionExpalantionPart({ questionIndex }: Props) {
         <div className="flex items-center gap-6">
             <div className="font-bold text-green-800">解析</div>
 
-            {hasQuestionExplanation ? (
+            {explanation ? (
                 <>
                     <div className="flex-grow">
-                        <RemovableEditor
-                            value={value}
+                        <RemovableEditorSlate
+                            value={explanation}
                             onChange={handleChange}
                             onRemove={() =>
                                 dispatch(

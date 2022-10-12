@@ -18,14 +18,14 @@ export default function QuestionSet() {
         <div className="flex flex-col gap-8">
             <QuestionSetBody body={questionSet.body} />
 
-            {/* <AudioPlayer
+            <AudioPlayer
                 url={questionSet.audio?.key}
                 text={questionSet.audio?.transcription}
             />
 
             <Questions questions={questionSet.questions} />
 
-            <QuestionSetExplanation explanation={questionSet.explanation} /> */}
+            <QuestionSetExplanation explanation={questionSet.explanation} />
         </div>
     )
 }

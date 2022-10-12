@@ -34,13 +34,11 @@ export default function QuestionSetList({ chapterId }: Props) {
             {questionSetIds?.length === 0 && <div>这一小节还没有题目</div>}
 
             <div className="mt-4">
-                <Button outline>
-                    <Link
-                        to={`/questionSetEditor?editType=${EditType.New}&chapterId=${chapterId}`}
-                    >
-                        新增题目
-                    </Link>
-                </Button>
+                <Link
+                    to={`/questionSetEditor?editType=${EditType.New}&chapterId=${chapterId}`}
+                >
+                    <Button outline>新增题目</Button>
+                </Link>
             </div>
         </div>
     )

@@ -1,25 +1,20 @@
-import React from 'react'
+import { Descendant } from 'slate'
 import Button from '../../../components/ui/Button'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
     questionSetExplanationAdded,
     questionSetExplanationRemoved,
-    selectHasQuestionSetExplanation,
     selectQuestionSetExplanation,
     questionSetExplanationChanged,
 } from '../questionSetEditorSlice'
-import RemovableEditor from './RemovableEditor'
+import RemovableEditorSlate from './RemovableEditorSlate'
 
 export default function QuesitonSetExplanationPart() {
     const dispatch = useAppDispatch()
 
-    const hasQuestionSetExplanation = useAppSelector(
-        selectHasQuestionSetExplanation
-    )
+    const explanation = useAppSelector(selectQuestionSetExplanation)
 
-    const value = useAppSelector(selectQuestionSetExplanation)
-
-    const handleChange = (value: string) => {
+    const handleChange = (value: Descendant[]) => {
         dispatch(questionSetExplanationChanged(value))
     }
 
@@ -27,10 +22,10 @@ export default function QuesitonSetExplanationPart() {
         <div className="rounded bg-gray-100 p-4">
             <div className="text-lg font-bold text-green-800">大题解析</div>
 
-            {hasQuestionSetExplanation ? (
+            {explanation ? (
                 <div className="mt-2">
-                    <RemovableEditor
-                        value={value}
+                    <RemovableEditorSlate
+                        value={explanation}
                         onChange={handleChange}
                         onRemove={() =>
                             dispatch(questionSetExplanationRemoved())

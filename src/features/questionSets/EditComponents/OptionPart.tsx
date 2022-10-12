@@ -7,9 +7,10 @@ import {
     selectOptionsCount,
     selectOptionValue,
 } from '../questionSetEditorSlice'
-import RemovableEditor from './RemovableEditor'
 import { Check } from 'react-bootstrap-icons'
 import clsx from 'clsx'
+import RemovableEditorSlate from './RemovableEditorSlate'
+import { Descendant } from 'slate'
 
 type Props = {
     questionIndex: number
@@ -25,7 +26,7 @@ export default function OptionPart({ questionIndex, optionIndex }: Props) {
     const handleClick = () => {
         dispatch(optionSelected({ questionIndex, optionIndex }))
     }
-    const handleChange = (value: string) => {
+    const handleChange = (value: Descendant[]) => {
         dispatch(optionChanged({ questionIndex, optionIndex, value }))
     }
 
@@ -46,16 +47,20 @@ export default function OptionPart({ questionIndex, optionIndex }: Props) {
                     size={30}
                 />
             </div>
-            <div className="flex-grow">
-                <RemovableEditor
-                    value={value}
-                    onRemove={() =>
-                        dispatch(optionRemoved({ questionIndex, optionIndex }))
-                    }
-                    disableRemove={optionCount <= 2}
-                    onChange={handleChange}
-                />
-            </div>
+            {value && (
+                <div className="flex-grow">
+                    <RemovableEditorSlate
+                        value={value}
+                        onRemove={() =>
+                            dispatch(
+                                optionRemoved({ questionIndex, optionIndex })
+                            )
+                        }
+                        disableRemove={optionCount <= 2}
+                        onChange={handleChange}
+                    />
+                </div>
+            )}
         </div>
     )
 }

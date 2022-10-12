@@ -24,7 +24,9 @@ export const CustomEditor = {
         return !!match
     },
 
+    // 新增一个 tip
     addTip(editor: EditorType) {
+        // 如果没有选中文字，不允许添加
         if (editor.selection == null) {
             return false
         }
@@ -36,6 +38,7 @@ export const CustomEditor = {
         )
     },
 
+    // 获取假名备注的 tip
     getTip(editor: EditorType) {
         const result = Editor.above(editor, {
             match: (n) => Element.isElement(n) && n.type === 'tip',
@@ -45,6 +48,7 @@ export const CustomEditor = {
         return result && result.length > 0 && result[0].tip
     },
 
+    // 设置假名备注的 tip
     setTip(editor: EditorType, value: string) {
         const selection = editor.selection
 
@@ -59,7 +63,7 @@ export const CustomEditor = {
         if (value) {
             Transforms.setNodes(editor, { tip: value }, { at: parentPath })
         } else {
-            // 如果没有值，就 unwrap tip
+            // 如果没有需要设置的值，就 unwrap tip （把 tip 变为 text）
             this.unsetTip(editor)
         }
         ReactEditor.deselect(editor)

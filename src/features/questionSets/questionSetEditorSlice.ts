@@ -10,28 +10,19 @@ import type { RootState } from '../../store/store'
 import _ from 'lodash'
 
 export interface QuestionSetEditorState {
-    // editType: null | 'new' | 'edit'
     chapterId: null | string
     questionSet: null | IQuestionSetInEditor
     validationError: null | string[]
 }
 
 const initialState: QuestionSetEditorState = {
-    // editType: null,
     chapterId: null,
     questionSet: null,
     validationError: null,
 }
 
-const emptyQuestion: INewQuestion = {
-    body: '',
-    options: ['', ''],
-}
-
-const testTip = {
-    type: 'tip',
-    tip: '这是备注',
-    children: [{ text: '测试' }],
+function createStartingParagprah() {
+    return _.cloneDeep(startingParagraph)
 }
 
 export const startingParagraph: RichTextNode[] = [
@@ -43,8 +34,9 @@ export const startingParagraph: RichTextNode[] = [
     },
 ]
 
-function createStartingParagprah() {
-    return _.cloneDeep(startingParagraph)
+const emptyQuestion: INewQuestion = {
+    body: createStartingParagprah(),
+    options: [createStartingParagprah(), createStartingParagprah()],
 }
 
 export const questionSetEditorSlice = createSlice({
@@ -55,7 +47,6 @@ export const questionSetEditorSlice = createSlice({
             state.chapterId = action.payload
         },
         questionSetCreated: (state) => {
-            // state.editType = 'new'
             state.questionSet = {
                 questions: [_.cloneDeep(emptyQuestion)],
             }
@@ -65,7 +56,6 @@ export const questionSetEditorSlice = createSlice({
                 console.error('questionSetBodyAdded called without questionSet')
                 return
             }
-            // state.questionSet.body = ''
             state.questionSet.body = createStartingParagprah()
         },
         questionSetBodyRemoved: (state) => {
@@ -92,7 +82,7 @@ export const questionSetEditorSlice = createSlice({
                 )
                 return
             }
-            state.questionSet.explanation = ''
+            state.questionSet.explanation = createStartingParagprah()
         },
         questionSetExplanationRemoved: (state) => {
             delete state.questionSet?.explanation
@@ -103,7 +93,7 @@ export const questionSetEditorSlice = createSlice({
                 return
             }
             const index = action.payload
-            state.questionSet.questions[index].body = ''
+            state.questionSet.questions[index].body = createStartingParagprah()
         },
         questionBodyRemoved: (state, action: PayloadAction<number>) => {
             if (!state.questionSet) {
@@ -149,7 +139,9 @@ export const questionSetEditorSlice = createSlice({
                 return
             }
             const index = action.payload
-            state.questionSet.questions[index].options.push('')
+            state.questionSet.questions[index].options.push(
+                createStartingParagprah()
+            )
         },
         optionSelected: (
             state,
@@ -173,7 +165,8 @@ export const questionSetEditorSlice = createSlice({
                 return
             }
             const index = action.payload
-            state.questionSet.questions[index].explanation = ''
+            state.questionSet.questions[index].explanation =
+                createStartingParagprah()
         },
         questionExplanationRemoved: (state, action: PayloadAction<number>) => {
             if (!state.questionSet) {
@@ -222,7 +215,10 @@ export const questionSetEditorSlice = createSlice({
         },
         questionBodyChanged: (
             state,
-            action: PayloadAction<{ value: string; questionIndex: number }>
+            action: PayloadAction<{
+                value: RichTextNode[]
+                questionIndex: number
+            }>
         ) => {
             if (!state.questionSet) {
                 console.error('questionBodyChanged called without questionSet')
@@ -239,7 +235,7 @@ export const questionSetEditorSlice = createSlice({
         optionChanged: (
             state,
             action: PayloadAction<{
-                value: string
+                value: RichTextNode[]
                 questionIndex: number
                 optionIndex: number
             }>
@@ -266,7 +262,10 @@ export const questionSetEditorSlice = createSlice({
         },
         questionExplanationChanged: (
             state,
-            action: PayloadAction<{ questionIndex: number; value: string }>
+            action: PayloadAction<{
+                questionIndex: number
+                value: RichTextNode[]
+            }>
         ) => {
             if (!state.questionSet) {
                 console.error('questionExplanationChanged:  no questionSet')
@@ -286,7 +285,7 @@ export const questionSetEditorSlice = createSlice({
         },
         questionSetExplanationChanged: (
             state,
-            action: PayloadAction<string>
+            action: PayloadAction<RichTextNode[]>
         ) => {
             if (!state.questionSet) {
                 console.error('questionExplanationChanged:  no questionSet')
@@ -361,16 +360,6 @@ export const selectQuestionsCount = (state: RootState) => {
     }
 }
 
-export const selectHasQuestionSetExplanation = (state: RootState) => {
-    return state.questionSetEditor.questionSet?.explanation !== undefined
-}
-
-export const selectHasQuestionBody = (index: number) => (state: RootState) => {
-    return (
-        state.questionSetEditor.questionSet?.questions[index].body !== undefined
-    )
-}
-
 export const selectOptionsCount =
     (questionIndex: number) => (state: RootState) => {
         if (state.questionSetEditor.questionSet) {
@@ -389,14 +378,6 @@ export const selectAnswer =
         )
     }
 
-export const selectHasQuestionExaplantion =
-    (questionIndex: number) => (state: RootState) => {
-        return (
-            state.questionSetEditor.questionSet?.questions[questionIndex]
-                .explanation !== undefined
-        )
-    }
-
 export const selectHasAudio = (state: RootState) => {
     return state.questionSetEditor.questionSet?.audio !== undefined
 }
@@ -407,10 +388,11 @@ export const selectAudioTranscription = (state: RootState) => {
     return audio?.transcription ?? ''
 }
 
+// todo
 export const selectQuestionBody =
     (questionIndex: number) => (state: RootState) => {
         const questionSet = state.questionSetEditor.questionSet
-        return questionSet?.questions[questionIndex]?.body ?? ''
+        return questionSet?.questions[questionIndex]?.body
     }
 
 export const selectOptionValue =
@@ -419,18 +401,18 @@ export const selectOptionValue =
 
         const question = questionSet?.questions[questionIndex]
 
-        return question?.options[optionIndex] ?? ''
+        return question?.options[optionIndex]
     }
 
 export const selectQuestionExplanation =
     (questionIndex: number) => (state: RootState) => {
         const questionSet = state.questionSetEditor.questionSet
-        return questionSet?.questions[questionIndex]?.explanation ?? ''
+        return questionSet?.questions[questionIndex]?.explanation
     }
 
 export const selectQuestionSetExplanation = (state: RootState) => {
     const questionSet = state.questionSetEditor.questionSet
-    return questionSet?.explanation ?? ''
+    return questionSet?.explanation
 }
 
 export const selectAddQuestionSetPayload = (state: RootState) => {

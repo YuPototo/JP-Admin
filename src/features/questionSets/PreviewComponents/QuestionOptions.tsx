@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
 import { useAppDispatch } from '../../../store/hooks'
 import { errorDiscovered } from '../questionSetEditorSlice'
+import { RichTextNode } from '../questionSetTypes'
 import Option from './Option'
 
 type Props = {
-    options: string[]
+    options: RichTextNode[][]
     answer?: number
 }
 
