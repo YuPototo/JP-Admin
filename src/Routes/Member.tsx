@@ -7,7 +7,7 @@ export default function Member() {
 
     return (
         <PageLayout>
-            <h1 className="mb-6 font-bold">开会员</h1>
+            <h1 className="mb-6 font-bold text-white">开会员</h1>
             <MemberForm />
         </PageLayout>
     )

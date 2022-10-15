@@ -40,7 +40,7 @@ export default function MemberForm() {
                 isSubmitting,
                 setFieldValue,
             }) => (
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="text-white">
                     <div>
                         <label
                             className="inline-block w-16"
@@ -97,7 +97,11 @@ export default function MemberForm() {
                     </div>
 
                     <div className="mt-6">
-                        <Button type="submit" disabled={isSubmitting}>
+                        <Button
+                            padding="px-8 py-2"
+                            type="submit"
+                            disabled={isSubmitting}
+                        >
                             确认
                         </Button>
                     </div>

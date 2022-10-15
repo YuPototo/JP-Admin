@@ -7,11 +7,13 @@ export const booksApi = splitApi.injectEndpoints({
             query: () => 'categories',
             transformResponse: (res: { categories: Category[] }) =>
                 res.categories,
+            keepUnusedDataFor: 60 * 30,
         }),
         getBooks: build.query<IBook[], void>({
             query: () => 'books',
             transformResponse: (res: { books: IBook[] }) => res.books,
             providesTags: ['Book'],
+            keepUnusedDataFor: 60 * 30,
         }),
         updateBook: build.mutation<
             IBook,

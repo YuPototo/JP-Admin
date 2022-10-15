@@ -31,7 +31,7 @@ export default function QuestionSetEditor() {
     const editType = searchParams.get('editType') as EditType
 
     usePrepareNewQuestionSet(editType)
-    usePrepareUpdatingQuestionSet(editType)
+    const isLoading = usePrepareUpdatingQuestionSet(editType)
 
     const title = Title[editType]
 
@@ -40,10 +40,16 @@ export default function QuestionSetEditor() {
             <div className="text-xl text-white">{title}</div>
 
             <div className="my-8 flex flex-col gap-5">
-                <QuestionSetBodyPart />
-                <AudioPart />
-                <QuestionListPart />
-                <QuesitonSetExplanationPart />
+                {isLoading ? (
+                    <div className="text-lg text-white">加载中...</div>
+                ) : (
+                    <>
+                        <QuestionSetBodyPart />
+                        <AudioPart />
+                        <QuestionListPart />
+                        <QuesitonSetExplanationPart />
+                    </>
+                )}
 
                 <Previewer editType={editType} />
             </div>
@@ -81,13 +87,16 @@ export function usePrepareUpdatingQuestionSet(editType: EditType) {
 
     const questionSetId = searchParams.get('questionSetId')
 
-    const { data } = useGetQuestionSetQuery(questionSetId!, {
+    const { data, isLoading } = useGetQuestionSetQuery(questionSetId!, {
         skip: questionSetId === null,
     })
 
     useEffect(() => {
         if (editType === EditType.Update) {
+            console.log('data', data)
             data && dispatch(questionSetReceived(data!))
         }
     }, [editType, data, dispatch])
+
+    return isLoading
 }

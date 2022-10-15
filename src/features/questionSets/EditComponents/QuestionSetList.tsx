@@ -2,14 +2,14 @@ import { Link } from 'react-router-dom'
 import Button from '../../../components/ui/Button'
 import Skeleton from '../../../components/ui/Skeleton'
 import { EditType } from '../../../routes/QuestionSetEditor'
-import { useGetChapterQuery } from '../questionSetService'
+import { useGetChapterInfoQuery } from '../questionSetService'
 
 type Props = {
     chapterId: string
 }
 
 export default function QuestionSetList({ chapterId }: Props) {
-    const { data, isLoading } = useGetChapterQuery(chapterId)
+    const { data, isLoading } = useGetChapterInfoQuery(chapterId)
 
     const questionSetIds = data?.questionSets
 

@@ -10,7 +10,7 @@ interface ChapterInfo {
 
 export const questionSetApi = splitApi.injectEndpoints({
     endpoints: (build) => ({
-        getChapter: build.query<ChapterInfo, string>({
+        getChapterInfo: build.query<ChapterInfo, string>({
             query: (chapterId) => `chapters/${chapterId}`,
             transformResponse: (res: { chapter: ChapterInfo }) => res.chapter,
             keepUnusedDataFor: 300,
@@ -65,7 +65,7 @@ export const questionSetApi = splitApi.injectEndpoints({
 })
 
 export const {
-    useGetChapterQuery,
+    useGetChapterInfoQuery,
     useGetQuestionSetQuery,
     useAddAudioMutation,
     useAddQuestionSetMutation,

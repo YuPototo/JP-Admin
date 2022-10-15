@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from '../../../components/ui/Button'
 import Skeleton from '../../../components/ui/Skeleton'
-import { useGetChapterQuery } from '../../questionSets/questionSetService'
+import { useGetChapterInfoQuery } from '../../questionSets/questionSetService'
 import ChapterEditor from './ChapterEditor'
 import { IChapter } from '../contentTypes'
 
@@ -10,7 +10,7 @@ type Props = {
 }
 
 export default function ChapterPanel({ chapter }: Props) {
-    const { data, isLoading } = useGetChapterQuery(chapter.id)
+    const { data, isLoading } = useGetChapterInfoQuery(chapter.id)
 
     return (
         <div className="flex items-center rounded bg-white px-4 py-3">
