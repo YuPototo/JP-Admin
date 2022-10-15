@@ -1,9 +1,9 @@
 import { ReactElement } from 'react'
 import Button from '../../../components/ui/Button'
 import { ImageElement } from '../editorTypes'
-import { ReactEditor, useSelected, useSlateStatic } from 'slate-react'
+import { useSelected, useSlateStatic } from 'slate-react'
 import clsx from 'clsx'
-import { Transforms } from 'slate'
+import { CustomEditor } from '../CustomEditor'
 
 type Props = {
     /**
@@ -22,7 +22,6 @@ export default function Image({
     children,
 }: Props): ReactElement {
     const editor = useSlateStatic()
-    const path = ReactEditor.findPath(editor, element)
     const selected = useSelected()
 
     return (
@@ -53,7 +52,7 @@ export default function Image({
             >
                 <Button
                     outline
-                    onClick={() => Transforms.removeNodes(editor, { at: path })}
+                    onClick={() => CustomEditor.deleteImage(editor)}
                 >
                     删除
                 </Button>

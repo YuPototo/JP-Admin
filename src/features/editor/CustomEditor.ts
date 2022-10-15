@@ -76,17 +76,38 @@ export const CustomEditor = {
             match: (n) => Element.isElement(n) && n.type === 'tip',
         })
     },
+
+    // delete image
+    deleteImage(editor: EditorType) {
+        const selection = editor.selection
+
+        if (!selection) {
+            return
+        }
+
+        const currentPath = selection?.anchor.path
+        const parentPath = currentPath.filter(
+            (_, i) => i !== currentPath.length - 1
+        )
+        Transforms.removeNodes(editor, { at: parentPath })
+
+        // add an empty paragraph if there no element left
+        const [match] = Editor.nodes(editor, {
+            match: (n) => Element.isElement(n),
+        })
+        if (!match) {
+            Transforms.insertNodes(editor, emptyParagraph)
+        }
+    },
 }
 
-export const emptyParagraph: RichTextNode[] = [
-    {
-        //@ts-ignore
-        type: 'paragraph',
-        //@ts-ignore
-        children: [{ text: '' }],
-    },
-]
+export const emptyParagraph: RichTextNode = {
+    //@ts-ignore
+    type: 'paragraph',
+    //@ts-ignore
+    children: [{ text: '' }],
+}
 
-export function createEmptyParagraph() {
-    return _.cloneDeep(emptyParagraph)
+export function createEmptyEditor() {
+    return [_.cloneDeep(emptyParagraph)]
 }

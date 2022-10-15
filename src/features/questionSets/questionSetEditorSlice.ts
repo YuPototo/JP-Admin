@@ -8,7 +8,7 @@ import {
 } from './questionSetTypes'
 import type { RootState } from '../../store/store'
 import _ from 'lodash'
-import { createEmptyParagraph } from '../editor/CustomEditor'
+import { createEmptyEditor } from '../editor/CustomEditor'
 
 export interface QuestionSetEditorState {
     chapterId: null | string
@@ -23,8 +23,8 @@ const initialState: QuestionSetEditorState = {
 }
 
 const emptyQuestion: INewQuestion = {
-    body: createEmptyParagraph(),
-    options: [createEmptyParagraph(), createEmptyParagraph()],
+    body: createEmptyEditor(),
+    options: [createEmptyEditor(), createEmptyEditor()],
 }
 
 export const questionSetEditorSlice = createSlice({
@@ -44,7 +44,7 @@ export const questionSetEditorSlice = createSlice({
                 console.error('questionSetBodyAdded called without questionSet')
                 return
             }
-            state.questionSet.body = createEmptyParagraph()
+            state.questionSet.body = createEmptyEditor()
         },
         questionSetBodyRemoved: (state) => {
             delete state.questionSet?.body
@@ -70,7 +70,7 @@ export const questionSetEditorSlice = createSlice({
                 )
                 return
             }
-            state.questionSet.explanation = createEmptyParagraph()
+            state.questionSet.explanation = createEmptyEditor()
         },
         questionSetExplanationRemoved: (state) => {
             delete state.questionSet?.explanation
@@ -81,7 +81,7 @@ export const questionSetEditorSlice = createSlice({
                 return
             }
             const index = action.payload
-            state.questionSet.questions[index].body = createEmptyParagraph()
+            state.questionSet.questions[index].body = createEmptyEditor()
         },
         questionBodyRemoved: (state, action: PayloadAction<number>) => {
             if (!state.questionSet) {
@@ -127,9 +127,7 @@ export const questionSetEditorSlice = createSlice({
                 return
             }
             const index = action.payload
-            state.questionSet.questions[index].options.push(
-                createEmptyParagraph()
-            )
+            state.questionSet.questions[index].options.push(createEmptyEditor())
         },
         optionSelected: (
             state,
@@ -153,8 +151,7 @@ export const questionSetEditorSlice = createSlice({
                 return
             }
             const index = action.payload
-            state.questionSet.questions[index].explanation =
-                createEmptyParagraph()
+            state.questionSet.questions[index].explanation = createEmptyEditor()
         },
         questionExplanationRemoved: (state, action: PayloadAction<number>) => {
             if (!state.questionSet) {

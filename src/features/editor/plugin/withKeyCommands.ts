@@ -1,4 +1,5 @@
-import { Editor, Node, Path, Range, Transforms } from 'slate'
+import { Editor, Node, Path, Range, Transforms, Element } from 'slate'
+import { emptyParagraph } from '../CustomEditor'
 
 //https://github.com/ianstormtaylor/slate/issues/3991
 export const withCorrectVoidBehavior = <T extends Editor>(editor: T) => {
@@ -46,6 +47,14 @@ export const withCorrectVoidBehavior = <T extends Editor>(editor: T) => {
         }
 
         deleteBackward(unit)
+
+        // add an empty paragraph if there no element left
+        const [match] = Editor.nodes(editor, {
+            match: (n) => Element.isElement(n),
+        })
+        if (!match) {
+            Transforms.insertNodes(editor, emptyParagraph)
+        }
     }
 
     return editor
