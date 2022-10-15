@@ -1,4 +1,4 @@
-import { Editor, Element, Transforms } from 'slate'
+import { Editor, Element, Transforms, Path } from 'slate'
 import { EditorType } from './SlateEditor'
 import { ReactEditor } from 'slate-react'
 import _ from 'lodash'
@@ -82,6 +82,7 @@ export const CustomEditor = {
         const selection = editor.selection
 
         if (!selection) {
+            console.error('no selection')
             return
         }
 
@@ -97,6 +98,53 @@ export const CustomEditor = {
         })
         if (!match) {
             Transforms.insertNodes(editor, emptyParagraph)
+        }
+    },
+
+    // insert image
+    insertImage(editor: EditorType, src: string, alt: string) {
+        const selection = editor.selection
+
+        const image = {
+            type: 'image',
+            src,
+            alt,
+            children: [{ text: '' }],
+        }
+
+        ReactEditor.focus(editor)
+
+        // 如果没有 selection，就插入在最后
+        if (!selection) {
+            console.log('insert image at the end')
+            //@ts-ignore
+            Transforms.insertNodes(editor, image, { select: true })
+            return
+        }
+
+        const [match] = Editor.nodes(editor, {
+            at: selection,
+            match: (n) =>
+                Element.isElement(n) &&
+                n.type === 'paragraph' &&
+                n.children[0].text === '',
+        })
+
+        if (match) {
+            // 如果 selection 所在的 node 是个 empty paragraph，就 replace
+            console.log('replace empty paragraph')
+            Transforms.setNodes(editor, image, { at: selection })
+        } else {
+            // 如果 selection 所在的 node 不是个 empty paragraph，就在下一个 root path 插入
+
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const [_, parentPath] = Editor.parent(editor, selection.focus?.path)
+
+            //@ts-ignore
+            Transforms.insertNodes(editor, image, {
+                select: true,
+                at: Path.next(parentPath),
+            })
         }
     },
 }

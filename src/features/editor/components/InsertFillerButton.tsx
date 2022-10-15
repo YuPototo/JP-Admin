@@ -1,6 +1,6 @@
 import React from 'react'
 import { Transforms } from 'slate'
-import { useSlateStatic } from 'slate-react'
+import { ReactEditor, useSlateStatic } from 'slate-react'
 import { FillerElement } from '../editorTypes'
 import { EditorType } from '../SlateEditor'
 import ToolbarButton from './ToolbarButton'
@@ -21,6 +21,8 @@ export default function InsertFillerButton() {
 }
 
 const insertFiller = (editor: EditorType) => {
+    ReactEditor.focus(editor)
+
     const filler: FillerElement = {
         type: 'filler',
         children: [{ text: '&nbsp;' }],

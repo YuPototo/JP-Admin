@@ -5,6 +5,7 @@ import { EditorType } from '../SlateEditor'
 import { TypeBold, TypeUnderline } from 'react-bootstrap-icons'
 import InsertFillerButton from './InsertFillerButton'
 import InsertTipButton from './IntertTipButton'
+import InsertImageButton from './InsertImageButton'
 
 type Format = 'bold' | 'underline'
 
@@ -19,6 +20,7 @@ export default function MyToolbar() {
             </MarkButton>
             <InsertFillerButton />
             <InsertTipButton />
+            <InsertImageButton />
         </div>
     )
 }

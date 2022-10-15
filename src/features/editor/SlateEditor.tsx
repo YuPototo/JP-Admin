@@ -41,6 +41,7 @@ export default function SlateEditor({ onChange, value }: Props) {
     const renderLeaf = useRenderLeaf()
 
     const handleChange = (newValue: Descendant[]) => {
+        console.log('this is on change event')
         // 判断编辑器内容是否发生改变
         const isAstChange = editor.operations.some(
             (op) => 'set_selection' !== op.type

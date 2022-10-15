@@ -6,5 +6,5 @@ import { emptyParagraph } from '../CustomEditor'
  * is the value empty?
  */
 export function isValueEmpty(value: RichTextNode[]) {
-    return _.isEqual(value, emptyParagraph)
+    return _.isEqual(value, [emptyParagraph])
 }
