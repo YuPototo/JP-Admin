@@ -1,6 +1,7 @@
 import { Descendant } from 'slate'
 
 // Rich Text Node
+// 这是一个很强的假设：rich text 的 node 和 descendant 会一样
 export type RichTextNode = Descendant
 
 // Question Set Interface

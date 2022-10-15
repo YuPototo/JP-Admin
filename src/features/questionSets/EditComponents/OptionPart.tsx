@@ -10,7 +10,7 @@ import {
 import { Check } from 'react-bootstrap-icons'
 import clsx from 'clsx'
 import RemovableEditorSlate from './RemovableEditorSlate'
-import { Descendant } from 'slate'
+import { RichTextNode } from '../questionSetTypes'
 
 type Props = {
     questionIndex: number
@@ -26,7 +26,7 @@ export default function OptionPart({ questionIndex, optionIndex }: Props) {
     const handleClick = () => {
         dispatch(optionSelected({ questionIndex, optionIndex }))
     }
-    const handleChange = (value: Descendant[]) => {
+    const handleChange = (value: RichTextNode[]) => {
         dispatch(optionChanged({ questionIndex, optionIndex, value }))
     }
 

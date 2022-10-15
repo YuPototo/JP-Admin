@@ -20,6 +20,11 @@ export enum EditType {
     Update = 'update',
 }
 
+const Title = {
+    new: '新增题目',
+    update: '编辑题目',
+}
+
 export default function QuestionSetEditor() {
     useAuthGuard()
     let [searchParams] = useSearchParams()
@@ -28,16 +33,16 @@ export default function QuestionSetEditor() {
     usePrepareNewQuestionSet(editType)
     usePrepareUpdatingQuestionSet(editType)
 
+    const title = Title[editType]
+
     return (
         <PageLayout>
-            <div className="text-xl text-white">题目编辑器</div>
+            <div className="text-xl text-white">{title}</div>
 
             <div className="my-8 flex flex-col gap-5">
                 <QuestionSetBodyPart />
-
                 <AudioPart />
                 <QuestionListPart />
-
                 <QuesitonSetExplanationPart />
 
                 <Previewer editType={editType} />

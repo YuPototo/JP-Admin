@@ -1,12 +1,12 @@
 import Button from '../../../components/ui/Button'
 import SlateEditor from '../../editor/SlateEditor'
-import { Descendant } from 'slate'
+import { RichTextNode } from '../questionSetTypes'
 
 type Props = {
-    value: Descendant[]
+    value: RichTextNode[]
     disableRemove?: boolean
     onRemove: () => void
-    onChange: (value: Descendant[]) => void
+    onChange: (value: RichTextNode[]) => void
 }
 
 export default function RemovableEditorSlate({

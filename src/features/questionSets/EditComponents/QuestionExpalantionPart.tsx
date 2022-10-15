@@ -1,4 +1,3 @@
-import { Descendant } from 'slate'
 import Button from '../../../components/ui/Button'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
@@ -7,6 +6,7 @@ import {
     questionExplanationRemoved,
     selectQuestionExplanation,
 } from '../questionSetEditorSlice'
+import { RichTextNode } from '../questionSetTypes'
 import RemovableEditorSlate from './RemovableEditorSlate'
 
 type Props = {
@@ -18,7 +18,7 @@ export default function QuestionExpalantionPart({ questionIndex }: Props) {
 
     const explanation = useAppSelector(selectQuestionExplanation(questionIndex))
 
-    const handleChange = (value: Descendant[]) => {
+    const handleChange = (value: RichTextNode[]) => {
         dispatch(questionExplanationChanged({ questionIndex, value }))
     }
 
