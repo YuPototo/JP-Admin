@@ -8,6 +8,7 @@ import {
 } from './questionSetTypes'
 import type { RootState } from '../../store/store'
 import _ from 'lodash'
+import { createEmptyParagraph } from '../editor/CustomEditor'
 
 export interface QuestionSetEditorState {
     chapterId: null | string
@@ -21,22 +22,9 @@ const initialState: QuestionSetEditorState = {
     validationError: null,
 }
 
-function createStartingParagprah() {
-    return _.cloneDeep(startingParagraph)
-}
-
-export const startingParagraph: RichTextNode[] = [
-    {
-        //@ts-ignore
-        type: 'paragraph',
-        //@ts-ignore
-        children: [{ text: '' }],
-    },
-]
-
 const emptyQuestion: INewQuestion = {
-    body: createStartingParagprah(),
-    options: [createStartingParagprah(), createStartingParagprah()],
+    body: createEmptyParagraph(),
+    options: [createEmptyParagraph(), createEmptyParagraph()],
 }
 
 export const questionSetEditorSlice = createSlice({
@@ -56,7 +44,7 @@ export const questionSetEditorSlice = createSlice({
                 console.error('questionSetBodyAdded called without questionSet')
                 return
             }
-            state.questionSet.body = createStartingParagprah()
+            state.questionSet.body = createEmptyParagraph()
         },
         questionSetBodyRemoved: (state) => {
             delete state.questionSet?.body
@@ -82,7 +70,7 @@ export const questionSetEditorSlice = createSlice({
                 )
                 return
             }
-            state.questionSet.explanation = createStartingParagprah()
+            state.questionSet.explanation = createEmptyParagraph()
         },
         questionSetExplanationRemoved: (state) => {
             delete state.questionSet?.explanation
@@ -93,7 +81,7 @@ export const questionSetEditorSlice = createSlice({
                 return
             }
             const index = action.payload
-            state.questionSet.questions[index].body = createStartingParagprah()
+            state.questionSet.questions[index].body = createEmptyParagraph()
         },
         questionBodyRemoved: (state, action: PayloadAction<number>) => {
             if (!state.questionSet) {
@@ -140,7 +128,7 @@ export const questionSetEditorSlice = createSlice({
             }
             const index = action.payload
             state.questionSet.questions[index].options.push(
-                createStartingParagprah()
+                createEmptyParagraph()
             )
         },
         optionSelected: (
@@ -166,7 +154,7 @@ export const questionSetEditorSlice = createSlice({
             }
             const index = action.payload
             state.questionSet.questions[index].explanation =
-                createStartingParagprah()
+                createEmptyParagraph()
         },
         questionExplanationRemoved: (state, action: PayloadAction<number>) => {
             if (!state.questionSet) {

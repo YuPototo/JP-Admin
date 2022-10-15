@@ -7,7 +7,7 @@ import {
     questionSetExplanationChanged,
 } from '../questionSetEditorSlice'
 import { RichTextNode } from '../questionSetTypes'
-import RemovableEditorSlate from './RemovableEditorSlate'
+import RemovableEditor from './RemovableEditor'
 
 export default function QuesitonSetExplanationPart() {
     const dispatch = useAppDispatch()
@@ -24,7 +24,7 @@ export default function QuesitonSetExplanationPart() {
 
             {explanation ? (
                 <div className="mt-2">
-                    <RemovableEditorSlate
+                    <RemovableEditor
                         value={explanation}
                         onChange={handleChange}
                         onRemove={() =>

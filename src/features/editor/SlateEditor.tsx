@@ -10,11 +10,14 @@ import {
     RenderLeafProps,
     DefaultElement as Paragraph,
 } from 'slate-react'
+import Image from './components/Image'
 
 import Toolbar, { toggleMark } from './components/Toolbar'
 import Leaf from './components/Leaf'
 import Filler from './components/Filler'
 import Tip from './components/Tip'
+import withImage from './plugin/withImage'
+import { withCorrectVoidBehavior } from './plugin/withKeyCommands'
 
 export type EditorType = ReturnType<typeof withReact>
 
@@ -29,7 +32,9 @@ type Props = {
 }
 
 export default function SlateEditor({ onChange, value }: Props) {
-    const [editor] = useState(() => withReact(createEditor()))
+    const [editor] = useState(() =>
+        withCorrectVoidBehavior(withImage(withReact(createEditor())))
+    )
 
     useInlineConfig(editor)
     const renderElement = useRenderElement()
@@ -82,6 +87,9 @@ function useRenderElement() {
                 return <Tip {...props} />
             case 'paragraph':
                 return <Paragraph {...props} />
+            case 'image':
+                //@ts-ignore tech debt
+                return <Image {...props} />
             default:
                 return (
                     <div className="my-2">
@@ -105,6 +113,10 @@ function useRenderLeaf() {
 
 // 设置哪个 element 是 inline elmeent
 function useInlineConfig(editor: EditorType) {
-    editor.isInline = (element) => ['filler', 'tip'].includes(element.type)
-    editor.isVoid = (element) => ['filler'].includes(element.type)
+    const { isVoid, isInline } = editor
+
+    editor.isInline = (element) =>
+        ['filler', 'tip'].includes(element.type) || isInline(element)
+    editor.isVoid = (element) =>
+        ['filler'].includes(element.type) || isVoid(element)
 }

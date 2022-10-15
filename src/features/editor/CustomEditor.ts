@@ -1,6 +1,8 @@
 import { Editor, Element, Transforms } from 'slate'
 import { EditorType } from './SlateEditor'
 import { ReactEditor } from 'slate-react'
+import _ from 'lodash'
+import { RichTextNode } from '../questionSets/questionSetTypes'
 
 /**
  * Use custom editor to add custom methods to the editor
@@ -74,4 +76,17 @@ export const CustomEditor = {
             match: (n) => Element.isElement(n) && n.type === 'tip',
         })
     },
+}
+
+export const emptyParagraph: RichTextNode[] = [
+    {
+        //@ts-ignore
+        type: 'paragraph',
+        //@ts-ignore
+        children: [{ text: '' }],
+    },
+]
+
+export function createEmptyParagraph() {
+    return _.cloneDeep(emptyParagraph)
 }

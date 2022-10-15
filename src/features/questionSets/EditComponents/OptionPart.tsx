@@ -9,7 +9,7 @@ import {
 } from '../questionSetEditorSlice'
 import { Check } from 'react-bootstrap-icons'
 import clsx from 'clsx'
-import RemovableEditorSlate from './RemovableEditorSlate'
+import RemovableEditor from './RemovableEditor'
 import { RichTextNode } from '../questionSetTypes'
 
 type Props = {
@@ -49,7 +49,7 @@ export default function OptionPart({ questionIndex, optionIndex }: Props) {
             </div>
             {value && (
                 <div className="flex-grow">
-                    <RemovableEditorSlate
+                    <RemovableEditor
                         value={value}
                         onRemove={() =>
                             dispatch(

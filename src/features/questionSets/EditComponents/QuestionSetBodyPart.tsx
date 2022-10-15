@@ -7,7 +7,7 @@ import {
 } from '../questionSetEditorSlice'
 import { questionSetBodyRemoved } from '../questionSetEditorSlice'
 import { RichTextNode } from '../questionSetTypes'
-import RemovableEditorSlate from './RemovableEditorSlate'
+import RemovableEditor from './RemovableEditor'
 
 export default function QuestionSetBodyPart() {
     const dispatch = useAppDispatch()
@@ -23,7 +23,7 @@ export default function QuestionSetBodyPart() {
 
             {value !== undefined ? (
                 <div className="mt-2">
-                    <RemovableEditorSlate
+                    <RemovableEditor
                         value={value}
                         onChange={handleChange}
                         onRemove={() => dispatch(questionSetBodyRemoved())}

@@ -93,7 +93,6 @@ export function usePrepareUpdatingQuestionSet(editType: EditType) {
 
     useEffect(() => {
         if (editType === EditType.Update) {
-            console.log('data', data)
             data && dispatch(questionSetReceived(data!))
         }
     }, [editType, data, dispatch])

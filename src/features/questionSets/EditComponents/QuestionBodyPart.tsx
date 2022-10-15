@@ -7,7 +7,7 @@ import {
     selectQuestionBody,
 } from '../questionSetEditorSlice'
 import { RichTextNode } from '../questionSetTypes'
-import RemovableEditorSlate from './RemovableEditorSlate'
+import RemovableEditor from './RemovableEditor'
 
 type Props = {
     index: number
@@ -29,7 +29,7 @@ export default function QuestionBodyPart({ index }: Props) {
             {questionBody ? (
                 <>
                     <div className="flex-grow">
-                        <RemovableEditorSlate
+                        <RemovableEditor
                             value={questionBody}
                             onChange={handleChange}
                             onRemove={() =>

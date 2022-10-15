@@ -1,14 +1,15 @@
-import RichTextEditor from '../../../components/RichTextEditor'
 import Button from '../../../components/ui/Button'
+import SlateEditor from '../../editor/SlateEditor'
+import { RichTextNode } from '../questionSetTypes'
 
 type Props = {
-    value: string
+    value: RichTextNode[]
     disableRemove?: boolean
     onRemove: () => void
-    onChange: (value: string) => void
+    onChange: (value: RichTextNode[]) => void
 }
 
-export default function RemovableEditor({
+export default function RemovableEditorSlate({
     value,
     onRemove,
     onChange,
@@ -17,7 +18,7 @@ export default function RemovableEditor({
     return (
         <div className="flex items-center gap-4">
             <div className="flex-grow">
-                <RichTextEditor value={value} onChange={onChange} />
+                <SlateEditor value={value} onChange={onChange} />
             </div>
             <div className="">
                 <Button

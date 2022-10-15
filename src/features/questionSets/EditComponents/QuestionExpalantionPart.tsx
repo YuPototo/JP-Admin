@@ -7,7 +7,7 @@ import {
     selectQuestionExplanation,
 } from '../questionSetEditorSlice'
 import { RichTextNode } from '../questionSetTypes'
-import RemovableEditorSlate from './RemovableEditorSlate'
+import RemovableEditor from './RemovableEditor'
 
 type Props = {
     questionIndex: number
@@ -29,7 +29,7 @@ export default function QuestionExpalantionPart({ questionIndex }: Props) {
             {explanation ? (
                 <>
                     <div className="flex-grow">
-                        <RemovableEditorSlate
+                        <RemovableEditor
                             value={explanation}
                             onChange={handleChange}
                             onRemove={() =>
