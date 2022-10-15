@@ -11,6 +11,7 @@ import { calcSize } from '../../../utils/calcSize'
 import Button from '../../../components/ui/Button'
 import Spinner from '../../../components/ui/Spinner'
 import { CustomEditor } from '../CustomEditor'
+import { useUploadQuestionSetImageMutation } from '../../questionSets/questionSetService'
 
 /**
  * 交互
@@ -73,7 +74,7 @@ function UpdateImageModal({
     onClose: () => void
     onUpdateDone: (url: string) => void
 }) {
-    // const [updateCover] = useUpdateBookCoverMutation()
+    const [uploadImage] = useUploadQuestionSetImageMutation()
     const [file, setFile] = useState<File | undefined>()
 
     // 上限：900kb
@@ -84,37 +85,33 @@ function UpdateImageModal({
             <h2 className="mb-4 font-bold text-green-700">上传图片</h2>
 
             <Formik
-                initialValues={{ cover: '' }}
+                initialValues={{ image: '' }}
                 validate={(values) => {
                     const errors = {}
-                    if (!values.cover) {
+                    if (!values.image) {
                         //@ts-ignore
-                        errors.cover = '需要选择图片'
+                        errors.image = '需要选择图片'
                     }
 
                     //@ts-ignore
-                    if (values.cover.size > fileSizeLimit) {
+                    if (values.image.size > fileSizeLimit) {
                         //@ts-ignore
-                        errors.cover = '封面尺寸需要小于900kb'
+                        errors.image = '封面尺寸需要小于900kb'
                     }
                     return errors
                 }}
                 onSubmit={async (values, { setSubmitting }) => {
                     const formData = new FormData()
-                    formData.append('cover', values.cover)
+                    formData.append('image', values.image)
 
                     try {
                         setSubmitting(true)
-                        // await updateCover({
-                        //     bookId,
-                        //     formData,
-                        // }).unwrap()
+                        const { imageUrl } = await uploadImage(
+                            formData
+                        ).unwrap()
                         toast.success('图片添加成功')
                         setSubmitting(false)
-                        //! todo: 修改
-                        const random = Math.random()
-                        let size = random > 0.5 ? 300 : 250
-                        onUpdateDone(`https://picsum.photos/${size}`)
+                        onUpdateDone(imageUrl)
                     } catch (err) {
                         // middle ware 里处理了
                     }
@@ -130,19 +127,19 @@ function UpdateImageModal({
                     <form onSubmit={handleSubmit}>
                         {file === undefined ? (
                             <div>
-                                <label htmlFor="cover" className="mr-2">
+                                <label htmlFor="image" className="mr-2">
                                     选择图片
                                 </label>
 
                                 <input
-                                    id="cover"
-                                    name="cover"
+                                    id="image"
+                                    name="image"
                                     type="file"
                                     accept=".jpg, .jpeg, .png"
                                     onChange={(event) => {
                                         const file =
                                             event.currentTarget.files?.[0]
-                                        setFieldValue('cover', file)
+                                        setFieldValue('image', file)
                                         setFile(file)
                                     }}
                                 />
@@ -178,7 +175,7 @@ function UpdateImageModal({
                         )}
 
                         <div className="mt-2 text-sm text-red-600">
-                            {errors.cover && touched.cover && errors.cover}
+                            {errors.image && touched.image && errors.image}
                         </div>
 
                         <div className="mt-4 flex justify-center gap-4">

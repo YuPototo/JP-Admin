@@ -58,8 +58,14 @@ export const questionSetApi = splitApi.injectEndpoints({
                     body: { questionSet: rest },
                 }
             },
-
             invalidatesTags: ['QuestionSet'],
+        }),
+        uploadQuestionSetImage: build.mutation<{ imageUrl: string }, FormData>({
+            query: (formData) => ({
+                url: 'questionSets/uploadImage',
+                method: 'POST',
+                body: formData,
+            }),
         }),
     }),
 })
@@ -70,4 +76,5 @@ export const {
     useAddAudioMutation,
     useAddQuestionSetMutation,
     useUpdateQuestionSetMutation,
+    useUploadQuestionSetImageMutation,
 } = questionSetApi
