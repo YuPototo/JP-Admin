@@ -1,16 +1,25 @@
+import { useState } from 'react'
 import Button from '../../../components/ui/Button'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { createEmptyEditor } from '../../editor/CustomEditor'
 import { optionAdded, selectOptions } from '../questionSetEditorSlice'
 import OptionPart from './OptionPart'
 
 type Props = {
     questionIndex: number
-    initialValue: any
+    startingValue: any
 }
 
-export default function OptionsPart({ questionIndex, initialValue }: Props) {
+export default function OptionsPart({ questionIndex, startingValue }: Props) {
+    const [initialValue, setInitialValue] = useState(startingValue)
+
     const dispatch = useAppDispatch()
     const options = useAppSelector(selectOptions(questionIndex))
+
+    const handleAdd = () => {
+        setInitialValue([...options!, createEmptyEditor()])
+        dispatch(optionAdded(questionIndex))
+    }
 
     return (
         <div className="flex items-center gap-6">
@@ -19,7 +28,7 @@ export default function OptionsPart({ questionIndex, initialValue }: Props) {
                 {options &&
                     options.map((option, index) => (
                         <OptionPart
-                            key={Math.random()}
+                            key={index}
                             questionIndex={questionIndex}
                             optionIndex={index}
                             initialValue={initialValue[index]}
@@ -27,10 +36,7 @@ export default function OptionsPart({ questionIndex, initialValue }: Props) {
                     ))}
 
                 <div>
-                    <Button
-                        outline
-                        onClick={() => dispatch(optionAdded(questionIndex))}
-                    >
+                    <Button outline onClick={handleAdd}>
                         新增选项
                     </Button>
                 </div>

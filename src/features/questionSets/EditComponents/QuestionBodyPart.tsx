@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Button from '../../../components/ui/Button'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { createEmptyEditor } from '../../editor/CustomEditor'
@@ -12,19 +13,27 @@ import RemovableEditor from './RemovableEditor'
 
 type Props = {
     index: number
-    initialValue?: RichTextNode[]
+    startingValue?: RichTextNode[]
 }
 
 export default function QuestionBodyPart({
     index,
-    initialValue = createEmptyEditor(),
+    startingValue = createEmptyEditor(),
 }: Props) {
+    // 如果使用添加按钮，initialValue 应该是个空白值
+    const [initialValue, setInitialValue] = useState(startingValue)
+
     const dispatch = useAppDispatch()
 
     const hasQuestionBody = useAppSelector(selectHasQuestionBody(index))
 
     const handleChange = (value: RichTextNode[]) => {
         dispatch(questionBodyChanged({ questionIndex: index, value }))
+    }
+
+    const handleAdd = () => {
+        setInitialValue(createEmptyEditor())
+        dispatch(questionBodyAdded(index))
     }
 
     return (
@@ -49,10 +58,7 @@ export default function QuestionBodyPart({
                         <div className="color-gray-700 text-sm">
                             用于添加小题的题目。
                         </div>
-                        <Button
-                            outline
-                            onClick={() => dispatch(questionBodyAdded(index))}
-                        >
+                        <Button outline onClick={handleAdd}>
                             添加
                         </Button>
                     </div>

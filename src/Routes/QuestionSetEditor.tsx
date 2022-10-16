@@ -38,11 +38,11 @@ export default function QuestionSetEditor() {
 
                 {data && (
                     <>
-                        <QuestionSetBodyPart initialValue={data.body} />
+                        <QuestionSetBodyPart startingValue={data.body} />
                         <AudioPart />
                         <QuestionListPart initialValues={data.questions} />
                         <QuesitonSetExplanationPart
-                            initialValue={data.explanation}
+                            startingValue={data.explanation}
                         />
                     </>
                 )}

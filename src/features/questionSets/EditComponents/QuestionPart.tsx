@@ -32,17 +32,17 @@ export default function QuestionPart({
             <div className="ml-2 mt-4 flex flex-col gap-8">
                 <QuestionBodyPart
                     index={index}
-                    initialValue={initialValue.body}
+                    startingValue={initialValue.body}
                 />
 
                 <OptionsPart
                     questionIndex={index}
-                    initialValue={initialValue.options}
+                    startingValue={initialValue.options}
                 />
 
                 <QuestionExpalantionPart
                     questionIndex={index}
-                    initialValue={initialValue.explanation}
+                    startingValue={initialValue.explanation}
                 />
             </div>
 

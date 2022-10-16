@@ -11,7 +11,6 @@ import clsx from 'clsx'
 import RemovableEditor from './RemovableEditor'
 import { RichTextNode } from '../questionSetTypes'
 import { createEmptyEditor } from '../../editor/CustomEditor'
-import React from 'react'
 
 type Props = {
     questionIndex: number
@@ -19,7 +18,7 @@ type Props = {
     initialValue?: RichTextNode[]
 }
 
-function OptionPart({
+export default function OptionPart({
     questionIndex,
     optionIndex,
     initialValue = createEmptyEditor(),
@@ -59,24 +58,17 @@ function OptionPart({
                     size={30}
                 />
             </div>
-            {initialValue && (
-                <div className="flex-grow">
-                    <RemovableEditor
-                        initalValue={initialValue}
-                        onRemove={() =>
-                            dispatch(
-                                optionRemoved({ questionIndex, optionIndex })
-                            )
-                        }
-                        disableRemove={optionCount <= 2}
-                        onChange={handleChange}
-                    />
-                </div>
-            )}
+
+            <div className="flex-grow">
+                <RemovableEditor
+                    initalValue={initialValue}
+                    onRemove={() =>
+                        dispatch(optionRemoved({ questionIndex, optionIndex }))
+                    }
+                    disableRemove={optionCount <= 2}
+                    onChange={handleChange}
+                />
+            </div>
         </div>
     )
 }
-
-const OptionPartMemo = React.memo(OptionPart)
-
-export default OptionPartMemo

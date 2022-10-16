@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Button from '../../../components/ui/Button'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { createEmptyEditor } from '../../editor/CustomEditor'
@@ -12,13 +13,15 @@ import RemovableEditor from './RemovableEditor'
 
 type Props = {
     questionIndex: number
-    initialValue?: RichTextNode[]
+    startingValue?: RichTextNode[]
 }
 
 export default function QuestionExpalantionPart({
     questionIndex,
-    initialValue = createEmptyEditor(),
+    startingValue = createEmptyEditor(),
 }: Props) {
+    const [initialValue, setInitialValue] = useState(startingValue)
+
     const dispatch = useAppDispatch()
 
     const handleChange = (value: RichTextNode[]) => {
@@ -28,6 +31,11 @@ export default function QuestionExpalantionPart({
     const hasQuestionExplanation = useAppSelector(
         selectHasQuestionExplanation(questionIndex)
     )
+
+    const handleAdd = () => {
+        setInitialValue(createEmptyEditor())
+        dispatch(questionExplanationAdded(questionIndex))
+    }
 
     return (
         <div className="flex items-center gap-6">
@@ -53,14 +61,7 @@ export default function QuestionExpalantionPart({
                         <div className="color-gray-700 text-sm">
                             用于添加小题的解析。
                         </div>
-                        <Button
-                            outline
-                            onClick={() =>
-                                dispatch(
-                                    questionExplanationAdded(questionIndex)
-                                )
-                            }
-                        >
+                        <Button outline onClick={handleAdd}>
                             添加
                         </Button>
                     </div>
