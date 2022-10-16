@@ -1,24 +1,23 @@
-import _ from 'lodash'
 import Button from '../../../components/ui/Button'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
-    emptyQuestion,
+    createEmptyQuestion,
     questionRemove,
     selectQuestionsCount,
 } from '../questionSetEditorSlice'
-import { INewQuestion, IQuestion } from '../questionSetTypes'
+import { WorkingQuestion } from '../questionSetTypes'
 import OptionsPart from './OptionsPart'
 import QuestionBodyPart from './QuestionBodyPart'
 import QuestionExpalantionPart from './QuestionExpalantionPart'
 
 type Props = {
     index: number
-    initialValue?: IQuestion | INewQuestion
+    startingValue?: WorkingQuestion
 }
 
 export default function QuestionPart({
     index,
-    initialValue = _.cloneDeep(emptyQuestion),
+    startingValue = createEmptyQuestion(),
 }: Props) {
     const dispatch = useAppDispatch()
     const questionsCount = useAppSelector(selectQuestionsCount)
@@ -32,17 +31,17 @@ export default function QuestionPart({
             <div className="ml-2 mt-4 flex flex-col gap-8">
                 <QuestionBodyPart
                     index={index}
-                    startingValue={initialValue.body}
+                    startingValue={startingValue.body}
                 />
 
                 <OptionsPart
                     questionIndex={index}
-                    startingValue={initialValue.options}
+                    startingValue={startingValue.options}
                 />
 
                 <QuestionExpalantionPart
                     questionIndex={index}
-                    startingValue={initialValue.explanation}
+                    startingValue={startingValue.explanation}
                 />
             </div>
 

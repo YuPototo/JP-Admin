@@ -1,18 +1,34 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
 import {
     IAudio,
-    INewQuestion,
     RichTextNode,
     IQuestionSet,
-    IQuestionSetInEditor,
+    WorkingQuestionSet,
+    WorkingQuestion,
+    UpdateQuestionSetPayload,
 } from './questionSetTypes'
 import type { RootState } from '../../store/store'
-import _ from 'lodash'
 import { createEmptyEditor } from '../editor/CustomEditor'
+import { AddQuestionSetPayload } from './questionSetService'
+
+export function createNewOption() {
+    return {
+        uuid: nanoid(),
+        data: createEmptyEditor(),
+    }
+}
+
+export function createEmptyQuestion(): WorkingQuestion {
+    return {
+        uuid: nanoid(),
+        body: createEmptyEditor(),
+        options: [createNewOption(), createNewOption()],
+    }
+}
 
 export interface QuestionSetEditorState {
     chapterId: null | string
-    questionSet: null | IQuestionSetInEditor
+    questionSet: null | WorkingQuestionSet
     validationError: null | string[]
 }
 
@@ -20,11 +36,6 @@ const initialState: QuestionSetEditorState = {
     chapterId: null, // 只在新增题目时需要
     questionSet: null,
     validationError: null,
-}
-
-export const emptyQuestion: INewQuestion = {
-    body: createEmptyEditor(),
-    options: [createEmptyEditor(), createEmptyEditor()],
 }
 
 export const questionSetEditorSlice = createSlice({
@@ -36,7 +47,7 @@ export const questionSetEditorSlice = createSlice({
         },
         questionSetCreated: (state) => {
             state.questionSet = {
-                questions: [_.cloneDeep(emptyQuestion)],
+                questions: [createEmptyQuestion()],
             }
         },
         questionSetBodyAdded: (state) => {
@@ -54,7 +65,7 @@ export const questionSetEditorSlice = createSlice({
                 console.error('questionAdded called without questionSet')
                 return
             }
-            state.questionSet.questions.push(_.cloneDeep(emptyQuestion))
+            state.questionSet.questions.push(createEmptyQuestion())
         },
         questionRemove: (state, action: PayloadAction<number>) => {
             if (!state.questionSet) {
@@ -127,7 +138,7 @@ export const questionSetEditorSlice = createSlice({
                 return
             }
             const index = action.payload
-            state.questionSet.questions[index].options.push(createEmptyEditor())
+            state.questionSet.questions[index].options.push(createNewOption())
         },
         optionSelected: (
             state,
@@ -243,7 +254,7 @@ export const questionSetEditorSlice = createSlice({
                 return
             }
 
-            question.options[optionIndex] = value
+            question.options[optionIndex].data = value
         },
         questionExplanationChanged: (
             state,
@@ -293,8 +304,22 @@ export const questionSetEditorSlice = createSlice({
             state.questionSet = null
             state.validationError = null
         },
-        questionSetReceived: (state, payload: PayloadAction<IQuestionSet>) => {
-            state.questionSet = payload.payload
+        questionSetReceived: (state, action: PayloadAction<IQuestionSet>) => {
+            const questionSet = action.payload
+            state.questionSet = {
+                ...questionSet,
+                questions: questionSet.questions.map((question) => ({
+                    uuid: nanoid(),
+                    ...question,
+                    options: question.options.map((option) => ({
+                        uuid: nanoid(),
+                        data: option,
+                    })),
+                })),
+            }
+
+            //@ts-ignore
+            delete state.questionSet.chapters
         },
         finishEditing: (state) => {
             state.questionSet = null
@@ -347,6 +372,11 @@ export const selectQuestionsCount = (state: RootState) => {
     } else {
         return 0
     }
+}
+
+export const selectQuestions = (state: RootState) => {
+    const questionSet = state.questionSetEditor.questionSet
+    return questionSet?.questions
 }
 
 export const selectOptionsCount =
@@ -410,29 +440,59 @@ export const selectHasQuestionSetExplanation = (state: RootState) => {
     return !!questionSet?.explanation
 }
 
-export const selectAddQuestionSetPayload = (state: RootState) => {
-    const questionSet = state.questionSetEditor.questionSet
+export const selectAddQuestionSetPayload = (
+    state: RootState
+): AddQuestionSetPayload | undefined => {
+    const questionSet = selectFormatedQuestionSet(state)
+
     if (!questionSet) {
         return
     }
+
     const chapterId = state.questionSetEditor.chapterId
     if (!chapterId) {
         return
     }
+
     return {
+        //@ts-ignore
         questionSet,
         chapterId,
+    }
+}
+
+export const selectFormatedQuestionSet = (state: RootState) => {
+    const questionSet = state.questionSetEditor.questionSet
+    if (!questionSet) {
+        return
+    }
+
+    const questions = questionSet.questions.map((question) => {
+        const formatedQuestion = {
+            ...question,
+            options: question.options.map((option) => option.data),
+        }
+        //@ts-ignore
+        delete formatedQuestion.uuid
+        return formatedQuestion
+    })
+
+    return {
+        ...questionSet,
+        questions,
     }
 }
 
 /* tech debt */
 export const selectUpdateQuestionSetPayload = (
     state: RootState
-): { questionSet: IQuestionSet } | null => {
-    const questionSet = state.questionSetEditor.questionSet
+): { questionSet: UpdateQuestionSetPayload } | undefined => {
+    const questionSet = selectFormatedQuestionSet(state)
 
-    if (questionSet !== null && questionSet.id === undefined) {
-        return null
+    if (!questionSet) {
+        return
     }
-    return { questionSet } as { questionSet: IQuestionSet }
+
+    //@ts-ignore
+    return { questionSet }
 }

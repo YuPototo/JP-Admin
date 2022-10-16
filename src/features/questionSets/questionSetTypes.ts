@@ -12,13 +12,6 @@ export interface IQuestion {
     answer: number
 }
 
-export interface INewQuestion {
-    body?: RichTextNode[]
-    explanation?: RichTextNode[]
-    options: RichTextNode[][]
-    answer?: number
-}
-
 export interface IAudio {
     id: string
     key: string
@@ -34,19 +27,24 @@ export interface IQuestionSet {
     chapters: string[]
 }
 
-export type IQuestionInEditor = INewQuestion | IQuestion
-
-export interface IQuestionSetInEditor {
-    id?: string
-    body?: RichTextNode[] // 大题题干
-    questions: IQuestionInEditor[]
-    explanation?: RichTextNode[] // 大题解析
-    audio?: IAudio
+// Working Questino Set Interface
+export type WorkingOption = {
+    uuid: string
+    data: RichTextNode[]
 }
 
-export interface AddQuestionSetPayload {
+export type WorkingQuestion = {
+    uuid: string
+    body?: RichTextNode[]
+    explanation?: RichTextNode[]
+    options: WorkingOption[]
+    answer?: number
+}
+
+export type WorkingQuestionSet = {
+    id?: string
     body?: RichTextNode[] // 大题题干
-    questions: IQuestionInEditor[]
+    questions: WorkingQuestion[]
     explanation?: RichTextNode[] // 大题解析
     audio?: IAudio
 }

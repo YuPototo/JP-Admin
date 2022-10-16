@@ -1,9 +1,9 @@
 import React from 'react'
-import { IQuestionInEditor } from '../questionSetTypes'
+import { IQuestion } from '../questionSetTypes'
 import Question from './Question'
 
 type Props = {
-    questions?: IQuestionInEditor[]
+    questions?: IQuestion[]
 }
 
 export default function Questions({ questions }: Props) {

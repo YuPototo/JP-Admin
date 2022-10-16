@@ -1,14 +1,13 @@
 import React from 'react'
 import { useAppSelector } from '../../../store/hooks'
+import { selectFormatedQuestionSet } from '../questionSetEditorSlice'
 import AudioPlayer from './AudioPart'
 import Questions from './Questions'
 import QuestionSetBody from './QuestionSetBody'
 import QuestionSetExplanation from './QuestionSetExplanation'
 
 export default function QuestionSet() {
-    const questionSet = useAppSelector(
-        (state) => state.questionSetEditor.questionSet
-    )
+    const questionSet = useAppSelector(selectFormatedQuestionSet)
 
     if (!questionSet) {
         return <div className="text-2xl text-red-700">出错了！找不到题目</div>
@@ -23,6 +22,7 @@ export default function QuestionSet() {
                 text={questionSet.audio?.transcription}
             />
 
+            {/* @ts-ignore */}
             <Questions questions={questionSet.questions} />
 
             <QuestionSetExplanation explanation={questionSet.explanation} />

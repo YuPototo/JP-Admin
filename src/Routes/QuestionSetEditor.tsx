@@ -12,7 +12,7 @@ import {
 } from '../features/questionSets/questionSetEditorSlice'
 import { useGetQuestionSetQuery } from '../features/questionSets/questionSetService'
 import useAuthGuard from '../features/user/useAuthGuard'
-import { useAppDispatch } from '../store/hooks'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
 
 export default function QuestionSetEditor() {
     useAuthGuard()
@@ -27,6 +27,16 @@ export default function QuestionSetEditor() {
         }
     }, [dispatch])
 
+    useEffect(() => {
+        if (data) {
+            dispatch(questionSetReceived(data))
+        }
+    }, [data, dispatch])
+
+    const workingQuestionSet = useAppSelector(
+        (state) => state.questionSetEditor.questionSet
+    )
+
     return (
         <PageLayout>
             <div className="text-xl text-white">编辑题目</div>
@@ -36,13 +46,17 @@ export default function QuestionSetEditor() {
                     <div className="text-lg text-white">加载中...</div>
                 )}
 
-                {data && (
+                {workingQuestionSet && (
                     <>
-                        <QuestionSetBodyPart startingValue={data.body} />
+                        <QuestionSetBodyPart
+                            startingValue={workingQuestionSet.body}
+                        />
                         <AudioPart />
-                        <QuestionListPart initialValues={data.questions} />
+                        <QuestionListPart
+                            startingValue={workingQuestionSet.questions}
+                        />
                         <QuesitonSetExplanationPart
-                            startingValue={data.explanation}
+                            startingValue={workingQuestionSet.explanation}
                         />
                     </>
                 )}

@@ -1,11 +1,27 @@
 import { splitApi } from '../../store/query/splitApi'
-import { IAudio, IQuestionSet, AddQuestionSetPayload } from './questionSetTypes'
+import {
+    IAudio,
+    IQuestion,
+    IQuestionSet,
+    RichTextNode,
+    UpdateQuestionSetPayload,
+} from './questionSetTypes'
 
 interface ChapterInfo {
     id: string
     title: string
     desc?: string
     questionSets: string[]
+}
+
+export interface AddQuestionSetPayload {
+    chapterId: string
+    questionSet: {
+        body?: RichTextNode[] // 大题题干
+        questions: IQuestion[]
+        explanation?: RichTextNode[] // 大题解析
+        audio?: IAudio
+    }
 }
 
 export const questionSetApi = splitApi.injectEndpoints({
@@ -31,13 +47,7 @@ export const questionSetApi = splitApi.injectEndpoints({
             }),
             transformResponse: (res: { audio: IAudio }) => res.audio,
         }),
-        addQuestionSet: build.mutation<
-            void,
-            {
-                chapterId: string
-                questionSet: AddQuestionSetPayload
-            }
-        >({
+        addQuestionSet: build.mutation<void, AddQuestionSetPayload>({
             query: ({ chapterId, questionSet }) => ({
                 url: 'questionSets',
                 method: 'POST',
@@ -48,10 +58,12 @@ export const questionSetApi = splitApi.injectEndpoints({
             }),
             invalidatesTags: ['Chapter'],
         }),
-        updateQuestionSet: build.mutation<void, { questionSet: IQuestionSet }>({
+        updateQuestionSet: build.mutation<
+            void,
+            { questionSet: UpdateQuestionSetPayload }
+        >({
             query: ({ questionSet }) => {
-                // * 不能包含 chapters 字段
-                const { id, chapters, ...rest } = questionSet
+                const { id, ...rest } = questionSet
                 return {
                     url: `questionSets/${id}`,
                     method: 'PATCH',

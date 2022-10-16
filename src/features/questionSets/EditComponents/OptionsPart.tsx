@@ -1,13 +1,17 @@
 import { useState } from 'react'
 import Button from '../../../components/ui/Button'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { createEmptyEditor } from '../../editor/CustomEditor'
-import { optionAdded, selectOptions } from '../questionSetEditorSlice'
+import {
+    createNewOption,
+    optionAdded,
+    selectOptions,
+} from '../questionSetEditorSlice'
+import { WorkingOption } from '../questionSetTypes'
 import OptionPart from './OptionPart'
 
 type Props = {
     questionIndex: number
-    startingValue: any
+    startingValue: WorkingOption[]
 }
 
 export default function OptionsPart({ questionIndex, startingValue }: Props) {
@@ -17,7 +21,7 @@ export default function OptionsPart({ questionIndex, startingValue }: Props) {
     const options = useAppSelector(selectOptions(questionIndex))
 
     const handleAdd = () => {
-        setInitialValue([...options!, createEmptyEditor()])
+        setInitialValue([...options!, createNewOption()])
         dispatch(optionAdded(questionIndex))
     }
 
@@ -28,10 +32,10 @@ export default function OptionsPart({ questionIndex, startingValue }: Props) {
                 {options &&
                     options.map((option, index) => (
                         <OptionPart
-                            key={index}
+                            key={option.uuid}
                             questionIndex={questionIndex}
                             optionIndex={index}
-                            initialValue={initialValue[index]}
+                            initialValue={initialValue[index].data}
                         />
                     ))}
 

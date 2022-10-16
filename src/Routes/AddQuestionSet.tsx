@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import React, { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import PageLayout from '../components/layout/PageLayout'
@@ -9,7 +8,7 @@ import QuesitonSetExplanationPart from '../features/questionSets/EditComponents/
 import Previewer from '../features/questionSets/PreviewComponents/Previewer'
 import {
     chapterUsed,
-    emptyQuestion,
+    createEmptyQuestion,
     finishEditing,
     questionSetCreated,
 } from '../features/questionSets/questionSetEditorSlice'
@@ -34,7 +33,7 @@ export default function AddQuestionSet() {
     }, [dispatch, chapterId])
 
     const newQuestionSet = {
-        questions: [_.cloneDeep(emptyQuestion)],
+        questions: [createEmptyQuestion()],
     }
 
     return (
@@ -47,7 +46,7 @@ export default function AddQuestionSet() {
                 {/* Audio Editor 不是富文本编辑器 */}
                 <AudioPart />
 
-                <QuestionListPart initialValues={newQuestionSet.questions} />
+                <QuestionListPart startingValue={newQuestionSet.questions} />
 
                 {/* 新题目默认没有 questionSetExplanation */}
                 <QuesitonSetExplanationPart />
