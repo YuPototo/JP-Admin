@@ -3,7 +3,11 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { questionAdded, selectQuestionsCount } from '../questionSetEditorSlice'
 import QuestionPart from './QuestionPart'
 
-export default function QuestionListPart() {
+type Props = {
+    initialValues: any
+}
+
+export default function QuestionListPart({ initialValues }: Props) {
     const dispatch = useAppDispatch()
     const questionsCount = useAppSelector(selectQuestionsCount)
 
@@ -15,7 +19,10 @@ export default function QuestionListPart() {
         <div>
             {Array.from({ length: questionsCount }).map((_, index) => (
                 <div key={index} className="my-4">
-                    <QuestionPart index={index} />
+                    <QuestionPart
+                        index={index}
+                        initialValue={initialValues[index]}
+                    />
                 </div>
             ))}
 

@@ -1,5 +1,5 @@
 // Import the Slate editor factory.
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { createEditor, Descendant } from 'slate'
 import isHotkey from 'is-hotkey'
 import {
@@ -27,11 +27,11 @@ const HOTKEYS = {
 }
 
 type Props = {
-    value: Descendant[]
+    initalValue: Descendant[]
     onChange: (value: Descendant[]) => void
 }
 
-export default function SlateEditor({ onChange, value }: Props) {
+export default function SlateEditor({ onChange, initalValue }: Props) {
     const [editor] = useState(() =>
         withCorrectVoidBehavior(withImage(withReact(createEditor())))
     )
@@ -41,7 +41,6 @@ export default function SlateEditor({ onChange, value }: Props) {
     const renderLeaf = useRenderLeaf()
 
     const handleChange = (newValue: Descendant[]) => {
-        console.log('this is on change event')
         // 判断编辑器内容是否发生改变
         const isAstChange = editor.operations.some(
             (op) => 'set_selection' !== op.type
@@ -53,7 +52,7 @@ export default function SlateEditor({ onChange, value }: Props) {
 
     return (
         <div>
-            <Slate editor={editor} value={value} onChange={handleChange}>
+            <Slate editor={editor} value={initalValue} onChange={handleChange}>
                 <Toolbar />
 
                 <div className="rounded border border-gray-300 bg-gray-50 px-4 py-3 shadow-green-100">

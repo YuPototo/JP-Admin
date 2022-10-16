@@ -3,6 +3,8 @@ import { selectHasAudio } from '../questionSetEditorSlice'
 import AudioAdder from './AudioAdder'
 import AudioEditor from './AudioEditor'
 
+// 注意：audio editor 不是富文本编辑器，是一个 controlled input
+
 export default function AudioPart() {
     const hasAudio = useAppSelector(selectHasAudio)
     const audio = useAppSelector(

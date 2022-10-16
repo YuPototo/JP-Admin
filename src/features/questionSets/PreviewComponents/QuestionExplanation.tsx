@@ -25,7 +25,7 @@ export default function QuestionExplanation({ explanation }: Props) {
         <>
             {isValueEmpty(explanation) ? (
                 <div className="font-bold text-red-700">
-                    题干为空白。如果不需要，请移除题干。
+                    小题解析为空白。如果不需要，请移除解析。
                 </div>
             ) : (
                 <RichtTextRenderer data={explanation} />

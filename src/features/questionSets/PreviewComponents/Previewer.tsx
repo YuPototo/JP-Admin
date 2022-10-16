@@ -3,7 +3,6 @@ import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import MyModal from '../../../components/MyModal'
 import Button from '../../../components/ui/Button'
-import { EditType } from '../../../routes/QuestionSetEditor'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
     errorReset,
@@ -17,8 +16,16 @@ import {
 } from '../questionSetService'
 import QuestionSet from './QuestionSet'
 
-export default function Previewer({ editType }: { editType: EditType }) {
+export default function Previewer({
+    editType,
+}: {
+    editType: 'update' | 'new'
+}) {
     const [showModal, setShowModal] = useState(false)
+
+    const handlePreviewQuestionSet = () => {
+        setShowModal(true)
+    }
 
     return (
         <>
@@ -28,7 +35,7 @@ export default function Previewer({ editType }: { editType: EditType }) {
                 onClose={() => setShowModal(false)}
             />
             <div className="self-center">
-                <Button padding="px-12 py-2" onClick={() => setShowModal(true)}>
+                <Button padding="px-12 py-2" onClick={handlePreviewQuestionSet}>
                     预览题目
                 </Button>
             </div>
@@ -41,7 +48,7 @@ function PreviewModal({
     isOpen,
     onClose,
 }: {
-    editType: EditType
+    editType: 'update' | 'new'
     isOpen: boolean
     onClose: () => void
 }) {
@@ -61,9 +68,9 @@ function PreviewModal({
     const [handleUpdate, isUpdating] = useUpdateQuestionSet()
 
     const handleSubmit = async () => {
-        if (editType === EditType.New) {
+        if (editType === 'new') {
             await handleCreateNew()
-        } else if (editType === EditType.Update) {
+        } else if (editType === 'update') {
             await handleUpdate()
         }
     }

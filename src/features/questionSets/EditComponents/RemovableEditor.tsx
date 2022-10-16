@@ -3,14 +3,14 @@ import SlateEditor from '../../editor/SlateEditor'
 import { RichTextNode } from '../questionSetTypes'
 
 type Props = {
-    value: RichTextNode[]
+    initalValue: RichTextNode[]
     disableRemove?: boolean
     onRemove: () => void
     onChange: (value: RichTextNode[]) => void
 }
 
 export default function RemovableEditorSlate({
-    value,
+    initalValue,
     onRemove,
     onChange,
     disableRemove = false,
@@ -18,7 +18,7 @@ export default function RemovableEditorSlate({
     return (
         <div className="flex items-center gap-4">
             <div className="flex-grow">
-                <SlateEditor value={value} onChange={onChange} />
+                <SlateEditor initalValue={initalValue} onChange={onChange} />
             </div>
             <div className="">
                 <Button

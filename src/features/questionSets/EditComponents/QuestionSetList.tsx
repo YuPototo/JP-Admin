@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import Button from '../../../components/ui/Button'
 import Skeleton from '../../../components/ui/Skeleton'
-import { EditType } from '../../../routes/QuestionSetEditor'
 import { useGetChapterInfoQuery } from '../questionSetService'
 
 type Props = {
@@ -21,7 +20,7 @@ export default function QuestionSetList({ chapterId }: Props) {
 
             {questionSetIds?.map((questionSetId, index) => (
                 <Link
-                    to={`/questionSetEditor?editType=${EditType.Update}&questionSetId=${questionSetId}`}
+                    to={`/questionSetEditor?questionSetId=${questionSetId}`}
                     key={questionSetId}
                 >
                     <div className="m-1 flex gap-2 p-2 text-gray-700 hover:bg-green-100">
@@ -34,9 +33,7 @@ export default function QuestionSetList({ chapterId }: Props) {
             {questionSetIds?.length === 0 && <div>这一小节还没有题目</div>}
 
             <div className="mt-4">
-                <Link
-                    to={`/questionSetEditor?editType=${EditType.New}&chapterId=${chapterId}`}
-                >
+                <Link to={`/addQuestionSet?chapterId=${chapterId}`}>
                     <Button outline>新增题目</Button>
                 </Link>
             </div>

@@ -1,31 +1,39 @@
 import Button from '../../../components/ui/Button'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { createEmptyEditor } from '../../editor/CustomEditor'
 import {
     questionSetExplanationAdded,
     questionSetExplanationRemoved,
-    selectQuestionSetExplanation,
     questionSetExplanationChanged,
+    selectHasQuestionSetExplanation,
 } from '../questionSetEditorSlice'
 import { RichTextNode } from '../questionSetTypes'
 import RemovableEditor from './RemovableEditor'
 
-export default function QuesitonSetExplanationPart() {
+type Props = {
+    initialValue?: RichTextNode[]
+}
+export default function QuesitonSetExplanationPart({
+    initialValue = createEmptyEditor(),
+}: Props) {
     const dispatch = useAppDispatch()
-
-    const explanation = useAppSelector(selectQuestionSetExplanation)
 
     const handleChange = (value: RichTextNode[]) => {
         dispatch(questionSetExplanationChanged(value))
     }
 
+    const hasQuestionSetExplanation = useAppSelector(
+        selectHasQuestionSetExplanation
+    )
+
     return (
         <div className="rounded bg-gray-100 p-4">
             <div className="text-lg font-bold text-green-800">大题解析</div>
 
-            {explanation ? (
+            {hasQuestionSetExplanation ? (
                 <div className="mt-2">
                     <RemovableEditor
-                        value={explanation}
+                        initalValue={initialValue}
                         onChange={handleChange}
                         onRemove={() =>
                             dispatch(questionSetExplanationRemoved())

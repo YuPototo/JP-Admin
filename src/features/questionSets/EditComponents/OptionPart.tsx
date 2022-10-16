@@ -3,25 +3,32 @@ import {
     optionChanged,
     optionRemoved,
     optionSelected,
-    selectAnswer,
+    selectIsSelected,
     selectOptionsCount,
-    selectOptionValue,
 } from '../questionSetEditorSlice'
 import { Check } from 'react-bootstrap-icons'
 import clsx from 'clsx'
 import RemovableEditor from './RemovableEditor'
 import { RichTextNode } from '../questionSetTypes'
+import { createEmptyEditor } from '../../editor/CustomEditor'
+import React from 'react'
 
 type Props = {
     questionIndex: number
     optionIndex: number
+    initialValue?: RichTextNode[]
 }
 
-export default function OptionPart({ questionIndex, optionIndex }: Props) {
+function OptionPart({
+    questionIndex,
+    optionIndex,
+    initialValue = createEmptyEditor(),
+}: Props) {
     const dispatch = useAppDispatch()
-    const value = useAppSelector(selectOptionValue(questionIndex, optionIndex))
     const optionCount = useAppSelector(selectOptionsCount(questionIndex))
-    const isSelected = useAppSelector(selectAnswer(questionIndex, optionIndex))
+    const isSelected = useAppSelector(
+        selectIsSelected(questionIndex, optionIndex)
+    )
 
     const handleClick = () => {
         dispatch(optionSelected({ questionIndex, optionIndex }))
@@ -31,10 +38,15 @@ export default function OptionPart({ questionIndex, optionIndex }: Props) {
     }
 
     return (
-        <div className="flex items-center gap-4">
+        <div
+            className={clsx(
+                'flex items-center gap-4 p-2',
+                isSelected && 'bg-green-100'
+            )}
+        >
             <div
                 className={clsx(
-                    'rounded border bg-white hover:cursor-pointer hover:bg-green-300 ',
+                    'rounded border bg-white p-1 hover:cursor-pointer hover:bg-green-300 ',
                     isSelected ? 'bg-green-200' : 'bg-white'
                 )}
                 onClick={handleClick}
@@ -47,10 +59,10 @@ export default function OptionPart({ questionIndex, optionIndex }: Props) {
                     size={30}
                 />
             </div>
-            {value && (
+            {initialValue && (
                 <div className="flex-grow">
                     <RemovableEditor
-                        value={value}
+                        initalValue={initialValue}
                         onRemove={() =>
                             dispatch(
                                 optionRemoved({ questionIndex, optionIndex })
@@ -64,3 +76,7 @@ export default function OptionPart({ questionIndex, optionIndex }: Props) {
         </div>
     )
 }
+
+const OptionPartMemo = React.memo(OptionPart)
+
+export default OptionPartMemo

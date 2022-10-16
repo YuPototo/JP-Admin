@@ -17,12 +17,12 @@ export interface QuestionSetEditorState {
 }
 
 const initialState: QuestionSetEditorState = {
-    chapterId: null,
+    chapterId: null, // 只在新增题目时需要
     questionSet: null,
     validationError: null,
 }
 
-const emptyQuestion: INewQuestion = {
+export const emptyQuestion: INewQuestion = {
     body: createEmptyEditor(),
     options: [createEmptyEditor(), createEmptyEditor()],
 }
@@ -296,6 +296,9 @@ export const questionSetEditorSlice = createSlice({
         questionSetReceived: (state, payload: PayloadAction<IQuestionSet>) => {
             state.questionSet = payload.payload
         },
+        finishEditing: (state) => {
+            state.questionSet = null
+        },
     },
 })
 
@@ -327,14 +330,15 @@ export const {
     errorReset,
     questionSetSubmitted,
     questionSetReceived,
+    finishEditing,
 } = questionSetEditorSlice.actions
 
 export default questionSetEditorSlice.reducer
 
 /* selectors */
-export const selectQuestionSetBody = (state: RootState) => {
+export const selectHasQuestionSetBody = (state: RootState) => {
     const questionSet = state.questionSetEditor.questionSet
-    return questionSet?.body
+    return !!questionSet?.body
 }
 
 export const selectQuestionsCount = (state: RootState) => {
@@ -355,7 +359,14 @@ export const selectOptionsCount =
         }
     }
 
-export const selectAnswer =
+export const selectOptions = (questionIndex: number) => (state: RootState) => {
+    if (state.questionSetEditor.questionSet) {
+        return state.questionSetEditor.questionSet.questions[questionIndex]
+            .options
+    }
+}
+
+export const selectIsSelected =
     (questionIndex: number, optionIndex: number) => (state: RootState) => {
         return (
             state.questionSetEditor.questionSet?.questions[questionIndex]
@@ -373,11 +384,10 @@ export const selectAudioTranscription = (state: RootState) => {
     return audio?.transcription ?? ''
 }
 
-// todo
-export const selectQuestionBody =
+export const selectHasQuestionBody =
     (questionIndex: number) => (state: RootState) => {
         const questionSet = state.questionSetEditor.questionSet
-        return questionSet?.questions[questionIndex]?.body
+        return !!questionSet?.questions[questionIndex]?.body
     }
 
 export const selectOptionValue =
@@ -389,15 +399,15 @@ export const selectOptionValue =
         return question?.options[optionIndex]
     }
 
-export const selectQuestionExplanation =
+export const selectHasQuestionExplanation =
     (questionIndex: number) => (state: RootState) => {
         const questionSet = state.questionSetEditor.questionSet
-        return questionSet?.questions[questionIndex]?.explanation
+        return !!questionSet?.questions[questionIndex]?.explanation
     }
 
-export const selectQuestionSetExplanation = (state: RootState) => {
+export const selectHasQuestionSetExplanation = (state: RootState) => {
     const questionSet = state.questionSetEditor.questionSet
-    return questionSet?.explanation
+    return !!questionSet?.explanation
 }
 
 export const selectAddQuestionSetPayload = (state: RootState) => {
