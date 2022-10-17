@@ -1,4 +1,4 @@
-import { Formik } from 'formik'
+import { Formik, FormikErrors } from 'formik'
 import React from 'react'
 import toast from 'react-hot-toast'
 import MyModal from '../../../components/MyModal'
@@ -27,6 +27,11 @@ export default function ChapterAdder({ section }: Props) {
     )
 }
 
+interface FormValues {
+    title: string
+    desc: string
+}
+
 function AddChapaterModal({
     section,
     isOpen,
@@ -38,6 +43,7 @@ function AddChapaterModal({
 }) {
     const [addChapter] = useAddChapterMutation()
 
+    const initialValues: FormValues = { title: '', desc: '' }
     return (
         <MyModal isOpen={isOpen} onModalClosed={onClose}>
             <h2 className="mb-4 font-bold text-green-700">添加一节 Chapter</h2>
@@ -47,11 +53,10 @@ function AddChapaterModal({
             </div>
 
             <Formik
-                initialValues={{ title: '', desc: '' }}
+                initialValues={initialValues}
                 validate={(values) => {
-                    const errors = {}
+                    let errors: FormikErrors<FormValues> = {}
                     if (!values.title) {
-                        //@ts-ignore
                         errors.title = '必须有标题'
                     }
                     return errors

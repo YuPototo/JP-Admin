@@ -1,4 +1,4 @@
-import { Formik } from 'formik'
+import { Formik, FormikErrors } from 'formik'
 import React from 'react'
 import toast from 'react-hot-toast'
 import MyModal from '../../../components/MyModal'
@@ -27,6 +27,11 @@ export default function BookUpdator({ book }: Props) {
     )
 }
 
+interface FormValues {
+    title: string
+    desc: string
+}
+
 function BookEditorModal({
     book,
     isOpen,
@@ -37,19 +42,19 @@ function BookEditorModal({
     onClose: () => void
 }) {
     const [updateBook] = useUpdateBookMutation()
+    const initialValues: FormValues = {
+        title: book.title,
+        desc: book.desc || '',
+    }
 
     return (
         <MyModal isOpen={isOpen} onModalClosed={onClose}>
             <h2 className="mb-4 font-bold text-green-700">练习册信息</h2>
             <Formik
-                initialValues={{
-                    title: book.title,
-                    desc: book.desc || '',
-                }}
+                initialValues={initialValues}
                 validate={(values) => {
-                    const errors = {}
+                    let errors: FormikErrors<FormValues> = {}
                     if (!values.title) {
-                        //@ts-ignore
                         errors.title = '必须有标题'
                     }
                     return errors

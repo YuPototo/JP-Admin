@@ -1,4 +1,4 @@
-import { Formik } from 'formik'
+import { Formik, FormikErrors } from 'formik'
 import React from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
@@ -23,6 +23,11 @@ export default function BookAdder() {
     )
 }
 
+interface FormValues {
+    title: string
+    desc: string
+}
+
 function AddBookModal({
     isOpen,
     onClose,
@@ -33,16 +38,17 @@ function AddBookModal({
     const navigate = useNavigate()
     const [addBook] = useAddBookMutation()
 
+    const initialValues: FormValues = { title: '', desc: '' }
+
     return (
         <MyModal isOpen={isOpen} onModalClosed={onClose}>
             <h2 className="mb-4 font-bold text-green-700">创建练习册</h2>
 
             <Formik
-                initialValues={{ title: '', desc: '' }}
+                initialValues={initialValues}
                 validate={(values) => {
-                    const errors = {}
+                    let errors: FormikErrors<FormValues> = {}
                     if (!values.title) {
-                        //@ts-ignore
                         errors.title = '必须有标题'
                     }
                     return errors

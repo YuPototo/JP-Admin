@@ -4,7 +4,7 @@ import { Image } from 'react-bootstrap-icons'
 import ToolbarButton from './ToolbarButton'
 import { Range } from 'slate'
 import MyModal from '../../../components/MyModal'
-import { Formik } from 'formik'
+import { Formik, FormikErrors } from 'formik'
 import toast from 'react-hot-toast'
 import clsx from 'clsx'
 import { calcSize } from '../../../utils/calcSize'
@@ -65,6 +65,10 @@ export default function InsertImageButton() {
     )
 }
 
+interface FormValue {
+    image?: File
+}
+
 function UpdateImageModal({
     isOpen,
     onClose,
@@ -79,28 +83,32 @@ function UpdateImageModal({
 
     // 上限：900kb
     const fileSizeLimit = 900000
+    const initialValue: FormValue = {}
 
     return (
         <MyModal isOpen={isOpen} onModalClosed={onClose}>
             <h2 className="mb-4 font-bold text-green-700">上传图片</h2>
 
             <Formik
-                initialValues={{ image: '' }}
+                initialValues={initialValue}
                 validate={(values) => {
-                    const errors = {}
+                    let errors: FormikErrors<FormValue> = {}
                     if (!values.image) {
-                        //@ts-ignore
                         errors.image = '需要选择图片'
+                        return
                     }
 
-                    //@ts-ignore
                     if (values.image.size > fileSizeLimit) {
-                        //@ts-ignore
                         errors.image = '封面尺寸需要小于900kb'
                     }
                     return errors
                 }}
                 onSubmit={async (values, { setSubmitting }) => {
+                    if (!values.image) {
+                        toast.error('需要选择图片')
+                        return
+                    }
+
                     const formData = new FormData()
                     formData.append('image', values.image)
 

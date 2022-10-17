@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { Formik } from 'formik'
+import { Formik, FormikErrors } from 'formik'
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import MyModal from '../../../components/MyModal'
@@ -38,6 +38,10 @@ export default function AudioAdder({
     )
 }
 
+interface FormValue {
+    audio?: File
+}
+
 function AddAudioModal({
     isOpen,
     onClose,
@@ -51,28 +55,31 @@ function AddAudioModal({
 
     // 上限：5mb
     const fileSizeLimit = 5000000
-
+    const initialValue: FormValue = {}
     return (
         <MyModal isOpen={isOpen} onModalClosed={onClose}>
             <h2 className="mb-4 font-bold text-green-700">上传听力</h2>
 
             <Formik
-                initialValues={{ audio: '' }}
+                initialValues={initialValue}
                 validate={(values) => {
-                    const errors = {}
+                    let errors: FormikErrors<FormValue> = {}
                     if (!values.audio) {
-                        //@ts-ignore
                         errors.audio = '必须选择一个听力'
+                        return
                     }
 
-                    //@ts-ignore
                     if (values.audio.size > fileSizeLimit) {
-                        //@ts-ignore
                         errors.audio = '听力文件需要小于5mb'
                     }
                     return errors
                 }}
                 onSubmit={async (values, { setSubmitting }) => {
+                    if (!values.audio) {
+                        toast.error('必须选择一个听力')
+                        return
+                    }
+
                     const loadingToast = toast.loading('听力上传中，请耐心等待')
 
                     const formData = new FormData()

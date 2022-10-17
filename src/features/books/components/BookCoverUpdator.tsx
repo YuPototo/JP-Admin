@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { Formik } from 'formik'
+import { Formik, FormikErrors } from 'formik'
 import React, { useState } from 'react'
 import { Pencil } from 'react-bootstrap-icons'
 import toast from 'react-hot-toast'
@@ -33,6 +33,10 @@ export default function BookCoverUpdator({ bookId }: Props) {
     )
 }
 
+interface FormValue {
+    cover?: File
+}
+
 function UpdateBookModal({
     bookId,
     isOpen,
@@ -47,29 +51,34 @@ function UpdateBookModal({
 
     // 上限：100kb
     const fileSizeLimit = 100000
+    const initialValue: FormValue = {}
 
     return (
         <MyModal isOpen={isOpen} onModalClosed={onClose}>
             <h2 className="mb-4 font-bold text-green-700">上传封面</h2>
 
             <Formik
-                initialValues={{ cover: '' }}
+                initialValues={initialValue}
                 validate={(values) => {
-                    const errors = {}
+                    let errors: FormikErrors<FormValue> = {}
                     if (!values.cover) {
-                        //@ts-ignore
                         errors.cover = '必须选择封面'
+                        return
                     }
 
-                    //@ts-ignore
                     if (values.cover.size > fileSizeLimit) {
-                        //@ts-ignore
                         errors.cover = '封面尺寸需要小于200kb'
                     }
                     return errors
                 }}
                 onSubmit={async (values, { setSubmitting }) => {
+                    if (!values.cover) {
+                        toast.error('必须选择封面')
+                        return
+                    }
+
                     const formData = new FormData()
+
                     formData.append('cover', values.cover)
 
                     try {
