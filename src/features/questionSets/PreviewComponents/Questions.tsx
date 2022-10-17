@@ -1,9 +1,9 @@
 import React from 'react'
-import { IQuestion } from '../questionSetTypes'
+import { MaybeQuestion } from '../questionSetTypes'
 import Question from './Question'
 
 type Props = {
-    questions?: IQuestion[]
+    questions?: MaybeQuestion[]
 }
 
 export default function Questions({ questions }: Props) {

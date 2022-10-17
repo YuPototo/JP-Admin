@@ -22,7 +22,6 @@ export default function QuestionSet() {
                 text={questionSet.audio?.transcription}
             />
 
-            {/* @ts-ignore */}
             <Questions questions={questionSet.questions} />
 
             <QuestionSetExplanation explanation={questionSet.explanation} />

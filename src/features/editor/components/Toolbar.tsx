@@ -7,7 +7,7 @@ import InsertFillerButton from './InsertFillerButton'
 import InsertTipButton from './IntertTipButton'
 import InsertImageButton from './InsertImageButton'
 
-type Format = 'bold' | 'underline'
+export type MarkFormat = 'bold' | 'underline'
 
 export default function MyToolbar() {
     return (
@@ -27,7 +27,7 @@ export default function MyToolbar() {
 
 /*  MarkButton */
 type MarkButtonType = {
-    format: Format
+    format: MarkFormat
     children: React.ReactNode
 }
 
@@ -46,12 +46,12 @@ const MarkButton = ({ format, children }: MarkButtonType) => {
     )
 }
 
-const isMarkActive = (editor: EditorType, format: Format) => {
+const isMarkActive = (editor: EditorType, format: MarkFormat) => {
     const marks = Editor.marks(editor)
     return marks ? marks[format] === true : false
 }
 
-export const toggleMark = (editor: EditorType, format: Format) => {
+export const toggleMark = (editor: EditorType, format: MarkFormat) => {
     const isActive = isMarkActive(editor, format)
 
     if (isActive) {

@@ -1,19 +1,14 @@
 import { ReactElement } from 'react'
 import Button from '../../../components/ui/Button'
 import { ImageElement } from '../editorTypes'
-import { useSelected, useSlateStatic } from 'slate-react'
+import { RenderElementProps, useSelected, useSlateStatic } from 'slate-react'
 import clsx from 'clsx'
 import { CustomEditor } from '../CustomEditor'
 
 type Props = {
-    /**
-     * tech debt
-     * 如果不使用 attributes，会导致图片无法选中
-     * 但我不确定应该怎么 type 它
-     */
-    attributes: any
+    attributes: RenderElementProps['attributes']
     element: ImageElement
-    children: ReactElement
+    children: RenderElementProps['children']
 }
 
 export default function Image({

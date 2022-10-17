@@ -1,16 +1,18 @@
 import clsx from 'clsx'
 import React, { ReactElement } from 'react'
-import { useFocused, useSelected } from 'slate-react'
+import { RenderElementProps, useFocused, useSelected } from 'slate-react'
 
 type Props = {
-    children: ReactElement
+    attributes: RenderElementProps['attributes']
+    children: RenderElementProps['children']
 }
-export default function Filler({ children }: Props): ReactElement {
+export default function Filler({ attributes, children }: Props): ReactElement {
     const selected = useSelected()
     const focused = useFocused()
 
     return (
         <span
+            {...attributes}
             className={clsx('jp-filler', selected && focused && 'ring')}
             contentEditable={false}
         >

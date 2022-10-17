@@ -3,6 +3,7 @@ import { EditorType } from './SlateEditor'
 import { ReactEditor } from 'slate-react'
 import _ from 'lodash'
 import { RichTextNode } from '../questionSets/questionSetTypes'
+import { ImageElement } from './editorTypes'
 
 /**
  * Use custom editor to add custom methods to the editor
@@ -105,7 +106,7 @@ export const CustomEditor = {
     insertImage(editor: EditorType, src: string, alt: string) {
         const selection = editor.selection
 
-        const image = {
+        const image: ImageElement = {
             type: 'image',
             src,
             alt,
@@ -117,7 +118,6 @@ export const CustomEditor = {
         // 如果没有 selection，就插入在最后
         if (!selection) {
             console.log('insert image at the end')
-            //@ts-ignore
             Transforms.insertNodes(editor, image, { select: true })
             return
         }
@@ -136,11 +136,9 @@ export const CustomEditor = {
             Transforms.setNodes(editor, image, { at: selection })
         } else {
             // 如果 selection 所在的 node 不是个 empty paragraph，就在下一个 root path 插入
+            const parent = Editor.parent(editor, selection.focus?.path)
+            const parentPath = parent[1]
 
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const [_, parentPath] = Editor.parent(editor, selection.focus?.path)
-
-            //@ts-ignore
             Transforms.insertNodes(editor, image, {
                 select: true,
                 at: Path.next(parentPath),
@@ -150,9 +148,7 @@ export const CustomEditor = {
 }
 
 export const emptyParagraph: RichTextNode = {
-    //@ts-ignore
     type: 'paragraph',
-    //@ts-ignore
     children: [{ text: '' }],
 }
 

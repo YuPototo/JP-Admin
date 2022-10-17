@@ -5,7 +5,10 @@ import {
     IQuestionSet,
     WorkingQuestionSet,
     WorkingQuestion,
-    UpdateQuestionSetPayload,
+    isNewQuestionSet,
+    MaybeQuestionSet,
+    MaybeQuestion,
+    isIQuestionSet,
 } from './questionSetTypes'
 import type { RootState } from '../../store/store'
 import { createEmptyEditor } from '../editor/CustomEditor'
@@ -317,9 +320,6 @@ export const questionSetEditorSlice = createSlice({
                     })),
                 })),
             }
-
-            //@ts-ignore
-            delete state.questionSet.chapters
         },
         finishEditing: (state) => {
             state.questionSet = null
@@ -446,36 +446,38 @@ export const selectAddQuestionSetPayload = (
     const questionSet = selectFormatedQuestionSet(state)
 
     if (!questionSet) {
+        console.error('selectAddQuestionSetPayload: 不存在 question set')
         return
     }
 
     const chapterId = state.questionSetEditor.chapterId
     if (!chapterId) {
+        console.error('selectAddQuestionSetPayload: 找不到 chapter id')
+        return
+    }
+
+    if (!isNewQuestionSet(questionSet)) {
+        console.error(
+            'selectAddQuestionSetPayload: 不是正确的 NewQuestionSet 格式'
+        )
         return
     }
 
     return {
-        //@ts-ignore
         questionSet,
         chapterId,
     }
 }
 
-export const selectFormatedQuestionSet = (state: RootState) => {
+export const selectFormatedQuestionSet = (
+    state: RootState
+): MaybeQuestionSet | undefined => {
     const questionSet = state.questionSetEditor.questionSet
     if (!questionSet) {
         return
     }
 
-    const questions = questionSet.questions.map((question) => {
-        const formatedQuestion = {
-            ...question,
-            options: question.options.map((option) => option.data),
-        }
-        //@ts-ignore
-        delete formatedQuestion.uuid
-        return formatedQuestion
-    })
+    const questions = questionSet.questions.map(workingQuestionToMaybeQuestion)
 
     return {
         ...questionSet,
@@ -483,16 +485,30 @@ export const selectFormatedQuestionSet = (state: RootState) => {
     }
 }
 
-/* tech debt */
 export const selectUpdateQuestionSetPayload = (
     state: RootState
-): { questionSet: UpdateQuestionSetPayload } | undefined => {
-    const questionSet = selectFormatedQuestionSet(state)
+): { questionSet: IQuestionSet } | undefined => {
+    const maybeQuestionSet = selectFormatedQuestionSet(state)
 
-    if (!questionSet) {
+    if (!maybeQuestionSet) {
         return
     }
 
-    //@ts-ignore
-    return { questionSet }
+    if (!isIQuestionSet(maybeQuestionSet)) {
+        return
+    }
+
+    return { questionSet: maybeQuestionSet }
+}
+
+function workingQuestionToMaybeQuestion(
+    workingQuestion: WorkingQuestion
+): MaybeQuestion {
+    const { uuid, ...otherProps } = workingQuestion
+    const question = {
+        ...otherProps,
+        options: workingQuestion.options.map((option) => option.data),
+    }
+
+    return question
 }

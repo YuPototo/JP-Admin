@@ -1,11 +1,11 @@
 import React from 'react'
-import { IQuestion } from '../questionSetTypes'
+import { MaybeQuestion } from '../questionSetTypes'
 import QuestionBody from './QuestionBody'
 import QuestionExplanation from './QuestionExplanation'
 import QuestionOptions from './QuestionOptions'
 
 type Props = {
-    question: IQuestion
+    question: MaybeQuestion
     index: number
 }
 

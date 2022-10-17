@@ -1,5 +1,5 @@
 // Import the Slate editor factory.
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { createEditor, Descendant } from 'slate'
 import isHotkey from 'is-hotkey'
 import {
@@ -12,7 +12,7 @@ import {
 } from 'slate-react'
 import Image from './components/Image'
 
-import Toolbar, { toggleMark } from './components/Toolbar'
+import Toolbar, { MarkFormat, toggleMark } from './components/Toolbar'
 import Leaf from './components/Leaf'
 import Filler from './components/Filler'
 import Tip from './components/Tip'
@@ -21,7 +21,7 @@ import { withCorrectVoidBehavior } from './plugin/withKeyCommands'
 
 export type EditorType = ReturnType<typeof withReact>
 
-const HOTKEYS = {
+const HOTKEYS: Record<string, MarkFormat> = {
     'mod+b': 'bold',
     'mod+u': 'underline',
 }
@@ -61,9 +61,8 @@ export default function SlateEditor({ onChange, initalValue }: Props) {
                         renderLeaf={renderLeaf}
                         onKeyDown={(event) => {
                             for (const hotkey in HOTKEYS) {
-                                if (isHotkey(hotkey, event as any)) {
+                                if (isHotkey(hotkey, event)) {
                                     event.preventDefault()
-                                    //@ts-ignore
                                     const mark = HOTKEYS[hotkey]
                                     toggleMark(editor, mark)
                                 }
@@ -82,14 +81,23 @@ function useRenderElement() {
             case 'filler':
                 return <Filler {...props} />
             case 'tip':
-                // tech debt：RenderElementProps 不包含 custom element 的 type
-                //@ts-ignore
-                return <Tip {...props} />
+                return (
+                    <Tip
+                        attributes={props.attributes}
+                        element={props.element}
+                        children={props.children}
+                    />
+                )
             case 'paragraph':
                 return <Paragraph {...props} />
             case 'image':
-                //@ts-ignore tech debt
-                return <Image {...props} />
+                return (
+                    <Image
+                        attributes={props.attributes}
+                        element={props.element}
+                        children={props.children}
+                    />
+                )
             default:
                 return (
                     <div className="my-2">

@@ -1,14 +1,20 @@
 import { ReactElement } from 'react'
+import { RenderElementProps } from 'slate-react'
 import { TipElement } from '../editorTypes'
 
 type Props = {
+    attributes: RenderElementProps['attributes']
     element: TipElement
-    children: ReactElement
+    children: RenderElementProps['children']
 }
 
-export default function Tip({ element, children }: Props): ReactElement {
+export default function Tip({
+    attributes,
+    element,
+    children,
+}: Props): ReactElement {
     return (
-        <span className="jp-tip">
+        <span {...attributes} className="jp-tip">
             {children}
             <span className="jp-tip-content" contentEditable={false}>
                 <span>{element.tip}</span>

@@ -4,7 +4,6 @@ import {
     IQuestion,
     IQuestionSet,
     RichTextNode,
-    UpdateQuestionSetPayload,
 } from './questionSetTypes'
 
 interface ChapterInfo {
@@ -58,10 +57,7 @@ export const questionSetApi = splitApi.injectEndpoints({
             }),
             invalidatesTags: ['Chapter'],
         }),
-        updateQuestionSet: build.mutation<
-            void,
-            { questionSet: UpdateQuestionSetPayload }
-        >({
+        updateQuestionSet: build.mutation<void, { questionSet: IQuestionSet }>({
             query: ({ questionSet }) => {
                 const { id, ...rest } = questionSet
                 return {
