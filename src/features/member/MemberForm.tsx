@@ -43,13 +43,13 @@ export default function MemberForm() {
                 <form onSubmit={handleSubmit} className="text-white">
                     <div>
                         <label
-                            className="inline-block w-16"
+                            className="inline-block w-16 "
                             htmlFor="userDisplayId"
                         >
                             用户 ID
                         </label>
                         <input
-                            className="m-4 w-60 rounded p-2"
+                            className="m-4 w-60 rounded p-2 text-gray-800"
                             type="text"
                             name="userDisplayId"
                             id="userDisplayId"
@@ -63,7 +63,7 @@ export default function MemberForm() {
                             月数
                         </label>
                         <input
-                            className="m-4 w-32 rounded p-2"
+                            className="m-4 w-32 rounded p-2 text-gray-800"
                             type="number"
                             name="months"
                             id="months"
