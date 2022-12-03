@@ -24,7 +24,10 @@ export default function LoginForm() {
             {({ values, handleChange, handleSubmit, isSubmitting }) => (
                 <form onSubmit={handleSubmit}>
                     <div>
-                        <label className="inline-block w-12" htmlFor="username">
+                        <label
+                            className="inline-block w-12 text-white"
+                            htmlFor="username"
+                        >
                             用户名
                         </label>
                         <input
@@ -38,7 +41,10 @@ export default function LoginForm() {
                         />
                     </div>
                     <div>
-                        <label className="inline-block w-12" htmlFor="password">
+                        <label
+                            className="inline-block w-12 text-white"
+                            htmlFor="password"
+                        >
                             密码
                         </label>
                         <input
